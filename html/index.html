@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Homepage Layout</title>
+    <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <img src="../img/big_logo.png" alt="logo" class="brand-logo"/>
+                <span class="brand-title">Codelingo</span>
+            </div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li class="nav-item"><a class="nav-link" href="#courses">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#progress">Progress</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#leaderboard">Leaderboard</a></li>
+                </ul>
+            </nav>
+
+            <div class="auth-controls">
+                <a class="auth-link" href="#login">Log In</a>
+                <a class="btn btn-primary" href="#signup">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero container" id="home">
+            <div class="hero-content">
+                <h1 class="hero-title">Learn coding like a game!</h1>
+                <p class="hero-subtitle">Daily lessons, streaks, XP points and real-world projects</p>
+                <a class="btn btn-cta" href="#get-started">Get Started Free</a>
+            </div>
+
+            <div class="hero-media">
+                <div class="hero-card">
+                    <img src="../img/small_logo.png" alt="project preview" class="hero-image"/>
+                </div>
+            </div>
+        </section>
+
+          <!-- STATS SECTION: streak, xp, level (converted from React/Tailwind) -->
+        <section class="stats-section container" aria-label="Quick user stats">
+          <div class="stats-grid">
+            <!-- Streak -->
+            <article class="stat-card" aria-labelledby="streak-title">
+  <div class="stat-icon-wrap">
+    <div class="stat-icon-circle">
+      <img src="../img/icons/fire.png" alt="" aria-hidden="true" class="stat-icon-img" loading="lazy" width="40" height="40" />
+      <span class="icon-ring" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <h3 id="streak-title" class="stat-title">7 days</h3>
+  <p class="stat-subtitle">Streak 🔥</p>
+</article>
+
+            <!-- XP Points -->
+           <article class="stat-card" aria-labelledby="xp-title">
+  <div class="stat-icon-wrap">
+    <div class="stat-icon-circle alt">
+      <img src="../img/icons/thunder.png" alt="" aria-hidden="true" class="stat-icon-img" loading="lazy" width="40" height="40" />
+    </div>
+  </div>
+
+  <h3 id="xp-title" class="stat-title">1,240 XP</h3>
+  <p class="stat-subtitle">Experience Points</p>
+
+  <div class="progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65" aria-label="Progress to next level">
+    <div class="progress-fill" style="width:65%"></div>
+  </div>
+  <p class="progress-note">To next level: 260 XP</p>
+</article>
+
+            <!-- Level -->
+            <article class="stat-card" aria-labelledby="level-title">
+              <div class="stat-icon-wrap">
+                <div class="stat-icon-circle alt2">
+                  <!-- trophy svg -->
+                    <img src="../img/icons/trophy.png" alt="" aria-hidden="true" class="stat-icon-img" loading="lazy" width="40" height="40" />
+                </div>
+              </div>
+
+              <div class="level-badge">Level 12</div>
+              <h3 id="level-title" class="stat-title small">Junior Coder</h3>
+            </article>
+          </div>
+        </section>
+
+                <section class="languages-section container" aria-labelledby="languages-title">
+          <div class="languages-header text-center">
+            <h2 id="languages-title" class="languages-title">Choose your programming language</h2>
+            <p class="languages-subtitle">Start your coding journey</p>
+          </div>
+
+          <div class="languages-grid" role="list">
+            <!-- Python -->
+            <article class="language-card" role="listitem">
+  <div class="card-bg-overlay"></div>
+
+  <div class="language-icon bg-gradient-python" aria-hidden="true">
+    <img src="../img/icons/py.png" srcset="../img/icons/code@2x.png 2x" alt="" aria-hidden="true" class="language-icon-img" loading="lazy" width="28" height="28" />
+  </div>
+
+  <div class="card-body">
+    <h3 class="lang-name">Python</h3>
+    <p class="lang-desc">For beginners</p>
+
+    <div class="lesson-row">
+      <span class="lesson-note">Lesson 5/30</span>
+      <span class="lesson-percent">17%</span>
+    </div>
+
+    <div class="progress-track" aria-hidden="true">
+      <div class="progress-fill" style="width:17%"></div>
+    </div>
+
+    <a class="btn btn-continue" href="#python">Continue</a>
+  </div>
+</article>
+
+            <!-- JavaScript -->
+ <article class="language-card" role="listitem">
+    <div class="card-bg-overlay"></div>
+
+    <div class="language-icon bg-gradient-js" aria-hidden="true">
+      <img src="../img/icons/js.png" srcset="../img/icons/js@2x.png 2x" alt="" aria-hidden="true" class="language-icon-img" loading="lazy" width="40" height="40" />
+    </div>
+
+    <div class="card-body">
+        <h3 class="lang-name">JavaScript</h3>
+        <p class="lang-desc">Web development</p>
+
+        <div class="lesson-row">
+          <span class="lesson-note">Lesson 12/30</span>
+          <span class="lesson-percent">40%</span>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" style="width:10%"></div>
+        </div>
+  
+      <a class="btn btn-continue" href="#javascript">Continue</a>
+    </div>
+ </article>
+
+            <!-- HTML / CSS -->
+<article class="language-card" role="listitem">
+  <div class="card-bg-overlay"></div>
+
+  <div class="language-icon bg-gradient-html" aria-hidden="true">
+    <img src="../img/icons/html_css.png" srcset="../img/icons/html@2x.png 2x" alt="" aria-hidden="true" class="language-icon-img" loading="lazy" width="28" height="28" />
+  </div>
+
+  <div class="card-body">
+    <h3 class="lang-name">HTML/CSS</h3>
+    <p class="lang-desc">Web basics</p>
+
+    <div class="lesson-row">
+      <span class="lesson-note">Lesson 18/30</span>
+      <span class="lesson-percent">60%</span>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" style="width:60%"></div>
+    </div>
+
+    <a class="btn btn-continue" href="#htmlcss">Continue</a>
+  </div>
+</article>
+
+            <!-- Java -->
+            <article class="language-card" role="listitem">
+  <div class="card-bg-overlay"></div>
+
+  <div class="language-icon bg-gradient-java" aria-hidden="true">
+    <img src="../img/icons/java.png" srcset="../img/icons/java@2x.png 2x" alt="" aria-hidden="true" class="language-icon-img" loading="lazy" width="28" height="28" />
+  </div>
+
+  <div class="card-body">
+    <h3 class="lang-name">Java</h3>
+    <p class="lang-desc">Enterprise development</p>
+
+    <div class="lesson-row">
+      <span class="lesson-note">Lesson 3/30</span>
+      <span class="lesson-percent">10%</span>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" style="width:10%"></div>
+    </div>
+
+    <a class="btn btn-continue" href="#java">Continue</a>
+  </div>
+</article>
+          </div>
+        </section>
+
+                <section id="how" class="how-section container" aria-labelledby="how-title">
+          <div class="how-header">
+            <h2 id="how-title" class="how-title">How it works</h2>
+            <p class="how-sub">Three simple steps to success</p>
+          </div>
+
+          <div class="how-grid" role="list">
+            <!-- connection line (desktop only) -->
+            <span class="how-line" aria-hidden="true"></span>
+
+            <!-- step 1 -->
+           <article class="how-step" role="listitem" aria-labelledby="step1-title">
+  <span class="step-number" aria-hidden="true">1</span>
+  <div class="step-icon bg-gradient-book" aria-hidden="true">
+    <img src="../img/icons/book.png" srcset="../img/icons/book@2x.png 2x" alt="" aria-hidden="true" class="step-icon-img" loading="lazy" width="28" height="28" />
+  </div>
+
+  <h3 id="step1-title" class="step-title">Short lessons</h3>
+  <p class="step-desc">5-10 minutes a day — learn theory in small portions</p>
+</article>
+
+            <!-- step 2 -->
+          <article class="how-step" role="listitem" aria-labelledby="step2-title">
+  <span class="step-number" aria-hidden="true">2</span>
+  <div class="step-icon bg-gradient-code" aria-hidden="true">
+    <img src="../img/icons/IT.png" srcset="../img/icons/code@2x.png 2x" alt="" aria-hidden="true" class="step-icon-img" loading="lazy" width="28" height="28" />
+  </div>
+
+  <h3 id="step2-title" class="step-title">Practice in browser</h3>
+  <p class="step-desc">Write code right here — no installation required</p>
+</article>
+
+            <!-- step 3 -->
+          <article class="how-step" role="listitem" aria-labelledby="step3-title">
+  <span class="step-number" aria-hidden="true">3</span>
+  <div class="step-icon bg-gradient-rocket" aria-hidden="true">
+    <img src="../img/icons/rocket.png" srcset="../img/icons/rocket@2x.png 2x" alt="" aria-hidden="true" class="step-icon-img" loading="lazy" width="28" height="28" />
+  </div>
+
+  <h3 id="step3-title" class="step-title">Real projects</h3>
+  <p class="step-desc">Build real applications and add them to your portfolio</p>
+</article>
+          </div>
+        </section>
+
+          <footer class="site-footer" role="contentinfo">
+      <div class="container footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="brand-row">
+              <img src="../img/small_logo.png" alt="Codelingo" class="footer-logo"/>
+              <span class="footer-brand-title">Codelingo</span>
+            </div>
+            <p class="footer-desc">
+              Learn programming in a fun and effective way. Every day brings you closer to your dream of becoming a developer.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Company</h4>
+            <ul class="footer-links" aria-label="Company links">
+              <li><a href="#" class="footer-link">About</a></li>
+              <li><a href="#" class="footer-link">Blog</a></li>
+              <li><a href="#" class="footer-link">Careers</a></li>
+              <li><a href="#" class="footer-link">Press</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-col-title">Support</h4>
+            <ul class="footer-links" aria-label="Support links">
+              <li><a href="#" class="footer-link">Help</a></li>
+              <li><a href="#" class="footer-link">Contact</a></li>
+              <li><a href="#" class="footer-link">FAQ</a></li>
+              <li><a href="#" class="footer-link">Community</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="copyright">© 2025 Codelingo. All rights reserved.</p>
+
+          <div class="social-row" aria-label="Social links">
+            <a href="#" class="social-link" aria-label="Facebook">
+              <img src="../img/icons/facebook.png" srcset="../img/icons/facebook@2x.png 2x" alt="" aria-hidden="true" class="social-img" loading="lazy" width="18" height="18" />
+            </a>
+          
+            <a href="#" class="social-link" aria-label="Twitter">
+              <img src="../img/icons/twitter.png" srcset="../img/icons/twitter@2x.png 2x" alt="" aria-hidden="true" class="social-img" loading="lazy" width="18" height="18" />
+            </a>
+          
+            <a href="#" class="social-link" aria-label="Instagram">
+              <img src="../img/icons/instagram.png" srcset="../img/icons/instagram@2x.png 2x" alt="" aria-hidden="true" class="social-img" loading="lazy" width="18" height="18" />
+            </a>
+          
+            <a href="#" class="social-link" aria-label="YouTube">
+              <img src="../img/icons/youtube.png" srcset="../img/icons/youtube@2x.png 2x" alt="" aria-hidden="true" class="social-img" loading="lazy" width="18" height="18" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    </main>
+</body>
+</html>
