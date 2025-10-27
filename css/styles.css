@@ -1,0 +1,257 @@
+:root{
+  --green-500:#15b07a;
+  --green-400:#1fc797;
+  --muted:#6b7280;
+  --bg-start:#f3fff9;
+  --bg-end:#ffffff;
+  --container-max:1180px;
+  --radius:14px;
+  --shadow-strong:0 30px 50px rgba(7,38,25,0.06);
+  --shadow-soft:0 10px 24px rgba(8,30,20,0.04);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  color:#08121a;
+  background:linear-gradient(180deg,var(--bg-start) 0%, var(--bg-end) 60%);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.45;
+}
+
+/* Utility container */
+.container{
+  width:92%;
+  max-width:var(--container-max);
+  margin:0 auto;
+}
+
+/* Buttons */
+.btn{
+  display:inline-block;
+  text-decoration:none;
+  border-radius:10px;
+  padding:10px 16px;
+  font-weight:600;
+  font-size:14px;
+  text-align:center;
+  cursor:pointer;
+}
+.btn-ghost{
+  background:transparent;
+  color:inherit;
+  border:none;
+}
+.btn-primary{
+  background:transparent;
+  color:inherit;
+  border:1px solid rgba(0,0,0,0.04);
+  padding:8px 12px;
+  border-radius:8px;
+}
+.btn-cta{
+  background:linear-gradient(180deg,var(--green-500), var(--green-400));
+  color:#fff;
+  padding:12px 26px;
+  border-radius:10px;
+  box-shadow:0 8px 28px rgba(20,160,110,0.12);
+}
+
+/* Header */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:40;
+  background:linear-gradient(180deg, rgba(20,170,110,0.03), transparent);
+  backdrop-filter: blur(4px);
+  border-bottom:1px solid rgba(2,6,10,0.02);
+}
+.header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:18px 0;
+}
+
+/* Brand */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+.brand-logo{
+  width:46px;height:46px;object-fit:cover;border-radius:8px;
+  box-shadow:0 6px 20px rgba(10,40,20,0.06);
+}
+.brand-title{
+  color:var(--green-500);
+  font-weight:600;
+  font-size:18px;
+}
+
+/* Navigation (center) */
+.main-nav{flex:1}
+.nav-list{
+  list-style:none;
+  display:flex;
+  gap:28px;
+  justify-content:center;
+  align-items:center;
+}
+.nav-link{
+  color:#07121a;
+  text-decoration:none;
+  font-weight:400;
+  padding:8px 10px;
+  border-radius:8px;
+  transition:background .18s, color .18s;
+}
+.nav-link:hover{background:rgba(0,0,0,0.03)}
+
+/* Auth controls (right) */
+.auth-controls{
+  display:flex;
+  align-items:center;
+  gap:30px;
+  flex-shrink:0;
+}
+.auth-link{
+  color:#07121a;
+  text-decoration:none;
+  font-weight:600;
+}
+.auth-controls .btn-primary{
+  background:linear-gradient(180deg,var(--green-500), var(--green-400));
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+}
+
+/* HERO SECTION */
+.hero{
+  display:flex;
+  align-items:center;
+  gap:40px;
+  padding:72px 0 90px;
+  position:relative;
+}
+.hero-content{
+  flex:1;
+  max-width:640px;
+}
+.hero-title{
+  font-size:44px;
+  line-height:1.05;
+  margin-bottom:14px;
+  color:var(--green-500);
+  font-weight:600;
+}
+.hero-subtitle{
+  margin-bottom:26px;
+  color:var(--muted);
+  font-size:16px;
+}
+
+/* Hero media (right) */
+.hero-media{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  min-height:320px;
+}
+
+/* white card with large drop shadow */
+.hero-card{
+  background:#fff;
+  border-radius:18px;
+  padding:28px;
+  box-shadow:var(--shadow-strong);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.hero-image{
+  width:320px;
+  height:320px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+/* floating small square icons (use in markup if needed) */
+.floating-icon{
+  position:absolute;
+  width:54px;height:54px;
+  background:#fff;
+  border-radius:12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 20px rgba(6,30,18,0.05);
+  border:2px solid rgba(31,199,135,0.06);
+  color:var(--green-500);
+  font-weight:700;
+}
+/* Examples of positions - adapt in markup if you add icons */
+.floating-icon.top-left{left:12%; top:45%;}
+.floating-icon.left-mid{left:22%; top:62%;}
+.floating-icon.right-top{right:8%; top:36%;}
+.floating-icon.right-mid{right:6%; top:56%;}
+
+/* COURSES SECTION */
+.courses-section{
+  padding:48px 0 120px;
+}
+.section-title{
+  font-size:22px;
+  margin-bottom:18px;
+  color:#07121a;
+}
+.course-list{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.course-card{
+  background:#fff;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:var(--shadow-soft);
+  border:1px solid rgba(6,20,18,0.02);
+}
+.course-title{font-weight:700;margin:0 0 6px}
+.course-desc{color:var(--muted);font-size:14px}
+
+/* Footer tweaks (optional) */
+.site-footer{
+  background:#0f1724;color:#fff;padding:48px 0;
+}
+
+/* Responsive */
+@media (max-width:1050px){
+  .hero{padding:48px 0;gap:24px}
+  .hero-image{width:280px;height:280px}
+  .course-list{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:900px){
+  .nav-list{display:none} /* replace with hamburger if needed */
+  .hero{flex-direction:column;align-items:flex-start;padding:40px 0}
+  .hero-media{width:100%;justify-content:flex-end;margin-top:18px}
+  .hero-image{width:260px;height:260px}
+  .course-list{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:600px){
+  .brand-title{display:none}
+  .auth-controls .btn-primary{display:none}
+  .hero-title{font-size:28px}
+  .hero-image{width:200px;height:200px}
+  .container{width:95%}
+  .course-list{grid-template-columns:1fr}
+  .hero-media{justify-content:center}
+  .floating-icon{display:none}
+}
