@@ -261,6 +261,21 @@ body{
   box-shadow:0 0 0 6px rgba(16,185,129,0.03);
 }
 
+.stat-icon-img{
+  display:block;
+  width:40px;
+  height:40px;
+  object-fit:contain;
+  /* turn dark glyph to white */
+  filter: invert(1) brightness(2);
+  transition:filter .15s ease, transform .12s ease;
+}
+
+/* optional: slightly lift on hover */
+.stat-icon-circle:hover .stat-icon-img{
+  transform:translateY(-3px);
+}
+
 /* Titles */
 .stat-title{ font-size:28px; margin:8px 0 4px; color:#07121a; font-weight:700; }
 .stat-title.small{ font-size:18px; margin-top:6px; }
@@ -357,6 +372,17 @@ body{
 .bg-gradient-html{ background:linear-gradient(180deg,#06b6d4,#10b981); color:#fff; }
 .bg-gradient-java{ background:linear-gradient(180deg,#0ea5a4,#059669); color:#fff; }
 .icon-white{ color:#fff; }
+
+.language-icon-img{
+  display:block;
+  width:28px;
+  height:28px;
+  object-fit:contain;
+  /* если иконка чёрная — сделать белой на градиенте */
+  filter: invert(1) brightness(2);
+  transition: transform .12s ease, filter .12s ease;
+}
+.language-icon:hover .language-icon-img{ transform: translateY(-3px); }
 
 /* body */
 .card-body{ position:relative; z-index:2; text-align:left; }
@@ -482,6 +508,15 @@ body{
 .step-title{ font-size:20px; margin:6px 0 6px; color:#07121a; font-weight:600; }
 .step-desc{ color:var(--muted); font-size:14px; margin:0 12px; }
 
+.step-icon-img{
+  display:block;
+  width:50px;
+  height:50px;
+  object-fit:contain;
+  filter: invert(1) brightness(2); /* turns dark glyphs white */
+  transition: transform .12s ease, filter .12s ease;
+}
+.step-icon:hover .step-icon-img{ transform:translateY(-3px); }
 
 
 
@@ -543,5 +578,13 @@ body{
   color:#fff;
   transform:translateY(-3px);
 }
-.social-svg{ display:block; width:18px; height:18px; color:inherit; }
-
+.social-img{
+  margin: 10px 10px;
+  display:block;
+  width:18px;
+  height:18px;
+  object-fit:contain;
+ 
+  filter: invert(1) brightness(2);
+}
+.social-link{ display:inline-block; margin-left:12px; }
