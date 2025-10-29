@@ -1,0 +1,22 @@
+
+services:
+  db:
+    image: postgres:16-alpine 
+    container_name: codelingo-db 
+    restart: always
+
+    # Логин, пароль и имя базы данных
+    environment:
+      POSTGRES_USER: codelingo_user
+      POSTGRES_PASSWORD: codelingo_password
+      POSTGRES_DB: codelingo_dev
+
+    ports:
+      - '5432:5432' 
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local
