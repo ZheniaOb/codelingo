@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogIn — Codelingo</title>
+    <title>SignUp — Codelingo</title>
 
     <link rel="stylesheet" href="../css/styles.css"> 
 </head>
@@ -14,29 +14,35 @@
         <div class="login-container">
           
             <header class="login-header">
-                <div class="brand">
-                    <img 
-                        src="../img/big_logo.png" 
-                        alt="Codelingo" 
-                        class="login-logo"
-                    >
-                    
-                </div>
-                <h1 class="title">Welcome back!</h1>
-                <p class="subtitle">Continue your coding journey</p>
+                <img 
+                    src="../img/big_logo.png" 
+                    alt="Codelingo" 
+                    class="login-logo" 
+                >
+                <h1 class="title">Join Codelingo!</h1>
+                <p class="subtitle">Start your coding adventure today</p>
             </header>
 
             <section class="login-card">
                 
                 <form action="#" method="post" class="login-form">
                     
-                    <div class="error-alert">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                        <span>Invalid credentials. Please try again.</span>
+                    <div class="form-group">
+                        <label for="name" class="form-label">Name</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Your name"
+                                class="input-field"
+                                required
+                            >
+                        </div>
                     </div>
                     
                     <div class="form-group">
@@ -76,13 +82,13 @@
                     </div>
 
                     <button type="submit" class="btn btn-cta btn-full">
-                        Log In
+                        Create Account
                     </button>
 
                     <footer class="form-footer">
                         <p class="footer-text">
-                            Don't have an account?
-                            <a href="SignUp.html" class="auth-link">Sign up</a>
+                            Already have an account?
+                            <a href="LogIn.html" class="auth-link">Log in</a>
                         </p>
                         <a href="index.html" class="btn btn-ghost">Back to home</a>
                     </footer>
