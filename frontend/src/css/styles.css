@@ -358,6 +358,26 @@ body{
   border-color:transparent;
 }
 
+/* Mobile responsive */
+@media (max-width: 1024px) {
+  .languages-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 карточки в ряд на планшете */
+  }
+}
+
+@media (max-width: 768px) {
+  .languages-grid {
+    grid-template-columns: 1fr; /* каждая карточка на отдельной строке на мобиле */
+  }
+}
+
+/* Дополнительно можно сделать карточки адаптивными */
+@media (max-width: 480px) {
+  .language-card {
+    padding: 16px; /* чуть меньше padding для маленьких экранов */
+  }
+}
+
 /* subtle gradient overlay shown on hover */
 .card-bg-overlay{
   position:absolute;
