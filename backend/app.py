@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta, timezone # Added timezone
+from datetime import datetime, timedelta, timezone 
 import jwt 
 import bcrypt 
 from flask import Flask, request, jsonify
@@ -12,7 +12,8 @@ print("Starting backend...")
 load_dotenv() 
 
 app = Flask(__name__)
-CORS(app) # Allow requests from the React app
+
+CORS(app) 
 
 db_url = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
@@ -87,11 +88,45 @@ def login():
     token = jwt.encode({
         'user_id': user.id,
         'role': user.role, 
-        'exp': datetime.now(timezone.utc) + timedelta(hours=24) # Fixed DeprecationWarning
+        'exp': datetime.now(timezone.utc) + timedelta(hours=24) # Token validity
     }, app.config['SECRET_KEY'], algorithm="HS256")
 
     print(f"Login successful: {email}, Role: {user.role}")
     return jsonify(access_token=token, role=user.role), 200
+
+# GET USER DATA (Protected route: /api/me)
+@app.route('/api/me', methods=['GET'])
+def get_user_data():
+    token = None
+    
+    # 1. Get token from 'Authorization: Bearer [token]' header
+    if 'Authorization' in request.headers:
+        token = request.headers['Authorization'].split(" ")[1]
+
+    if not token:
+        return jsonify(error="Authentication token is missing"), 401
+
+    try:
+        # 2. Decode the token (verifies validity and expiry)
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+        
+        # 3. Fetch user data from the database using ID from the token
+        current_user = User.query.filter_by(id=data['user_id']).first()
+        
+        if not current_user:
+            return jsonify(error="User not found"), 404
+
+        # 4. Return user data (without password hash)
+        return jsonify(
+            id=current_user.id,
+            email=current_user.email,
+            role=current_user.role
+        ), 200
+
+    except jwt.ExpiredSignatureError:
+        return jsonify(error="Token has expired"), 401
+    except jwt.InvalidTokenError:
+        return jsonify(error="Invalid token"), 401
 
 # --- 4. RUN ---
 if __name__ == '__main__':

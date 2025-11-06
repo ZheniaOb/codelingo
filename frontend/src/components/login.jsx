@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../css/styles.css"; // Оставил оригинальный путь
+import "../css/styles.css"; 
 
 const Login = () => {
-  // --- НАЧАЛО ЛОГИКИ ---
+
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
@@ -25,9 +25,9 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem("token", data.access_token);
-        // Временный алерт для проверки
+        
         alert(`Success! Logged in as: ${data.role}\nToken saved to localStorage.`);
-        // Здесь должен быть редирект, например: window.location.href = "/dashboard";
+        
       } else {
         setError(data.error || "Invalid credentials");
       }
@@ -35,8 +35,7 @@ const Login = () => {
       setError("Network error. Is the backend running on port 5001?");
     }
   };
-  // --- КОНЕЦ ЛОГИКИ ---
-
+  
   return (
     <main className="login-page-wrapper">
       <div className="login-container">
