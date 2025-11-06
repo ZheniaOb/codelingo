@@ -225,6 +225,13 @@ body{
   box-shadow:0 10px 30px rgba(10,30,20,0.03);
 }
 
+/* mobile responsive for stats section */
+@media (max-width: 768px) {
+  .stats-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Card */
 .stat-card{
   background:#fff;
