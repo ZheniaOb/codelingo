@@ -1,5 +1,6 @@
 import React from "react";
 import "../css/styles.css";
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
@@ -13,9 +14,15 @@ const Home = () => {
 
           <nav className="main-nav" aria-label="Main navigation">
             <ul className="nav-list">
-              <li className="nav-item"><a className="nav-link" href="#courses">Courses</a></li>
-              <li className="nav-item"><a className="nav-link" href="#progress">Progress</a></li>
-              <li className="nav-item"><a className="nav-link" href="#leaderboard">Leaderboard</a></li>
+             <li className="nav-item">
+    <Link className="nav-link" to="/courses">Courses</Link>
+</li>
+<li className="nav-item">
+    <Link className="nav-link" to="/progress">Progress</Link>
+</li>
+<li className="nav-item">
+    <Link className="nav-link" to="/leaderboard">Leaderboard</Link>
+</li>
             </ul>
           </nav>
 
