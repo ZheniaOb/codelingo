@@ -6,7 +6,7 @@ import Progress from "./components/Progress";
 import Leaderboard from "./components/Leaderboard";
 function App() {
   return (
-    <Router>І
+    <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

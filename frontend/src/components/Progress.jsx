@@ -1,9 +1,9 @@
 // frontend/src/components/Progress.jsx
 
-import React from 'react';
-import { Link } from 'react-router-dom'; 
+import React from 'react'; 
 import "../css/styles.css"; 
-
+import  Header  from './BasicSiteView/Header/Header';
+import Footer from './BasicSiteView/Footer/Footer';
 // --- Данные ---
 const weeklyActivity = [
   { day: "Mon", xp: 50 },
@@ -39,57 +39,11 @@ const Progress = () => {
   // Общая оболочка с шапкой и подвалом
   const HeaderFooter = ({ children }) => (
     <>
-      {/* ⭐ ШАПКА/ХЕДЕР (СКОПИРОВАНО ИЗ home.jsx) */}
-      <header className="site-header">
-        <div className="container header-inner">
-          <div className="brand">
-            <img src="/img/big_logo.png" alt="logo" className="brand-logo" />
-            <span className="brand-title">Codelingo</span>
-          </div>
-          <nav className="main-nav" aria-label="Main navigation">
-            <ul className="nav-list">
-             <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li> 
-             <li className="nav-item"><Link className="nav-link" to="/courses">Courses</Link></li>
-             <li className="nav-item"><Link className="nav-link" to="/progress">Progress</Link></li>
-             <li className="nav-item"><Link className="nav-link" to="/leaderboard">Leaderboard</Link></li>
-            </ul>
-          </nav>
-          <div className="auth-controls">
-            <Link className="auth-link" to="/login">Log In</Link>
-            <Link className="btn btn-primary" to="/signup">Sign Up</Link>
-          </div>
-        </div>
-      </header>
-
+      <Header />
       <main className="progress-page-wrapper">
         {children}
       </main>
-
-      {/* ⭐ ФУТЕР (СКОПИРОВАНО ИЗ home.jsx) */}
-      <footer className="site-footer">
-        <div className="container footer-inner">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <div className="brand-row">
-                <img src="/img/small_logo.png" alt="Codelingo" className="footer-logo" />
-                <span className="footer-brand-title">Codelingo</span>
-              </div>
-              <p className="footer-desc">Learn programming in a fun and effective way. Every day brings you closer to your dream of becoming a developer.</p>
-            </div>
-            <div className="footer-col">
-              <h4 className="footer-col-title">Company</h4>
-              <ul className="footer-links"><li><a href="#" className="footer-link">About</a></li><li><a href="#" className="footer-link">Blog</a></li></ul>
-            </div>
-            <div className="footer-col">
-              <h4 className="footer-col-title">Support</h4>
-              <ul className="footer-links"><li><a href="#" className="footer-link">Help</a></li><li><a href="#" className="footer-link">Contact</a></li></ul>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <p className="copyright">© 2025 Codelingo. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 

@@ -1,0 +1,75 @@
+:root{
+  --green-500:#15b07a;
+  --green-400:#1fc797;
+  --muted:#6b7280;
+}
+
+.site-footer{
+  background:#0f1724;
+  color:#d1d5db;
+  padding:48px 0;
+  border-top:1px solid rgba(255,255,255,0.02);
+}
+.footer-inner{ max-width:1180px; margin:0 auto; padding:0 18px; }
+
+/* grid: two columns on desktop (brand + two link columns) */
+.footer-grid{
+  display:grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap:28px;
+  align-items:start;
+  margin-bottom:20px;
+}
+.footer-brand .brand-row{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.footer-logo{ width:46px; height:46px; border-radius:8px; object-fit:cover; background:#fff; padding:6px; }
+.footer-brand-title{ color:#10b981; font-weight:600; font-size:18px; }
+.footer-desc{ color:rgba(209,213,219,0.85); line-height:1.6; font-size:14px; max-width:560px; }
+
+/* columns */
+.footer-col-title{ color:#fff; margin:0 0 10px; font-weight:700; font-size:15px; }
+.footer-links{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+.footer-link{ color:rgba(209,213,219,0.8); text-decoration:none; font-size:14px; transition:color .15s ease; }
+.footer-link:hover{ color:var(--green-500); }
+
+/* bottom row */
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  border-top:1px solid rgba(255,255,255,0.02);
+  padding-top:18px;
+  margin-top:8px;
+}
+.copyright{ color:rgba(209,213,219,0.7); font-size:14px; margin:0; }
+
+/* social icons */
+.social-row{ display:flex; gap:12px; align-items:center; }
+.social-link{
+  width:40px;
+  height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:rgba(255,255,255,0.03);
+  color:rgba(209,213,219,0.95);
+  text-decoration:none;
+  transition:background .15s ease, color .15s ease, transform .12s ease;
+}
+.social-link:hover{
+  background:var(--green-500);
+  color:#fff;
+  transform:translateY(-3px);
+}
+.social-img{
+  margin: 10px 10px;
+  display:block;
+  width:18px;
+  height:18px;
+  object-fit:contain;
+ 
+  filter: invert(1) brightness(2);
+}
+
+.social-link{ display:inline-block; margin-left:12px; }

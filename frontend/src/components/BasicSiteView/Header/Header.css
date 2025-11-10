@@ -1,0 +1,78 @@
+/* Header */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:40;
+  background:linear-gradient(180deg, rgba(20,170,110,0.03), transparent);
+  backdrop-filter: blur(4px);
+  border-bottom:1px solid rgba(2,6,10,0.02);
+}
+.header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:18px 0;
+}
+
+/* Brand */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+.brand-logo{
+  width:46px;height:46px;object-fit:cover;border-radius:8px;
+  box-shadow:0 6px 20px rgba(10,40,20,0.06);
+}
+.brand-title{
+  color:var(--green-500);
+  font-weight:600;
+  font-size:18px;
+}
+
+/* Navigation (center) */
+.main-nav{flex:1}
+.nav-list{
+  list-style:none;
+  display:flex;
+  gap:28px;
+  justify-content:center;
+  align-items:center;
+}
+.nav-link{
+  color:#07121a;
+  text-decoration:none;
+  font-weight:400;
+  padding:8px 10px;
+  border-radius:8px;
+  transition:background .18s, color .18s;
+}
+.nav-link:hover{background:rgba(0,0,0,0.03)}
+
+/* Auth controls (right) */
+.auth-controls{
+  display:flex;
+  align-items:center;
+  gap:30px;
+  flex-shrink:0;
+}
+.auth-link{
+  color:#07121a;
+  text-decoration:none;
+  font-weight:600;
+}
+.auth-controls .btn-primary{
+  background:linear-gradient(180deg,var(--green-500), var(--green-400));
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+}
+
+.brand,
+.brand:hover,
+.brand:focus,
+.brand:active {
+  text-decoration: none;
+}
