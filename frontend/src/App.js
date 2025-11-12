@@ -4,6 +4,7 @@ import Login from "./components/login";
 import SignUp from "./components/SignUp";
 import Progress from "./components/Progress";
 import Leaderboard from "./components/Leaderboard";
+import Courses from "./components/Courses/Courses";
 function App() {
   return (
     <Router>
@@ -13,6 +14,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/courses" element={<Courses />} />
       </Routes>
     </Router>
   );
