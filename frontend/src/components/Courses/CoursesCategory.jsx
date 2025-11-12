@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Header from "../BasicSiteView/Header/Header";
 import Footer from "../BasicSiteView/Footer/Footer";
-import "./Courses.css";
+import "./CoursesCategory.css";
 
 const COURSES = [
   { id: "python",     title: "Python",     lessons: 6 },
@@ -31,7 +31,7 @@ const getIcon = (id, title) => {
   );
 };
 
-const Courses = () => (
+const CoursesList = () => (
   <div className="courses-page">
     <Header />
 
@@ -84,4 +84,4 @@ const Courses = () => (
   </div>
 );
 
-export default Courses;
+export default CoursesList;

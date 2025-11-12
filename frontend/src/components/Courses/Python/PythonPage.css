@@ -1,0 +1,182 @@
+:root{
+  --green:#10B981;
+  --green-dark:#059669;
+  --ink:#0d1117;
+  --yellow:#facc15;
+}
+
+/* Page base */
+.python-page{
+  font-family:'Segoe UI',Tahoma,Verdana,sans-serif;
+  background:linear-gradient(180deg,#f3fbf7,#ffffff);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Hero */
+.python-hero.minimal{padding:28px 16px 24px;}
+.hero-inner{max-width:960px;margin:0 auto;text-align:center;}
+.python-title{font-size:30px;font-weight:700;margin:0 0 6px;color:var(--green-dark);}
+
+/* Stats + progress */
+.stats-row.compact{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.stat-cell{font-size:13px;color:#374151;font-weight:600;}
+.progress-line.slim{width:320px;height:8px;background:#d1d5db;border-radius:6px;overflow:hidden;margin-top:6px;}
+.progress-fill{height:100%;background:var(--ink);border-radius:inherit;transition:width .6s cubic-bezier(.22,.9,.31,.99);}
+
+/* Вертикальный путь */
+.theme-path{max-width:980px;margin:0 auto;padding:28px 16px 180px;text-align:center;}
+.path-title{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  margin:0;
+  font-size:15px;
+  line-height:1.25;
+  letter-spacing:.5px;
+  font-weight:800;
+}
+.path-title .theme-index{
+  font-size:12px;
+  color:#0d1e26;
+  opacity:.75;
+}
+.path-title .theme-name{
+  font-size:14px;
+  color:#0d1e26;
+}
+.path-title{margin:0 0 24px;font-size:18px;font-weight:800;color:#0d1e26;letter-spacing:.2px;}
+
+.path-column{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:84px;
+  padding:6px 0;
+}
+
+/* центральную линию убрали — прежний ::before удалён */
+
+/* Узел — базовый стиль */
+.path-node{
+  position:relative;
+  width:96px; height:96px;
+  border-radius:50%;
+  display:grid; place-items:center;
+  box-shadow:0 10px 28px -12px rgba(0,0,0,.16);
+  --offset: 0px;                     /* смещения как на примере */
+  transform: translateX(var(--offset));
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.path-node:hover{ transform: translateX(var(--offset)) translateY(-2px); }
+
+.icon-img{ width:28px; height:28px; user-select:none; }
+
+/* Уроки — белые кружки */
+.path-node.lesson{
+  background:#ffffff;
+  border:4px solid #e6eef2;
+}
+
+/* пройденный */
+.path-node.completed{
+  background:#fff;
+  border-color:#16c285;
+  box-shadow:0 10px 24px -12px rgba(16,185,129,.18), 0 0 0 6px rgba(16,185,129,.12);
+}
+
+/* Текущий урок — белый + зелёное свечение */
+.path-node.current{
+  background:#fff;
+  border-color:#bfeee1;
+  box-shadow:
+    0 16px 36px -14px rgba(16,185,129,.25),
+    0 0 0 10px rgba(16,185,129,.20);
+}
+
+/* закрытый */
+.path-node.locked{
+  background:#fff;
+  border-color:#e6eef2;
+  box-shadow:0 6px 18px -12px rgba(0,0,0,.10);
+}
+.path-node.locked .icon-img{ filter: grayscale(100%) opacity(.55); }
+
+/* Экзамен — жёлтый круг */
+.path-node.exam{
+  background:radial-gradient(120% 120% at 30% 25%, #ffe38a 0%, #ffd54a 55%, #f5bd00 100%);
+  border:4px solid #d4a100;
+  box-shadow:0 14px 32px -14px rgba(245,189,0,.45);
+}
+.path-node.exam .icon-img{ width:26px; height:26px; }
+
+/* Wrapper для тем */
+.themes-wrapper{
+  max-width:980px;
+  margin:0 auto;
+  padding-top:12px;
+  position:relative;
+}
+
+
+.themes-divider{
+  position: center;
+  width: 100%;
+  height:6px;
+  margin:8px 0 8px;
+  background:rgba(16,185,129,.25); /* полупрозрачная зелёная */
+  border-radius:4px;
+}
+
+/* Уменьшили вертикальные внутренние отступы тем */
+.theme-path{
+  padding:12px 16px 40px;
+}
+
+/* Меньше расстояние между Theme 1 и Theme 2 */
+.theme-path + .theme-path{
+  margin-top:12px;
+}
+
+/* Крупнее названия */
+.path-title .theme-index{
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.8px;
+  color:#059669;
+  opacity:1;
+}
+.path-title .theme-name{
+  font-size:20px;
+  font-weight:800;
+  letter-spacing:.6px;
+  color:#0d1e26;
+}
+
+/* Смещения Theme 1 */
+.theme-path.theme-1 .path-column .path-node:nth-child(1){ --offset:-14px; }
+.theme-path.theme-1 .path-column .path-node:nth-child(2){ --offset:-45px; }
+.theme-path.theme-1 .path-column .path-node:nth-child(3){ --offset:-70px; }
+.theme-path.theme-1 .path-column .path-node:nth-child(4){ --offset:-45px; }
+.theme-path.theme-1 .path-column .path-node:nth-child(5){ --offset:0px; }
+
+/* Смещения Theme 2 (зеркально ровная дуга) */
+.theme-path.theme-2 .path-column .path-node:nth-child(1){ --offset:0px; }
+.theme-path.theme-2 .path-column .path-node:nth-child(2){ --offset:45px; }
+.theme-path.theme-2 .path-column .path-node:nth-child(3){ --offset:70px; }
+.theme-path.theme-2 .path-column .path-node:nth-child(4){ --offset:45px; }
+.theme-path.theme-2 .path-column .path-node:nth-child(5){ --offset:14px; }
+
+/* Отступ между темами */
+.theme-path + .theme-path{ margin-top: 40px; }
+
+/* Адаптив */
+@media (max-width:820px){
+  .python-title{font-size:26px;}
+  .progress-line.slim{width:240px;}
+  .path-column{gap:72px;}
+  .path-column .path-node:nth-child(n){ --offset: 0px; }
+}
+
