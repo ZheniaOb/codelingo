@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/styles.css"; // Оставил оригинальный путь
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   // --- НАЧАЛО ЛОГИКИ ---
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +21,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const secretCode = formData.name.toLowerCase() === 'admin' ? 'MY_ADMIN_SECRET' : undefined;
 
     try {
@@ -36,8 +39,14 @@ const SignUp = () => {
 
       if (response.ok) {
         setIsError(false);
-        setMessage(`Success! Registered as ${data.role}. You can now log in.`);
-        setFormData({ name: "", email: "", password: "" }); 
+        setMessage(`Success! Registered as ${data.role}. Redirecting to login...`);
+        setFormData({ name: "", email: "", password: "" });
+
+        // redirect to login page after short delay
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+
       } else {
         setIsError(true);
         setMessage(data.error || "Registration failed.");
