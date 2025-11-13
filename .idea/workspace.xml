@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6782b9e4-5f35-4e99-9903-b2131f0b29b6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/AdminPanel/ManageLessons.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AdminPanel/ManageLessons.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/AdminPanel/ManageUsers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AdminPanel/ManageUsers.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -130,7 +132,7 @@
       <workItem from="1763054903480" duration="57000" />
       <workItem from="1763054985234" duration="7575000" />
       <workItem from="1763066586332" duration="4603000" />
-      <workItem from="1763072331242" duration="322000" />
+      <workItem from="1763072331242" duration="856000" />
     </task>
     <servers />
   </component>
