@@ -30,6 +30,9 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='user')
 
+    # Relationship to track lesson progress
+    lessons_completed = db.relationship('UserLessonProgress', backref='user', lazy=True, cascade="all, delete-orphan")
+
     def set_password(self, password):
         self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
@@ -37,6 +40,82 @@ class User(db.Model):
         return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
 
 print("User model defined.")
+
+# --- COURSE MODELS (Languages, Modules, Lessons, Exercises) ---
+
+class Language(db.Model):
+    """
+    A programming language (Python, Java, etc.)
+    """
+    __tablename__ = 'languages'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False) # "Python"
+    description = db.Column(db.Text, nullable=True)
+    image_url = db.Column(db.String(255), nullable=True) # /img/logos/python.png
+    
+    modules = db.relationship('Module', backref='language', lazy=True, cascade="all, delete-orphan")
+
+class Module(db.Model):
+    """
+    A Theme or Module of a course ("THEME 1: VARIABLES...")
+    """
+    __tablename__ = 'modules'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False) # "THEME 1..."
+    description = db.Column(db.Text, nullable=True)
+    order = db.Column(db.Integer, nullable=False) # For sorting (1, 2, 3...)
+    
+    language_id = db.Column(db.Integer, db.ForeignKey('languages.id'), nullable=False)
+    lessons = db.relationship('Lesson', backref='module', lazy=True, cascade="all, delete-orphan")
+
+class Lesson(db.Model):
+    """
+    A specific lesson ("Lesson 1: Integers (int)")
+    """
+    __tablename__ = 'lessons'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    lesson_type = db.Column(db.String(20), nullable=False, default='theory') # 'theory', 'quiz', 'code'
+    order = db.Column(db.Integer, nullable=False) # For sorting (1, 2, 3...)
+    
+    # Field to store the lesson text (theory)
+    content = db.Column(db.Text, nullable=True) 
+    
+    module_id = db.Column(db.Integer, db.ForeignKey('modules.id'), nullable=False)
+    exercises = db.relationship('Exercise', backref='lesson', lazy=True, cascade="all, delete-orphan")
+
+class Exercise(db.Model):
+    """
+    An exercise or Test ("What will 10 // 3 output?")
+    SIMPLE VERSION: No AI, just multiple choice or exact answer.
+    """
+    __tablename__ = 'exercises'
+    id = db.Column(db.Integer, primary_key=True)
+    exercise_type = db.Column(db.String(20), nullable=False) # 'multiple_choice', 'fill_in_blank'
+    question = db.Column(db.Text, nullable=False) # Question text
+    
+    # Answer options (for 'multiple_choice')
+    options = db.Column(db.JSON, nullable=True) # e.g., {"a": "print()", "b": "log()"}
+    
+    # The correct answer
+    answer = db.Column(db.Text, nullable=False) # e.g., "a" or "%"
+    
+    lesson_id = db.Column(db.Integer, db.ForeignKey('lessons.id'), nullable=False)
+
+class UserLessonProgress(db.Model):
+    """
+    Join table for tracking progress (User <-> Lesson)
+    """
+    __tablename__ = 'user_lesson_progress'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    lesson_id = db.Column(db.Integer, db.ForeignKey('lessons.id'), nullable=False)
+    completed_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    
+    __table_args__ = (db.UniqueConstraint('user_id', 'lesson_id', name='_user_lesson_uc'),)
+
+
+print("All course models defined.")
 
 # --- 3. API ROUTES (Endpoints) ---
 
