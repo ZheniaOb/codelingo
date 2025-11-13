@@ -14,6 +14,12 @@ const ManageUsers = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
+        if (!token) {
+          setError("No authentication token found");
+          setLoading(false);
+          return;
+        }
+
         const res = await fetch('http://localhost:5001/api/users', {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -21,8 +27,10 @@ const ManageUsers = () => {
         });
 
         const data = await res.json();
+
         if (res.ok) {
-          setUsers(data.users);
+          // upewniamy się, że data.users istnieje i jest tablicą
+          setUsers(Array.isArray(data.users) ? data.users : []);
         } else {
           setError(data.error || "Failed to fetch users");
         }
@@ -65,24 +73,28 @@ const ManageUsers = () => {
         {error && <p style={{ color: 'red' }}>{error}</p>}
 
         {!loading && !error && (
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead>
-              <tr>
-                <th style={{ borderBottom: '1px solid #ccc', padding: '0.5rem' }}>ID</th>
-                <th style={{ borderBottom: '1px solid #ccc', padding: '0.5rem' }}>Email</th>
-                <th style={{ borderBottom: '1px solid #ccc', padding: '0.5rem' }}>Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(u => (
-                <tr key={u.id}>
-                  <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{u.id}</td>
-                  <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{u.email}</td>
-                  <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{u.role}</td>
+          users.length > 0 ? (
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr>
+                  <th style={{ borderBottom: '1px solid #ccc', padding: '0.5rem' }}>ID</th>
+                  <th style={{ borderBottom: '1px solid #ccc', padding: '0.5rem' }}>Email</th>
+                  <th style={{ borderBottom: '1px solid #ccc', padding: '0.5rem' }}>Role</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map(u => (
+                  <tr key={u.id}>
+                    <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{u.id}</td>
+                    <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{u.email}</td>
+                    <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{u.role}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No users found.</p>
+          )
         )}
       </main>
 

@@ -18,7 +18,7 @@ const ManageLessons = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const [newExercise, setNewExercise] = useState({ question: '', options: {}, answer: '' });
+  const [newExercise, setNewExercise] = useState({ question: '', optionsText: '{}', answer: '' });
   const [addingNew, setAddingNew] = useState(false);
 
   const token = localStorage.getItem('token'); // JWT token admina
@@ -89,7 +89,7 @@ const ManageLessons = () => {
       });
       const data = await res.json();
       if (Array.isArray(data)) {
-        setExercises(data.map(e => ({ ...e, editMode: false })));
+        setExercises(data.map(e => ({ ...e, editMode: false, optionsText: JSON.stringify(e.options) })));
       } else setError(data.error || "Unexpected response");
     } catch (err) {
       setError("Network error");
@@ -112,13 +112,21 @@ const ManageLessons = () => {
   };
 
   const saveExercise = async (exercise) => {
+    let options;
+    try {
+      options = JSON.parse(exercise.optionsText);
+    } catch {
+      alert("Options must be valid JSON");
+      return;
+    }
+
     try {
       const res = await fetch(`http://localhost:5001/api/exercises/${exercise.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({
           question: exercise.question,
-          options: exercise.options,
+          options: options,
           answer: exercise.answer
         }),
       });
@@ -140,17 +148,25 @@ const ManageLessons = () => {
   };
 
   const addExercise = async () => {
+    let options;
+    try {
+      options = JSON.parse(newExercise.optionsText);
+    } catch {
+      alert("Options must be valid JSON");
+      return;
+    }
+
     try {
       const res = await fetch(`http://localhost:5001/api/exercises`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ ...newExercise, lesson_id: selectedLesson })
+        body: JSON.stringify({ ...newExercise, options, lesson_id: selectedLesson })
       });
       const data = await res.json();
       if (!res.ok) alert(data.error || "Error adding exercise");
       else {
-        setExercises([...exercises, { ...data, editMode: false }]);
-        setNewExercise({ question: '', options: {}, answer: '' });
+        setExercises([...exercises, { ...data, editMode: false, optionsText: JSON.stringify(data.options) }]);
+        setNewExercise({ question: '', optionsText: '{}', answer: '' });
         setAddingNew(false);
       }
     } catch (err) { alert("Network error"); }
@@ -227,8 +243,8 @@ const ManageLessons = () => {
                     </div>
                     <div style={{ marginBottom: '0.5rem' }}>
                       <label>Options (JSON):</label>
-                      <textarea value={JSON.stringify(newExercise.options)}
-                        onChange={e => { try { setNewExercise({ ...newExercise, options: JSON.parse(e.target.value) }); } catch {} }}
+                      <textarea value={newExercise.optionsText}
+                        onChange={e => setNewExercise({ ...newExercise, optionsText: e.target.value })}
                         style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }} />
                     </div>
                     <div style={{ marginBottom: '0.5rem' }}>
@@ -254,8 +270,8 @@ const ManageLessons = () => {
                         </div>
                         <div style={{ marginBottom: '0.5rem' }}>
                           <label>Options (JSON):</label>
-                          <textarea value={JSON.stringify(e.options)}
-                            onChange={ev => { try { handleExerciseChange(e.id, 'options', JSON.parse(ev.target.value)); } catch {} }}
+                          <textarea value={e.optionsText}
+                            onChange={ev => handleExerciseChange(e.id, 'optionsText', ev.target.value)}
                             style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }} />
                         </div>
                         <div style={{ marginBottom: '0.5rem' }}>

@@ -19,13 +19,17 @@ def get_jwt_user():
     except jwt.InvalidTokenError:
         return None, jsonify(error="Invalid token"), 401
 
+
 # --- USERS MANAGEMENT ---
 @app.route('/api/users', methods=['GET'])
 def get_all_users():
     current_user, err_resp, code = get_jwt_user()
-    if err_resp: return err_resp, code
+    if err_resp:
+        return err_resp, code
+
     users = User.query.all()
-    return jsonify([{"id": u.id, "email": u.email, "role": u.role} for u in users]), 200
+    return jsonify(users=[{"id": u.id, "email": u.email, "role": u.role} for u in users]), 200
+
 
 # --- COURSES MANAGEMENT ---
 @app.route('/api/languages', methods=['GET'])
