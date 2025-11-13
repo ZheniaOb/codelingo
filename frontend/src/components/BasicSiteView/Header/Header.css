@@ -76,3 +76,58 @@
 .brand:active {
   text-decoration: none;
 }
+
+/* Tablet responsive */
+@media (max-width: 1024px) {
+  .header-inner {
+    flex-wrap: wrap;             /* разрешаем блокам переноситься */
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .main-nav ul {
+    flex-wrap: wrap;             /* пункты меню могут переноситься */
+    justify-content: center;
+  }
+
+  .auth-controls {
+    flex-wrap: wrap;             /* кнопки остаются справа */
+    justify-content: flex-end;
+    gap: 12px;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;       /* все блоки в колонку */
+    align-items: stretch;         /* растягиваем на всю ширину */
+    gap: 12px;
+  }
+
+  .brand {
+    display: flex;
+    justify-content: flex-start;  /* логотип слева */
+    margin-bottom: 8px;
+  }
+
+  .main-nav {
+    width: 100%;
+  }
+
+  .main-nav ul {
+    flex-direction: row;          /* горизонтально, если помещается */
+    flex-wrap: wrap;              /* перенос при нехватке места */
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .auth-controls {
+    flex-direction: row;          /* кнопки рядом, пока хватает места */
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+}

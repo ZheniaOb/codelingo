@@ -221,6 +221,45 @@
   font-size: 14px;
 }
 
+/* Tablet responsive */
+@media (max-width: 1024px) {
+  .howit-steps {
+    grid-template-columns: repeat(2, 1fr); /* 2 карточки в ряд */
+    gap: 20px;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .howit-steps {
+    grid-template-columns: 1fr; /* 1 карточка в ряд */
+    gap: 16px;
+  }
+
+  .howit {
+    padding: 32px 16px 48px; /* уменьшаем паддинги для маленьких экранов */
+  }
+
+  .howit-title {
+    font-size: 22px; /* чуть меньше заголовок */
+  }
+
+  .howit-step-title {
+    font-size: 15px;
+  }
+
+  .howit-step-text {
+    font-size: 13px;
+  }
+
+  .howit-badge {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
+
 /* Анимационные базовые классы */
 .fade-in-up{
   opacity:0;
