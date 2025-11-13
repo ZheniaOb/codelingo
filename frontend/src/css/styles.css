@@ -103,20 +103,24 @@ body{
 }
 
 /* white card with large drop shadow */
-.hero-card{
-  background:#fff;
-  border-radius:18px;
-  padding:28px;
-  box-shadow:var(--shadow-strong);
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+.hero-image {
+  width: 320px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 8px;
+
+  /* Анимация подпрыгивания */
+  animation: jump 2s ease-in-out infinite;
 }
-.hero-image{
-  width:320px;
-  height:320px;
-  object-fit:cover;
-  border-radius:8px;
+
+/* Анимация подпрыгивания */
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px); /* высота подпрыгивания */
+  }
 }
 
 /* floating small square icons (use in markup if needed) */
