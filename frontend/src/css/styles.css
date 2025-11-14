@@ -1109,3 +1109,231 @@ body{
     background-color: #f59e0b;
     color: #fff;
 }
+
+/* ========== MINI GAMES PAGE ========== */
+.minigames-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f0fff4 0%, #ffffff 60%);
+}
+
+.minigames-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+/* Header Section */
+.minigames-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.minigames-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--green-500);
+  font-weight: 700;
+}
+
+.minigames-subtitle {
+  font-size: 1.25rem;
+  color: var(--muted);
+}
+
+/* Games Grid */
+.minigames-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .minigames-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Game Card */
+.minigame-card {
+  position: relative;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.minigame-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-strong);
+}
+
+.minigame-card-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.minigame-card:hover .minigame-card-overlay {
+  opacity: 0.1;
+}
+
+/* Gradient Classes */
+.game-gradient-1 {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.game-gradient-2 {
+  background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.game-gradient-3 {
+  background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+.game-gradient-4 {
+  background: linear-gradient(135deg, #059669, #10b981);
+}
+
+/* Card Content */
+.minigame-card-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Icon Wrapper */
+.minigame-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+}
+
+.minigame-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: invert(1) brightness(2);
+}
+
+.minigame-icon-fallback {
+  font-size: 2.5rem;
+  color: #fff;
+}
+
+/* Title and Description */
+.minigame-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  color: #07121a;
+  font-weight: 700;
+}
+
+.minigame-description {
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* Meta Information */
+.minigame-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.minigame-difficulty {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.difficulty-easy {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.difficulty-medium {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.difficulty-hard {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.minigame-xp {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Play Button */
+.minigame-play-btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+}
+
+.minigame-play-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.minigame-play-btn:active {
+  transform: scale(0.95);
+}
+
+.play-icon {
+  font-size: 0.875rem;
+}
+
+/* Animations for Mini Games */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
