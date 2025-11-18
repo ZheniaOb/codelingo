@@ -130,6 +130,7 @@
   border-radius:4px;
 }
 
+
 /* Уменьшили вертикальные внутренние отступы тем */
 .theme-path{
   padding:12px 16px 40px;
@@ -169,6 +170,31 @@
 .theme-path.theme-2 .path-column .path-node:nth-child(4){ --offset:45px; }
 .theme-path.theme-2 .path-column .path-node:nth-child(5){ --offset:14px; }
 
+/* Дуги для тем 3–6 (чередование) */
+.theme-path.theme-3 .path-column .path-node:nth-child(1){ --offset:-14px; }
+.theme-path.theme-3 .path-column .path-node:nth-child(2){ --offset:-45px; }
+.theme-path.theme-3 .path-column .path-node:nth-child(3){ --offset:-70px; }
+.theme-path.theme-3 .path-column .path-node:nth-child(4){ --offset:-45px; }
+.theme-path.theme-3 .path-column .path-node:nth-child(5){ --offset:0px; }
+
+.theme-path.theme-4 .path-column .path-node:nth-child(1){ --offset:0px; }
+.theme-path.theme-4 .path-column .path-node:nth-child(2){ --offset:45px; }
+.theme-path.theme-4 .path-column .path-node:nth-child(3){ --offset:70px; }
+.theme-path.theme-4 .path-column .path-node:nth-child(4){ --offset:45px; }
+.theme-path.theme-4 .path-column .path-node:nth-child(5){ --offset:14px; }
+
+.theme-path.theme-5 .path-column .path-node:nth-child(1){ --offset:-14px; }
+.theme-path.theme-5 .path-column .path-node:nth-child(2){ --offset:-45px; }
+.theme-path.theme-5 .path-column .path-node:nth-child(3){ --offset:-70px; }
+.theme-path.theme-5 .path-column .path-node:nth-child(4){ --offset:-45px; }
+.theme-path.theme-5 .path-column .path-node:nth-child(5){ --offset:0px; }
+
+.theme-path.theme-6 .path-column .path-node:nth-child(1){ --offset:0px; }
+.theme-path.theme-6 .path-column .path-node:nth-child(2){ --offset:45px; }
+.theme-path.theme-6 .path-column .path-node:nth-child(3){ --offset:70px; }
+.theme-path.theme-6 .path-column .path-node:nth-child(4){ --offset:45px; }
+.theme-path.theme-6 .path-column .path-node:nth-child(5){ --offset:14px; }
+
 /* Отступ между темами */
 .theme-path + .theme-path{ margin-top: 40px; }
 
@@ -179,4 +205,6 @@
   .path-column{gap:72px;}
   .path-column .path-node:nth-child(n){ --offset: 0px; }
 }
+
+
 
