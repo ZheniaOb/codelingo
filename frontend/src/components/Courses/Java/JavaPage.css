@@ -1,0 +1,263 @@
+:root{
+  --java-burgundy:#7F1D1D;
+  --java-burgundy-soft:#FEE2E2;
+  --java-navy:#1E293B;
+  --java-navy-soft:#E0F2FE;
+  --java-accent:#EF4444;      /* яркий красный для экзамена */
+  --java-bg-top:#0F172A;      /* тёмно-синий сверху */
+  --java-bg-bottom:#111827;   /* ещё темнее снизу */
+}
+
+/* Страница Java — светлый, как Python */
+.java-page{
+  font-family:'Segoe UI',Tahoma,Verdana,sans-serif;
+  background:
+    radial-gradient(circle at 20px 20px, rgba(148,163,184,0.08) 1px, transparent 0),
+    radial-gradient(circle at 60px 60px, rgba(148,163,184,0.05) 1px, transparent 0),
+    linear-gradient(180deg,#f8efff,#f8efff); /* светлый голубовато‑серый */
+  background-size:80px 80px, 120px 120px, 100% 100%;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  color:#111827;
+}
+
+/* Обёртка тем (копия themes-wrapper) */
+.java-themes-wrapper{
+  max-width:980px;
+  margin:0 auto;
+  padding-top:16px;
+  position:relative;
+}
+
+/* Линия между темами */
+.java-themes-divider{
+  width:100%;
+  height:6px;
+  margin:10px 0 10px;
+  background:linear-gradient(
+    90deg,
+    rgba(148,163,184,.25),
+    rgba(239,68,68,.65),
+    rgba(148,163,184,.25)
+  );
+  border-radius:999px;
+}
+
+/* Блок темы (клон theme-path) */
+.java-theme-path{
+  max-width:980px;
+  margin:0 auto;
+  padding:12px 16px 40px;
+  text-align:center;
+}
+.java-theme-path + .java-theme-path{
+  margin-top:40px;
+}
+
+/* Заголовок темы (клон path-title) */
+.java-path-title{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  margin:0 0 24px;
+  font-size:18px;
+  line-height:1.25;
+  letter-spacing:.2px;
+  font-weight:800;
+  color:#F9FAFB;
+}
+.java-path-title .java-theme-index{
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.8px;
+  color:#F97373; /* бордовый акцент */
+  opacity:1;
+}
+.java-path-title .java-theme-name{
+  font-size:20px;
+  font-weight:800;
+  letter-spacing:.6px;
+  color:#000000;
+}
+
+/* Колонка с кружками (клон path-column) */
+.java-path-column{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:84px;
+  padding:6px 0;
+}
+
+/* Базовый кружок (клон path-node) */
+.java-path-node{
+  position:relative;
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  box-shadow:0 10px 28px -12px rgba(15,23,42,.50);
+  --offset:0px;
+
+  opacity:0;
+  transform:translateX(var(--offset)) translateY(4px) scale(1);
+  animation: java-node-fade-in .5s ease forwards;
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    background .22s ease,
+    border-color .22s ease;
+}
+
+/* hover — как у Python */
+.java-path-node:hover{
+  transform:translateX(var(--offset)) translateY(2px) scale(1.14);
+}
+
+/* ::after без внутреннего свечения, как в Python */
+.java-path-node::after{
+  content:"";
+  position:absolute;
+  inset:10px;
+  border-radius:inherit;
+  pointer-events:none;
+  opacity:0;
+  box-shadow:none;
+  transition:opacity .25s ease, box-shadow .25s ease;
+}
+.java-path-node:hover::after{
+  opacity:0;
+  box-shadow:none;
+}
+
+/* Иконка */
+.java-icon-img{
+  width:28px;
+  height:28px;
+  user-select:none;
+}
+
+/* ===== СОСТОЯНИЯ (клон python, но бордовый/синий) ===== */
+
+.java-path-node.lesson{
+  background:#FFFFFF;
+  border:4px solid rgba(149, 170, 198, 0.75);
+  box-shadow:0 10px 24px -12px rgba(15,23,42,.18);
+}
+
+/* completed — лёгкий сине‑бордовый градиент, но всё ещё светлый */
+.java-path-node.completed{
+  background:linear-gradient(
+    145deg,
+    #ffd8e0,
+    #faecff
+  );
+  border-color:#f87373;
+  box-shadow:
+    0 10px 24px -12px rgba(230, 117, 117, 0.3),
+    0 0 0 6px rgba(238, 122, 122, 0.18);
+}
+
+/* current — белый центр + бордовая аура */
+.java-path-node.current{
+  background:#FFFFFF;
+  border-color:#d74747;           /* бордовый */
+  box-shadow:
+    0 18px 40px -16px rgba(185,28,28,.35),
+    0 0 0 10px rgba(252,165,165,.30);
+}
+
+/* locked — почти нейтральный серый */
+.java-path-node.locked{
+  background:#F9FAFB;
+  border-color:rgba(209,213,219,0.9);
+  box-shadow:0 6px 18px -12px rgba(148,163,184,.45);
+}
+.java-path-node.locked .java-icon-img{
+  filter:grayscale(100%) opacity(.55);
+}
+
+/* exam — светлый розово‑бордовый */
+.java-path-node.exam{
+  background:radial-gradient(
+    120% 120% at 30% 25%,
+    #FEE2E2 0%,
+    #FDBA74 35%,
+    #EF4444 100%
+  );
+  border:4px solid #d74747;
+  box-shadow:0 16px 36px -16px rgba(239,68,68,.55);
+}
+.java-path-node.exam .java-icon-img{
+  width:26px;
+  height:26px;
+}
+
+/* Смещения, как у Python (1–6) */
+.java-theme-1 .java-path-column .java-path-node:nth-child(1){ --offset:-14px; }
+.java-theme-1 .java-path-column .java-path-node:nth-child(2){ --offset:-45px; }
+.java-theme-1 .java-path-column .java-path-node:nth-child(3){ --offset:-70px; }
+.java-theme-1 .java-path-column .java-path-node:nth-child(4){ --offset:-45px; }
+.java-theme-1 .java-path-column .java-path-node:nth-child(5){ --offset:0px; }
+
+.java-theme-2 .java-path-column .java-path-node:nth-child(1){ --offset:0px; }
+.java-theme-2 .java-path-column .java-path-node:nth-child(2){ --offset:45px; }
+.java-theme-2 .java-path-column .java-path-node:nth-child(3){ --offset:70px; }
+.java-theme-2 .java-path-column .java-path-node:nth-child(4){ --offset:45px; }
+.java-theme-2 .java-path-column .java-path-node:nth-child(5){ --offset:14px; }
+
+.java-theme-3 .java-path-column .java-path-node:nth-child(1){ --offset:-14px; }
+.java-theme-3 .java-path-column .java-path-node:nth-child(2){ --offset:-45px; }
+.java-theme-3 .java-path-column .java-path-node:nth-child(3){ --offset:-70px; }
+.java-theme-3 .java-path-column .java-path-node:nth-child(4){ --offset:-45px; }
+.java-theme-3 .java-path-column .java-path-node:nth-child(5){ --offset:0px; }
+
+.java-theme-4 .java-path-column .java-path-node:nth-child(1){ --offset:0px; }
+.java-theme-4 .java-path-column .java-path-node:nth-child(2){ --offset:45px; }
+.java-theme-4 .java-path-column .java-path-node:nth-child(3){ --offset:70px; }
+.java-theme-4 .java-path-column .java-path-node:nth-child(4){ --offset:45px; }
+.java-theme-4 .java-path-column .java-path-node:nth-child(5){ --offset:14px; }
+
+.java-theme-5 .java-path-column .java-path-node:nth-child(1){ --offset:-14px; }
+.java-theme-5 .java-path-column .java-path-node:nth-child(2){ --offset:-45px; }
+.java-theme-5 .java-path-column .java-path-node:nth-child(3){ --offset:-70px; }
+.java-theme-5 .java-path-column .java-path-node:nth-child(4){ --offset:-45px; }
+.java-theme-5 .java-path-column .java-path-node:nth-child(5){ --offset:0px; }
+
+.java-theme-6 .java-path-column .java-path-node:nth-child(1){ --offset:0px; }
+.java-theme-6 .java-path-column .java-path-node:nth-child(2){ --offset:45px; }
+.java-theme-6 .java-path-column .java-path-node:nth-child(3){ --offset:70px; }
+.java-theme-6 .java-path-column .java-path-node:nth-child(4){ --offset:45px; }
+.java-theme-6 .java-path-column .java-path-node:nth-child(5){ --offset:14px; }
+
+/* Анимация появления (клон python-node-fade-in) */
+@keyframes java-node-fade-in{
+  from{
+    opacity:0;
+    transform:translateX(var(--offset)) translateY(8px) scale(.96);
+  }
+  to{
+    opacity:1;
+    transform:translateX(var(--offset)) translateY(0) scale(1);
+  }
+}
+
+/* Адаптив */
+@media (max-width:820px){
+  .java-path-column{
+    gap:72px;
+  }
+  .java-path-column .java-path-node:nth-child(n){
+    --offset:0px;
+  }
+
+  .java-page{
+    background:
+      radial-gradient(circle at 16px 16px, rgba(148,163,184,0.06) 1px, transparent 0),
+      linear-gradient(180deg,#F9FBFF,#EFF4FF);
+    background-size:80px 80px, 100% 100%;
+  }
+}
