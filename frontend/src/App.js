@@ -11,6 +11,7 @@ import ManageUsers from './components/AdminPanel/ManageUsers';
 import ManageLessons from './components/AdminPanel/ManageLessons.jsx';
 import JavaScriptPage from "./components/Courses/JavaScript/JavaScriptPage.jsx";
 import JavaPage from "./components/Courses/Java/JavaPage.jsx";
+import HtmlCssPage from "./components/Courses/htmlcss/HtmlCssPage.jsx";
 function App() {
   return (
     <Router>
@@ -28,6 +29,7 @@ function App() {
         <Route path="/admin_panel/manage_users" element={<ManageUsers />} />
         <Route path="/admin_panel/manage_lessons" element={<ManageLessons />} />
         <Route path="/courses/java" element={<JavaPage />} />
+        <Route path="/courses/htmlcss" element={<HtmlCssPage />} />
       </Routes>
     </Router>
   );
