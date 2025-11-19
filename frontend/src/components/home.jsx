@@ -93,7 +93,7 @@ const Home = () => {
                 <div className="progress-track">
                   <div className="progress-fill" style={{ width: "17%" }}></div>
                 </div>
-                <a className="btn btn-continue" href="#python">Continue</a>
+                <a className="btn btn-continue" href="/courses/python">Continue</a>
               </div>
             </article>
 

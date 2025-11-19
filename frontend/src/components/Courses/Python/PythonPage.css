@@ -130,7 +130,6 @@
   border-radius:4px;
 }
 
-
 /* Уменьшили вертикальные внутренние отступы тем */
 .theme-path{
   padding:12px 16px 40px;
@@ -205,6 +204,4 @@
   .path-column{gap:72px;}
   .path-column .path-node:nth-child(n){ --offset: 0px; }
 }
-
-
 
