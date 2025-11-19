@@ -81,6 +81,30 @@ class UserLessonProgress(db.Model):
     completed_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     __table_args__ = (db.UniqueConstraint('user_id', 'lesson_id', name='_user_lesson_uc'),)
 
+class Game(db.Model):
+    __tablename__ = 'games'
+    id = db.Column(db.Integer, primary_key=True)
+    game_id = db.Column(db.String(50), unique=True, nullable=False)  # memory-code, refactor-rush, etc.
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    difficulty = db.Column(db.String(20), nullable=False, default='Easy')
+    xp_reward = db.Column(db.Integer, nullable=False, default=50)
+    tasks = db.relationship('GameTask', backref='game', lazy=True, cascade="all, delete-orphan")
+
+class GameTask(db.Model):
+    __tablename__ = 'game_tasks'
+    id = db.Column(db.Integer, primary_key=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=False)
+    task_type = db.Column(db.String(50), nullable=False)  # memory_code, refactor, variable_hunt, bug_infection
+    language = db.Column(db.String(50), nullable=False, default='javascript')  # python, javascript, java, htmlcss
+    # For memory-code: code snippet to memorize
+    # For refactor-rush: bad code and correct answer
+    # For variable-hunt: code with variables and correct variable
+    # For bug-infection: code with bugs and correct fixes
+    task_data = db.Column(db.JSON, nullable=False)  # Flexible JSON structure for different game types
+    order = db.Column(db.Integer, nullable=False, default=0)
+    xp_reward = db.Column(db.Integer, nullable=False, default=50)
+
 print("All course models defined.")
 
 # --- 3. AUTHENTICATION ENDPOINTS ---
@@ -138,7 +162,70 @@ def get_user_data():
     except jwt.InvalidTokenError:
         return jsonify(error="Invalid token"), 401
 
-# --- 4. RUN SERVER ---
+# --- 4. GAMES ENDPOINTS ---
+
+@app.route('/api/games', methods=['GET'])
+def get_games():
+    """Get all available games"""
+    games = Game.query.all()
+    return jsonify([{
+        "id": g.id,
+        "game_id": g.game_id,
+        "title": g.title,
+        "description": g.description,
+        "difficulty": g.difficulty,
+        "xp_reward": g.xp_reward
+    } for g in games]), 200
+
+@app.route('/api/games/<string:game_id>/tasks', methods=['GET'])
+def get_game_tasks(game_id):
+    """Get tasks for a specific game"""
+    game = Game.query.filter_by(game_id=game_id).first()
+    if not game:
+        return jsonify(error="Game not found"), 404
+    
+    # Get language from query parameter (optional)
+    language = request.args.get('language')
+    query = GameTask.query.filter_by(game_id=game.id)
+    if language:
+        query = query.filter_by(language=language)
+    
+    tasks = query.order_by(GameTask.order).all()
+    return jsonify([{
+        "id": t.id,
+        "task_type": t.task_type,
+        "language": t.language,
+        "task_data": t.task_data,
+        "order": t.order,
+        "xp_reward": t.xp_reward
+    } for t in tasks]), 200
+
+@app.route('/api/games/<string:game_id>/tasks/random', methods=['GET'])
+def get_random_game_task(game_id):
+    """Get a random task for a specific game"""
+    import random
+    game = Game.query.filter_by(game_id=game_id).first()
+    if not game:
+        return jsonify(error="Game not found"), 404
+    
+    # Get language from query parameter
+    language = request.args.get('language', 'javascript')
+    
+    tasks = GameTask.query.filter_by(game_id=game.id, language=language).all()
+    if not tasks:
+        return jsonify(error=f"No tasks available for this game in {language}"), 404
+    
+    task = random.choice(tasks)
+    return jsonify({
+        "id": task.id,
+        "task_type": task.task_type,
+        "language": task.language,
+        "task_data": task.task_data,
+        "order": task.order,
+        "xp_reward": task.xp_reward
+    }), 200
+
+# --- 5. RUN SERVER ---
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

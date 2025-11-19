@@ -48,10 +48,7 @@ const MiniGamesPage = () => {
   const [iconErrors, setIconErrors] = React.useState({});
 
   const handleSelectGame = (gameId) => {
-    // Navigate to game page or handle game selection
-    console.log("Selected game:", gameId);
-    // You can add navigation logic here, e.g.:
-    // navigate(`/games/${gameId}`);
+    navigate(`/games/${gameId}`);
   };
 
   const handleIconError = (gameId) => {

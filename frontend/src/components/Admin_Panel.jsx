@@ -22,7 +22,7 @@ const Admin_Panel = () => {
         <section style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Admin Panel</h1>
           <p style={{ fontSize: '1.2rem', color: '#555' }}>
-            Manage users and lessons from here
+            Manage users, lessons and games from here
           </p>
         </section>
 
@@ -58,6 +58,19 @@ const Admin_Panel = () => {
             className="btn btn-cta"
           >
             Manage Lessons
+          </Link>
+
+          <Link
+            to="/admin_panel/manage_games"
+            style={{
+              padding: '1.5rem 2rem',
+              fontSize: '1.2rem',
+              minWidth: '200px',
+              textAlign: 'center',
+            }}
+            className="btn btn-cta"
+          >
+            Manage Games
           </Link>
         </section>
       </main>
