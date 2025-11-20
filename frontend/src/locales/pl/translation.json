@@ -42,17 +42,12 @@
   "nav_progress": "Postępy",
   "nav_login": "Zaloguj się",
   "nav_signup": "Zarejestruj się",
-  
-  "footer_desc": "Ucz się programowania w zabawny i efektywny sposób. Każdy dzień przybliża Cię do marzenia o zostaniu deweloperem.",
-  "footer_company_title": "Firma",
-  "footer_link_about": "O nas",
-  "footer_link_blog": "Blog",
-  "footer_link_careers": "Kariera",
-  "footer_link_press": "Prasa",
-  "footer_support_title": "Wsparcie",
-  "footer_link_help": "Pomoc",
-  "footer_link_contact": "Kontakt",
-  "footer_link_faq": "FAQ",
-  "footer_link_community": "Społeczność",
-  "footer_copyright": "© 2025 Codelingo. Wszelkie prawa zastrzeżone."
+
+  "nav_admin_panel": "Panel Administratora",
+  "nav_hello_user": "Witaj, użytkowniku",
+  "nav_logout": "Wyloguj",
+  "Courses": "Kursy",
+  "Mini Games": "Mini Gry",
+  "Progress": "Postęp",
+  "Leaderboard": "Ranking"
 }

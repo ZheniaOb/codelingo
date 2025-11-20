@@ -55,4 +55,13 @@
   "footer_link_faq": "FAQ",
   "footer_link_community": "Community",
   "footer_copyright": "© 2025 Codelingo. All rights reserved."
+
+  ,
+  "nav_admin_panel": "Admin Panel",
+  "nav_hello_user": "Hello, User",
+  "nav_logout": "Logout",
+  "Courses": "Courses",
+  "Mini Games": "Mini Games",
+  "Progress": "Progress",
+  "Leaderboard": "Leaderboard"
 }
