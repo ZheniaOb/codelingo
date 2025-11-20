@@ -1,7 +1,10 @@
 import React from 'react';
 import "./Footer.css";
+import { useTranslation } from 'react-i18next'; 
 
 const Footer = () => {
+    const { t } = useTranslation(); 
+
     return (
         <footer className="site-footer">
           <div className="container footer-inner">
@@ -9,48 +12,53 @@ const Footer = () => {
               <div className="footer-brand">
                 <div className="brand-row">
                   <img src="/img/small_logo.png" alt="Codelingo" className="footer-logo" />
-                  <span className="footer-brand-title">Codelingo</span>
+                  <span className="brand-title">Codelingo</span>
                 </div>
+                {/* ПЕРЕВОД: Описание */}
                 <p className="footer-desc">
-                  Learn programming in a fun and effective way. Every day brings you closer to your dream of becoming a developer.
+                  {t('footer_desc')}
                 </p>
               </div>
 
               <div className="footer-col">
-                <h4 className="footer-col-title">Company</h4>
+                {/* ПЕРЕВОД: Company */}
+                <h4 className="footer-col-title">{t('footer_company_title')}</h4>
                 <ul className="footer-links">
-                  <li><a href="#" className="footer-link">About</a></li>
-                  <li><a href="#" className="footer-link">Blog</a></li>
-                  <li><a href="#" className="footer-link">Careers</a></li>
-                  <li><a href="#" className="footer-link">Press</a></li>
+                  <li><a href="#" className="footer-link">{t('footer_link_about')}</a></li>
+                  <li><a href="#" className="footer-link">{t('footer_link_blog')}</a></li>
+                  <li><a href="#" className="footer-link">{t('footer_link_careers')}</a></li>
+                  <li><a href="#" className="footer-link">{t('footer_link_press')}</a></li>
                 </ul>
               </div>
 
               <div className="footer-col">
-                <h4 className="footer-col-title">Support</h4>
+                {/* ПЕРЕВОД: Support */}
+                <h4 className="footer-col-title">{t('footer_support_title')}</h4>
                 <ul className="footer-links">
-                  <li><a href="#" className="footer-link">Help</a></li>
-                  <li><a href="#" className="footer-link">Contact</a></li>
-                  <li><a href="#" className="footer-link">FAQ</a></li>
-                  <li><a href="#" className="footer-link">Community</a></li>
+                  <li><a href="#" className="footer-link">{t('footer_link_help')}</a></li>
+                  <li><a href="#" className="footer-link">{t('footer_link_contact')}</a></li>
+                  <li><a href="#" className="footer-link">{t('footer_link_faq')}</a></li>
+                  <li><a href="#" className="footer-link">{t('footer_link_community')}</a></li>
                 </ul>
               </div>
             </div>
 
             <div className="footer-bottom">
-              <p className="copyright">© 2025 Codelingo. All rights reserved.</p>
+              {/* ПЕРЕВОД: Копирайт */}
+              <p className="copyright">{t('footer_copyright')}</p>
               <div className="social-row">
+                {/* Социальные иконки остаются без перевода */}
                 <a href="#" className="social-link">
-                  <img src="/img/icons/facebook.png" alt="" className="social-img" width="18" height="18" />
+                  <img src="/img/icons/facebook.png" alt="Facebook" className="social-img" width="18" height="18" />
                 </a>
                 <a href="#" className="social-link">
-                  <img src="/img/icons/twitter.png" alt="" className="social-img" width="18" height="18" />
+                  <img src="/img/icons/twitter.png" alt="Twitter" className="social-img" width="18" height="18" />
                 </a>
                 <a href="#" className="social-link">
-                  <img src="/img/icons/instagram.png" alt="" className="social-img" width="18" height="18" />
+                  <img src="/img/icons/instagram.png" alt="Instagram" className="social-img" width="18" height="18" />
                 </a>
                 <a href="#" className="social-link">
-                  <img src="/img/icons/youtube.png" alt="" className="social-img" width="18" height="18" />
+                  <img src="/img/icons/youtube.png" alt="YouTube" className="social-img" width="18" height="18" />
                 </a>
               </div>
             </div>

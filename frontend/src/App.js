@@ -6,6 +6,7 @@ import Progress from "./components/Progress";
 import Leaderboard from "./components/Leaderboard";
 import Courses from "./components/Courses/CoursesCategory";
 import PythonPage from "./components/Courses/Python/PythonPage";
+import React, { Suspense } from "react";
 import Admin_Panel from './components/Admin_Panel';
 import ManageUsers from './components/AdminPanel/ManageUsers';
 import ManageLessons from './components/AdminPanel/ManageLessons.jsx';
@@ -15,9 +16,13 @@ import { GameWrapper } from './components/Games/GameWrapper';
 import JavaScriptPage from "./components/Courses/JavaScript/JavaScriptPage.jsx";
 import JavaPage from "./components/Courses/Java/JavaPage.jsx";
 import HtmlCssPage from "./components/Courses/htmlcss/HtmlCssPage.jsx";
+
+const Loading = () => <div style={{ textAlign: 'center', padding: '50px' }}>Loading...</div>;
+
 function App() {
   return (
     <Router>
+      <Suspense fallback={<Loading />}></Suspense>
       <Routes>
         {/* --- Basic routes --- */}
         <Route path="/" element={<Home />} />
