@@ -63,5 +63,25 @@
   "Courses": "Courses",
   "Mini Games": "Mini Games",
   "Progress": "Progress",
-  "Leaderboard": "Leaderboard"
+  "Leaderboard": "Leaderboard",
+  
+  "profile_my_profile": "My Profile",
+  "profile_loading": "Loading profile...",
+  "profile_not_logged_in": "You are not logged in",
+  "profile_please_login": "Please log in to see your profile.",
+  "profile_change_avatar": "Change avatar",
+  "profile_choose_avatar": "Choose your avatar",
+  "profile_record": "Record",
+  "profile_to_level": "to level",
+  "profile_lessons_completed": "Lessons Completed",
+  "profile_games_played": "Games Played",
+  "profile_badges_earned": "Badges Earned",
+  "profile_accuracy": "Accuracy",
+  "profile_account_settings": "Account Settings",
+  "profile_display_name": "Display Name",
+  "profile_email": "Email",
+  "profile_email_hint": "Email cannot be changed",
+  "profile_save_changes": "Save Changes",
+  "profile_saved": "Changes saved!",
+  "profile_quick_actions": "Quick Actions"
 }

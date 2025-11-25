@@ -16,6 +16,7 @@ import { GameWrapper } from './components/Games/GameWrapper';
 import JavaScriptPage from "./components/Courses/JavaScript/JavaScriptPage.jsx";
 import JavaPage from "./components/Courses/Java/JavaPage.jsx";
 import HtmlCssPage from "./components/Courses/htmlcss/HtmlCssPage.jsx";
+import ProfilePage from './components/ProfilePage';
 
 const Loading = () => <div style={{ textAlign: 'center', padding: '50px' }}>Loading...</div>;
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/courses/java" element={<JavaPage />} />
         <Route path="/courses/htmlcss" element={<HtmlCssPage />} />
         <Route path="/minigames" element={<MiniGamesPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/games/:gameId" element={<GameWrapper />} />
         <Route path="/admin_panel" element={<Admin_Panel />} />
         <Route path="/admin_panel/manage_users" element={<ManageUsers />} />

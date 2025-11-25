@@ -49,5 +49,25 @@
   "Courses": "Kursy",
   "Mini Games": "Mini Gry",
   "Progress": "Postęp",
-  "Leaderboard": "Ranking"
+  "Leaderboard": "Ranking",
+  
+  "profile_my_profile": "Mój Profil",
+  "profile_loading": "Ładowanie profilu...",
+  "profile_not_logged_in": "Nie jesteś zalogowany",
+  "profile_please_login": "Zaloguj się, aby zobaczyć swój profil.",
+  "profile_change_avatar": "Zmień avatar",
+  "profile_choose_avatar": "Wybierz swój avatar",
+  "profile_record": "Rekord",
+  "profile_to_level": "do poziomu",
+  "profile_lessons_completed": "Ukończone lekcje",
+  "profile_games_played": "Rozegrane gry",
+  "profile_badges_earned": "Zdobyte odznaki",
+  "profile_accuracy": "Dokładność",
+  "profile_account_settings": "Ustawienia konta",
+  "profile_display_name": "Nazwa wyświetlana",
+  "profile_email": "Email",
+  "profile_email_hint": "Email nie może być zmieniony",
+  "profile_save_changes": "Zapisz zmiany",
+  "profile_saved": "Zmiany zapisane!",
+  "profile_quick_actions": "Szybkie akcje"
 }

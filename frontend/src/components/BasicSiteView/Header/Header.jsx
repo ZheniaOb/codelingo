@@ -11,17 +11,54 @@ const Header = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        setUser({ username: payload.username || 'User', role: payload.role || 'user' });
-      } catch (err) {
-        console.error('Invalid token:', err);
-        localStorage.removeItem('token');
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          
+          // Pobierz dane użytkownika z API
+          try {
+            const response = await fetch('http://localhost:5001/api/me', {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (response.ok) {
+              const userData = await response.json();
+              setUser({ 
+                username: userData.email?.split('@')[0] || 'User', 
+                email: userData.email || 'user@example.com',
+                role: userData.role || payload.role || 'user' 
+              });
+            } else {
+              // Fallback do danych z localStorage lub tokena
+              const storedEmail = localStorage.getItem('email');
+              setUser({ 
+                username: storedEmail?.split('@')[0] || 'User', 
+                email: storedEmail || 'user@example.com',
+                role: payload.role || 'user' 
+              });
+            }
+          } catch (apiError) {
+            // Fallback do danych z localStorage lub tokena
+            const storedEmail = localStorage.getItem('email');
+            setUser({ 
+              username: storedEmail?.split('@')[0] || 'User', 
+              email: storedEmail || 'user@example.com',
+              role: payload.role || 'user' 
+            });
+          }
+        } catch (err) {
+          console.error('Invalid token:', err);
+          localStorage.removeItem('token');
+        }
       }
-    }
+    };
+    
+    fetchUserData();
   }, []);
 
   const handleLogout = () => {
@@ -64,7 +101,13 @@ const Header = () => {
           <LanguageSwitcher /> 
           {user ? (
             <>
-              <span className="user-name">{t('nav_hello_user', { username: user.username })}</span>
+              <Link to="/profile" className="user-profile-trigger" title={t('profile_my_profile') || 'My Profile'}>
+                <img 
+                  src="/img/small_logo.png" 
+                  alt="Profile" 
+                  className="user-profile-avatar-small"
+                />
+              </Link>
               <button className="btn btn-ghost" onClick={handleLogout}>{t('nav_logout')}</button>
             </>
           ) : (

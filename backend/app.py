@@ -26,9 +26,12 @@ print("Connecting to database...")
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False) 
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='user')
+    xp = db.Column(db.Integer, default=0) 
+    
     lessons_completed = db.relationship('UserLessonProgress', backref='user', lazy=True, cascade="all, delete-orphan")
 
     def set_password(self, password):
@@ -84,7 +87,7 @@ class UserLessonProgress(db.Model):
 class Game(db.Model):
     __tablename__ = 'games'
     id = db.Column(db.Integer, primary_key=True)
-    game_id = db.Column(db.String(50), unique=True, nullable=False)  # memory-code, refactor-rush, etc.
+    game_id = db.Column(db.String(50), unique=True, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
     difficulty = db.Column(db.String(20), nullable=False, default='Easy')
@@ -95,13 +98,9 @@ class GameTask(db.Model):
     __tablename__ = 'game_tasks'
     id = db.Column(db.Integer, primary_key=True)
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=False)
-    task_type = db.Column(db.String(50), nullable=False)  # memory_code, refactor, variable_hunt, bug_infection
-    language = db.Column(db.String(50), nullable=False, default='javascript')  # python, javascript, java, htmlcss
-    # For memory-code: code snippet to memorize
-    # For refactor-rush: bad code and correct answer
-    # For variable-hunt: code with variables and correct variable
-    # For bug-infection: code with bugs and correct fixes
-    task_data = db.Column(db.JSON, nullable=False)  # Flexible JSON structure for different game types
+    task_type = db.Column(db.String(50), nullable=False)
+    language = db.Column(db.String(50), nullable=False, default='javascript')
+    task_data = db.Column(db.JSON, nullable=False)
     order = db.Column(db.Integer, nullable=False, default=0)
     xp_reward = db.Column(db.Integer, nullable=False, default=50)
 
@@ -112,15 +111,22 @@ print("All course models defined.")
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
+    username = data.get('username') 
     email = data.get('email')
     password = data.get('password')
-    if not email or not password:
-        return jsonify(error="Email and password are required"), 400
+
+    if not username or not email or not password:
+        return jsonify(error="Username, email, and password are required"), 400
+    
     if User.query.filter_by(email=email).first():
         return jsonify(error="This email is already registered"), 409
+    
+    if User.query.filter_by(username=username).first():
+        return jsonify(error="This username is already taken"), 409
 
-    new_user = User(email=email)
+    new_user = User(email=email, username=username) 
     new_user.set_password(password)
+    
     secret_code = data.get('secret_code')
     new_user.role = 'admin' if secret_code == 'MY_ADMIN_SECRET' else 'user'
 
@@ -134,11 +140,13 @@ def login():
     email = data.get('email')
     password = data.get('password')
     user = User.query.filter_by(email=email).first()
+    
     if not user or not user.check_password(password):
         return jsonify(error="Invalid email or password"), 401
 
     token = jwt.encode({
         'user_id': user.id,
+        'username': user.username, 
         'role': user.role,
         'exp': datetime.now(timezone.utc) + timedelta(hours=24)
     }, app.config['SECRET_KEY'], algorithm="HS256")
@@ -156,7 +164,51 @@ def get_user_data():
         current_user = User.query.filter_by(id=data['user_id']).first()
         if not current_user:
             return jsonify(error="User not found"), 404
-        return jsonify(id=current_user.id, email=current_user.email, role=current_user.role), 200
+        
+        # Oblicz level na podstawie XP (100 XP per level)
+        level = (current_user.xp // 100) + 1
+        xp_for_current_level = (level - 1) * 100
+        xp_for_next_level = level * 100
+        xp_to_next_level = xp_for_next_level - current_user.xp
+        progress_percentage = int(((current_user.xp - xp_for_current_level) / 100) * 100) if xp_for_next_level > xp_for_current_level else 0
+        
+        # Level titles
+        level_titles = {
+            1: "Beginner",
+            2: "Novice",
+            3: "Learner",
+            4: "Student",
+            5: "Apprentice",
+            6: "Trainee",
+            7: "Junior",
+            8: "Junior Coder",
+            9: "Coder",
+            10: "Developer",
+            11: "Mid Developer",
+            12: "Senior Developer",
+            13: "Expert",
+            14: "Master",
+            15: "Grand Master"
+        }
+        level_title = level_titles.get(level, f"Level {level}")
+        next_level_title = level_titles.get(level + 1, f"Level {level + 1}")
+        
+        # Возвращаем расширенные данные профиля
+        return jsonify({
+            "id": current_user.id,
+            "username": current_user.username,
+            "email": current_user.email,
+            "role": current_user.role,
+            "xp": current_user.xp or 0,
+            "lessons_count": len(current_user.lessons_completed),
+            "level": level,
+            "level_title": level_title,
+            "next_level_title": next_level_title,
+            "xp_to_next_level": xp_to_next_level,
+            "progress_percentage": progress_percentage,
+            "xp_for_current_level": xp_for_current_level,
+            "xp_for_next_level": xp_for_next_level
+        }), 200
     except jwt.ExpiredSignatureError:
         return jsonify(error="Token has expired"), 401
     except jwt.InvalidTokenError:
@@ -166,7 +218,6 @@ def get_user_data():
 
 @app.route('/api/games', methods=['GET'])
 def get_games():
-    """Get all available games"""
     games = Game.query.all()
     return jsonify([{
         "id": g.id,
@@ -179,12 +230,10 @@ def get_games():
 
 @app.route('/api/games/<string:game_id>/tasks', methods=['GET'])
 def get_game_tasks(game_id):
-    """Get tasks for a specific game"""
     game = Game.query.filter_by(game_id=game_id).first()
     if not game:
         return jsonify(error="Game not found"), 404
     
-    # Get language from query parameter (optional)
     language = request.args.get('language')
     query = GameTask.query.filter_by(game_id=game.id)
     if language:
@@ -202,15 +251,12 @@ def get_game_tasks(game_id):
 
 @app.route('/api/games/<string:game_id>/tasks/random', methods=['GET'])
 def get_random_game_task(game_id):
-    """Get a random task for a specific game"""
     import random
     game = Game.query.filter_by(game_id=game_id).first()
     if not game:
         return jsonify(error="Game not found"), 404
     
-    # Get language from query parameter
     language = request.args.get('language', 'javascript')
-    
     tasks = GameTask.query.filter_by(game_id=game.id, language=language).all()
     if not tasks:
         return jsonify(error=f"No tasks available for this game in {language}"), 404
@@ -227,8 +273,12 @@ def get_random_game_task(game_id):
 
 # --- 5. RUN SERVER ---
 if __name__ == '__main__':
-    with app.app_context():
+    with app.app_context(): 
         db.create_all()
     # Import admin endpoints
-    from admin import *
+    try:
+        from admin import *
+    except ImportError:
+        print("Admin module not found or error inside it. Admin panel might not work.")
+        
     app.run(debug=True, port=5001)

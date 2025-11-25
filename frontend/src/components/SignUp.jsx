@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/styles.css"; // Оставил оригинальный путь
+import "../css/styles.css"; 
 
 const SignUp = () => {
   const navigate = useNavigate();
 
-  // --- НАЧАЛО ЛОГИКИ ---
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,6 +28,7 @@ const SignUp = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          username: formData.name, 
           email: formData.email,
           password: formData.password,
           secret_code: secretCode
@@ -42,7 +42,6 @@ const SignUp = () => {
         setMessage(`Success! Registered as ${data.role}. Redirecting to login...`);
         setFormData({ name: "", email: "", password: "" });
 
-        // redirect to login page after short delay
         setTimeout(() => {
           navigate("/login");
         }, 1500);
@@ -56,7 +55,6 @@ const SignUp = () => {
       setMessage("Network error. Is the backend running on port 5001?");
     }
   };
-  // --- КОНЕЦ ЛОГИКИ ---
 
   return (
     <main className="login-page-wrapper">
