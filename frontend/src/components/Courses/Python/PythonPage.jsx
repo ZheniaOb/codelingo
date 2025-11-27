@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../BasicSiteView/Header/Header";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./PythonPage.css";
@@ -7,10 +8,10 @@ const starIcon = "/img/icons/star.png";
 const examIcon = "/img/icons/exam_trophy.png";
 
 const pathNodes = [
-  { id: 1, type: "lesson", status: "completed" },
-  { id: 2, type: "lesson", status: "completed" },
-  { id: 3, type: "lesson", status: "completed" },
-  { id: 4, type: "lesson", status: "current" },
+  { id: 1, type: "lesson", status: "completed", lessonId: 1 },
+  { id: 2, type: "lesson", status: "completed", lessonId: 2 },
+  { id: 3, type: "lesson", status: "completed", lessonId: 3 },
+  { id: 4, type: "lesson", status: "current", lessonId: 4 },
   { id: 5, type: "exam",   status: "exam" },
 ];
 
@@ -52,6 +53,14 @@ const pathNodes6 = [
 ];
 
 const PythonPage = () => {
+const navigate = useNavigate();
+
+  const handleNodeClick = (node) => {
+    if (node.status === "locked") return;
+    if (!node.lessonId) return;
+    navigate(`/courses/python/lesson/${node.lessonId}`);
+  };
+
   return (
     <div className="python-page">
       <Header />
@@ -66,9 +75,14 @@ const PythonPage = () => {
           </div>
           <div className="path-column">
             {pathNodes.map(n => (
-              <div key={n.id} className={["path-node", n.type, n.status].join(" ")}>
+              <button
+                key={n.id}
+                type="button"
+                className={["path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
+              >
                 <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type} />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -85,9 +99,14 @@ const PythonPage = () => {
           </div>
           <div className="path-column">
             {pathNodes2.map(n => (
-              <div key={n.id} className={["path-node", n.type, n.status].join(" ")}>
+              <button
+                key={n.id}
+                type="button"
+                className={["path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
+              >
                 <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type} />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -104,9 +123,14 @@ const PythonPage = () => {
           </div>
           <div className="path-column">
             {pathNodes3.map(n => (
-              <div key={n.id} className={["path-node", n.type, n.status].join(" ")}>
-                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type}/>
-              </div>
+              <button
+                key={n.id}
+                type="button"
+                className={["path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
+              >
+                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type} />
+              </button>
             ))}
           </div>
         </section>
@@ -123,9 +147,14 @@ const PythonPage = () => {
           </div>
           <div className="path-column">
             {pathNodes4.map(n => (
-              <div key={n.id} className={["path-node", n.type, n.status].join(" ")}>
-                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type}/>
-              </div>
+              <button
+                key={n.id}
+                type="button"
+                className={["path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
+              >
+                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type} />
+              </button>
             ))}
           </div>
         </section>
@@ -142,9 +171,14 @@ const PythonPage = () => {
           </div>
           <div className="path-column">
             {pathNodes5.map(n => (
-              <div key={n.id} className={["path-node", n.type, n.status].join(" ")}>
+              <button
+                key={n.id}
+                type="button"
+                className={["path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
+              >
                 <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type}/>
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -161,9 +195,14 @@ const PythonPage = () => {
           </div>
             <div className="path-column">
               {pathNodes6.map(n => (
-                <div key={n.id} className={["path-node", n.type, n.status].join(" ")}>
+                <button
+                  key={n.id}
+                  type="button"
+                  className={["path-node", n.type, n.status].join(" ")}
+                  onClick={() => handleNodeClick(n)}
+                >
                   <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type}/>
-                </div>
+                </button>
               ))}
             </div>
         </section>

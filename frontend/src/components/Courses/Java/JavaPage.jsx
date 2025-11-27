@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../BasicSiteView/Header/Header";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./JavaPage.css";
@@ -7,10 +8,10 @@ const starIcon = "/img/icons/star.png";
 const examIcon = "/img/icons/exam_trophy.png";
 
 const javaPath1 = [
-  { id: 1, type: "lesson", status: "completed" },
-  { id: 2, type: "lesson", status: "completed" },
-  { id: 3, type: "lesson", status: "completed" },
-  { id: 4, type: "lesson", status: "current" },
+  { id: 1, type: "lesson", status: "completed", lessonId: 1 },
+  { id: 2, type: "lesson", status: "completed", lessonId: 2 },
+  { id: 3, type: "lesson", status: "completed", lessonId: 3 },
+  { id: 4, type: "lesson", status: "current", lessonId: 4 },
   { id: 5, type: "exam",   status: "exam" },
 ];
 
@@ -55,6 +56,14 @@ const javaPath6 = [
 ];
 
 const JavaPage = () => {
+  
+ const navigate = useNavigate();
+
+  const handleNodeClick = (node) => {
+    if (node.status === "locked") return;
+    if (!node.lessonId) return;
+    navigate(`/courses/java/lesson/${node.lessonId}`);
+  };
   return (
     <div className="java-page">
       <Header />
@@ -70,16 +79,18 @@ const JavaPage = () => {
           </div>
           <div className="java-path-column">
             {javaPath1.map(n => (
-              <div
+          <button
                 key={n.id}
+                type="button"
                 className={["java-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="java-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -96,16 +107,18 @@ const JavaPage = () => {
           </div>
           <div className="java-path-column">
             {javaPath2.map(n => (
-              <div
+              <button
                 key={n.id}
+                type="button"
                 className={["java-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="java-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -122,16 +135,18 @@ const JavaPage = () => {
           </div>
           <div className="java-path-column">
             {javaPath3.map(n => (
-              <div
+              <button
                 key={n.id}
+                type="button"
                 className={["java-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="java-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -148,16 +163,18 @@ const JavaPage = () => {
           </div>
           <div className="java-path-column">
             {javaPath4.map(n => (
-              <div
+              <button
                 key={n.id}
+                type="button"
                 className={["java-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="java-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -174,16 +191,18 @@ const JavaPage = () => {
           </div>
           <div className="java-path-column">
             {javaPath5.map(n => (
-              <div
+              <button
                 key={n.id}
+                type="button"
                 className={["java-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="java-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -200,16 +219,18 @@ const JavaPage = () => {
           </div>
           <div className="java-path-column">
             {javaPath6.map(n => (
-              <div
+              <button
                 key={n.id}
+                type="button"
                 className={["java-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="java-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>

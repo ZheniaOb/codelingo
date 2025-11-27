@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../BasicSiteView/Header/Header";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./HtmlCssPage.css";
@@ -7,10 +8,10 @@ const starIcon = "/img/icons/star.png";
 const examIcon = "/img/icons/exam_trophy.png";
 
 const htmlCssPath1 = [
-  { id: 1, type: "lesson", status: "completed" },
-  { id: 2, type: "lesson", status: "completed" },
-  { id: 3, type: "lesson", status: "completed" },
-  { id: 4, type: "lesson", status: "current" },
+  { id: 1, type: "lesson", status: "completed", lessonId: 1 },
+  { id: 2, type: "lesson", status: "completed", lessonId: 2 },
+  { id: 3, type: "lesson", status: "completed", lessonId: 3 },
+  { id: 4, type: "lesson", status: "current", lessonId: 4 },
   { id: 5, type: "exam",   status: "exam" },
 ];
 
@@ -55,6 +56,15 @@ const htmlCssPath6 = [
 ];
 
 const HtmlCssPage = () => {
+
+  const navigate = useNavigate();
+
+  const handleNodeClick = (node) => {
+    if (node.status === "locked") return;
+    if (!node.lessonId) return;
+    navigate(`/courses/htmlcss/lesson/${node.lessonId}`);
+  };
+
   return (
     <div className="htmlcss-page">
       <Header />
@@ -70,16 +80,18 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath1.map(n => (
-              <div
+              <button
                 key={n.id}
+                type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="htmlcss-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -96,16 +108,18 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath2.map(n => (
-              <div
+                <button
                 key={n.id}
+                type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="htmlcss-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -122,16 +136,18 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath3.map(n => (
-              <div
+                <button
                 key={n.id}
+                type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="htmlcss-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -148,16 +164,18 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath4.map(n => (
-              <div
+                <button
                 key={n.id}
+                type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="htmlcss-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -174,16 +192,18 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath5.map(n => (
-              <div
+                <button
                 key={n.id}
+                type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="htmlcss-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -200,16 +220,18 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath6.map(n => (
-              <div
+                <button
                 key={n.id}
+                type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}
+                onClick={() => handleNodeClick(n)}
               >
                 <img
                   className="htmlcss-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
                   alt={n.type}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
