@@ -9,6 +9,8 @@ import Header from "../BasicSiteView/Header/Header";
 import Footer from "../BasicSiteView/Footer/Footer";
 import "../../css/styles.css";
 
+const API_URL = "http://localhost:5001/api";
+
 const gameComponents = {
   "memory-code": MemoryCodeGame,
   "refactor-rush": RefactorRushGame,
@@ -22,6 +24,8 @@ export function GameWrapper() {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [showCompletion, setShowCompletion] = useState(false);
   const [earnedXP, setEarnedXP] = useState(0);
+  const [completionStatus, setCompletionStatus] = useState(null);
+  const [isSavingResult, setIsSavingResult] = useState(false);
 
   const GameComponent = gameComponents[gameId];
 
@@ -42,9 +46,61 @@ export function GameWrapper() {
     );
   }
 
-  const handleComplete = (xp) => {
+  const handleComplete = async (xp) => {
     setEarnedXP(xp);
-    setShowCompletion(true);
+    setCompletionStatus(null);
+
+    if (!xp || xp <= 0) {
+      setCompletionStatus({
+        type: "info",
+        message: "No XP earned this time. Try another round!"
+      });
+      setShowCompletion(true);
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setCompletionStatus({
+        type: "error",
+        message: "Log in to save your XP progress."
+      });
+      setShowCompletion(true);
+      return;
+    }
+
+    setIsSavingResult(true);
+    try {
+      const response = await fetch(`${API_URL}/games/${gameId}/complete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          xp_earned: xp,
+          language: selectedLanguage
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to save game result");
+      }
+
+      setCompletionStatus({
+        type: "success",
+        message: data.message || "XP saved!"
+      });
+    } catch (err) {
+      setCompletionStatus({
+        type: "error",
+        message: err.message || "Failed to save XP. Please try again."
+      });
+    } finally {
+      setIsSavingResult(false);
+      setShowCompletion(true);
+    }
   };
 
   const handleBack = () => {
@@ -94,9 +150,25 @@ export function GameWrapper() {
                 <span>⭐</span>
                 <span>{earnedXP} XP</span>
               </div>
-              <p style={{ color: '#6b7280', marginBottom: '2rem', fontSize: '1.1rem' }}>
+              <p style={{ color: '#6b7280', marginBottom: '1rem', fontSize: '1.1rem' }}>
                 Great job! Keep practicing to improve your skills!
               </p>
+              {completionStatus && (
+                <p
+                  style={{
+                    color: completionStatus.type === "success" ? '#059669' : completionStatus.type === "error" ? '#dc2626' : '#6b7280',
+                    marginBottom: '2rem',
+                    fontWeight: 600
+                  }}
+                >
+                  {completionStatus.message}
+                </p>
+              )}
+              {!completionStatus && isSavingResult && (
+                <p style={{ color: '#6b7280', marginBottom: '2rem', fontWeight: 600 }}>
+                  Saving your XP...
+                </p>
+              )}
               <div className="flex gap-4">
                 <button
                   onClick={() => {

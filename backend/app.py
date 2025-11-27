@@ -23,6 +23,23 @@ print("Connecting to database...")
 
 # --- 2. DATABASE MODELS ---
 
+def get_current_user_from_request():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or len(auth_header.split(" ")) != 2:
+        return None, jsonify(error="Authentication token is missing"), 401
+    token = auth_header.split(" ")[1]
+    try:
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+        current_user = User.query.filter_by(id=data['user_id']).first()
+        if not current_user:
+            return None, jsonify(error="User not found"), 404
+        return current_user, None, None
+    except jwt.ExpiredSignatureError:
+        return None, jsonify(error="Token has expired"), 401
+    except jwt.InvalidTokenError:
+        return None, jsonify(error="Invalid token"), 401
+
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -106,6 +123,15 @@ class GameTask(db.Model):
     order = db.Column(db.Integer, nullable=False, default=0)
     xp_reward = db.Column(db.Integer, nullable=False, default=50)
 
+class UserGameResult(db.Model):
+    __tablename__ = 'user_game_results'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=False)
+    xp_earned = db.Column(db.Integer, nullable=False, default=0)
+    language = db.Column(db.String(50), nullable=True)
+    completed_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+
 print("All course models defined.")
 
 # --- 3. AUTHENTICATION ENDPOINTS ---
@@ -157,145 +183,125 @@ def login():
 
 @app.route('/api/me', methods=['GET'])
 def get_user_data():
-    auth_header = request.headers.get('Authorization')
-    if not auth_header or len(auth_header.split(" ")) != 2:
-        return jsonify(error="Authentication token is missing"), 401
-    token = auth_header.split(" ")[1]
-    try:
-        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-        current_user = User.query.filter_by(id=data['user_id']).first()
-        if not current_user:
-            return jsonify(error="User not found"), 404
-        
-        # Oblicz level na podstawie XP (100 XP per level)
-        level = (current_user.xp // 100) + 1
-        xp_for_current_level = (level - 1) * 100
-        xp_for_next_level = level * 100
-        xp_to_next_level = xp_for_next_level - current_user.xp
-        progress_percentage = int(((current_user.xp - xp_for_current_level) / 100) * 100) if xp_for_next_level > xp_for_current_level else 0
-        
-        # Level titles
-        level_titles = {
-            1: "Beginner",
-            2: "Novice",
-            3: "Learner",
-            4: "Student",
-            5: "Apprentice",
-            6: "Trainee",
-            7: "Junior",
-            8: "Junior Coder",
-            9: "Coder",
-            10: "Developer",
-            11: "Mid Developer",
-            12: "Senior Developer",
-            13: "Expert",
-            14: "Master",
-            15: "Grand Master"
-        }
-        level_title = level_titles.get(level, f"Level {level}")
-        next_level_title = level_titles.get(level + 1, f"Level {level + 1}")
-        
-        # Возвращаем расширенные данные профиля
-        return jsonify({
-            "id": current_user.id,
-            "username": current_user.username,
-            "email": current_user.email,
-            "role": current_user.role,
-            "xp": current_user.xp or 0,
-            "lessons_count": len(current_user.lessons_completed),
-            "level": level,
-            "level_title": level_title,
-            "next_level_title": next_level_title,
-            "xp_to_next_level": xp_to_next_level,
-            "progress_percentage": progress_percentage,
-            "xp_for_current_level": xp_for_current_level,
-            "xp_for_next_level": xp_for_next_level,
-            "avatar": current_user.avatar or "/img/small_logo.png"
-        }), 200
-    except jwt.ExpiredSignatureError:
-        return jsonify(error="Token has expired"), 401
-    except jwt.InvalidTokenError:
-        return jsonify(error="Invalid token"), 401
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp:
+        return err_resp, code
+
+    # Oblicz level na podstawie XP (100 XP per level)
+    level = (current_user.xp // 100) + 1
+    xp_for_current_level = (level - 1) * 100
+    xp_for_next_level = level * 100
+    xp_to_next_level = xp_for_next_level - current_user.xp
+    progress_percentage = int(((current_user.xp - xp_for_current_level) / 100) * 100) if xp_for_next_level > xp_for_current_level else 0
+    
+    # Level titles
+    level_titles = {
+        1: "Beginner",
+        2: "Novice",
+        3: "Learner",
+        4: "Student",
+        5: "Apprentice",
+        6: "Trainee",
+        7: "Junior",
+        8: "Junior Coder",
+        9: "Coder",
+        10: "Developer",
+        11: "Mid Developer",
+        12: "Senior Developer",
+        13: "Expert",
+        14: "Master",
+        15: "Grand Master"
+    }
+    level_title = level_titles.get(level, f"Level {level}")
+    next_level_title = level_titles.get(level + 1, f"Level {level + 1}")
+    
+    # Возвращаем расширенные данные профиля
+    return jsonify({
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email,
+        "role": current_user.role,
+        "xp": current_user.xp or 0,
+        "lessons_count": len(current_user.lessons_completed),
+        "level": level,
+        "level_title": level_title,
+        "next_level_title": next_level_title,
+        "xp_to_next_level": xp_to_next_level,
+        "progress_percentage": progress_percentage,
+        "xp_for_current_level": xp_for_current_level,
+        "xp_for_next_level": xp_for_next_level,
+        "avatar": current_user.avatar or "/img/small_logo.png"
+    }), 200
 
 @app.route('/api/me', methods=['PUT'])
 def update_user_data():
-    auth_header = request.headers.get('Authorization')
-    if not auth_header or len(auth_header.split(" ")) != 2:
-        return jsonify(error="Authentication token is missing"), 401
-    token = auth_header.split(" ")[1]
-    try:
-        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-        current_user = User.query.filter_by(id=data['user_id']).first()
-        if not current_user:
-            return jsonify(error="User not found"), 404
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp:
+        return err_resp, code
 
-        payload = request.get_json() or {}
-        new_username = payload.get('username', current_user.username)
-        new_email = payload.get('email', current_user.email)
-        new_avatar = payload.get('avatar', current_user.avatar)
+    payload = request.get_json() or {}
+    new_username = payload.get('username', current_user.username)
+    new_email = payload.get('email', current_user.email)
+    new_avatar = payload.get('avatar', current_user.avatar)
 
-        if not new_username:
-            return jsonify(error="Username cannot be empty"), 400
-        if not new_email:
-            return jsonify(error="Email cannot be empty"), 400
+    if not new_username:
+        return jsonify(error="Username cannot be empty"), 400
+    if not new_email:
+        return jsonify(error="Email cannot be empty"), 400
 
-        # Ensure username/email are unique if changed
-        if new_email != current_user.email and User.query.filter_by(email=new_email).first():
-            return jsonify(error="This email is already registered"), 409
-        if new_username != current_user.username and User.query.filter_by(username=new_username).first():
-            return jsonify(error="This username is already taken"), 409
+    # Ensure username/email are unique if changed
+    if new_email != current_user.email and User.query.filter_by(email=new_email).first():
+        return jsonify(error="This email is already registered"), 409
+    if new_username != current_user.username and User.query.filter_by(username=new_username).first():
+        return jsonify(error="This username is already taken"), 409
 
-        current_user.username = new_username
-        current_user.email = new_email
-        current_user.avatar = new_avatar
-        db.session.commit()
+    current_user.username = new_username
+    current_user.email = new_email
+    current_user.avatar = new_avatar
+    db.session.commit()
 
-        # Recalculate level info for response consistency
-        level = (current_user.xp // 100) + 1
-        xp_for_current_level = (level - 1) * 100
-        xp_for_next_level = level * 100
-        xp_to_next_level = xp_for_next_level - current_user.xp
-        progress_percentage = int(((current_user.xp - xp_for_current_level) / 100) * 100) if xp_for_next_level > xp_for_current_level else 0
-        level_titles = {
-            1: "Beginner",
-            2: "Novice",
-            3: "Learner",
-            4: "Student",
-            5: "Apprentice",
-            6: "Trainee",
-            7: "Junior",
-            8: "Junior Coder",
-            9: "Coder",
-            10: "Developer",
-            11: "Mid Developer",
-            12: "Senior Developer",
-            13: "Expert",
-            14: "Master",
-            15: "Grand Master"
-        }
-        level_title = level_titles.get(level, f"Level {level}")
-        next_level_title = level_titles.get(level + 1, f"Level {level + 1}")
+    # Recalculate level info for response consistency
+    level = (current_user.xp // 100) + 1
+    xp_for_current_level = (level - 1) * 100
+    xp_for_next_level = level * 100
+    xp_to_next_level = xp_for_next_level - current_user.xp
+    progress_percentage = int(((current_user.xp - xp_for_current_level) / 100) * 100) if xp_for_next_level > xp_for_current_level else 0
+    level_titles = {
+        1: "Beginner",
+        2: "Novice",
+        3: "Learner",
+        4: "Student",
+        5: "Apprentice",
+        6: "Trainee",
+        7: "Junior",
+        8: "Junior Coder",
+        9: "Coder",
+        10: "Developer",
+        11: "Mid Developer",
+        12: "Senior Developer",
+        13: "Expert",
+        14: "Master",
+        15: "Grand Master"
+    }
+    level_title = level_titles.get(level, f"Level {level}")
+    next_level_title = level_titles.get(level + 1, f"Level {level + 1}")
 
-        return jsonify({
-            "id": current_user.id,
-            "username": current_user.username,
-            "email": current_user.email,
-            "role": current_user.role,
-            "xp": current_user.xp or 0,
-            "lessons_count": len(current_user.lessons_completed),
-            "level": level,
-            "level_title": level_title,
-            "next_level_title": next_level_title,
-            "xp_to_next_level": xp_to_next_level,
-            "progress_percentage": progress_percentage,
-            "xp_for_current_level": xp_for_current_level,
-            "xp_for_next_level": xp_for_next_level,
-            "avatar": current_user.avatar or "/img/small_logo.png"
-        }), 200
-    except jwt.ExpiredSignatureError:
-        return jsonify(error="Token has expired"), 401
-    except jwt.InvalidTokenError:
-        return jsonify(error="Invalid token"), 401
+    return jsonify({
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email,
+        "role": current_user.role,
+        "xp": current_user.xp or 0,
+        "lessons_count": len(current_user.lessons_completed),
+        "level": level,
+        "level_title": level_title,
+        "next_level_title": next_level_title,
+        "xp_to_next_level": xp_to_next_level,
+        "progress_percentage": progress_percentage,
+        "xp_for_current_level": xp_for_current_level,
+        "xp_for_next_level": xp_for_next_level,
+        "avatar": current_user.avatar or "/img/small_logo.png"
+    }), 200
 
 @app.route('/api/leaderboard', methods=['GET'])
 def get_leaderboard():
@@ -383,6 +389,53 @@ def get_random_game_task(game_id):
         "task_data": task.task_data,
         "order": task.order,
         "xp_reward": task.xp_reward
+    }), 200
+
+@app.route('/api/games/<string:game_id>/complete', methods=['POST'])
+def complete_game(game_id):
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp:
+        return err_resp, code
+
+    game = Game.query.filter_by(game_id=game_id).first()
+    if not game:
+        return jsonify(error="Game not found"), 404
+
+    payload = request.get_json() or {}
+    xp_earned = payload.get('xp_earned')
+    language = payload.get('language')
+
+    if xp_earned is None:
+        return jsonify(error="xp_earned is required"), 400
+
+    try:
+        xp_earned = int(xp_earned)
+    except (TypeError, ValueError):
+        return jsonify(error="xp_earned must be a number"), 400
+
+    if xp_earned <= 0:
+        return jsonify(error="xp_earned must be greater than zero"), 400
+
+    # Prevent unrealistic submissions from the client
+    xp_cap = max(game.xp_reward or 0, 50) * 10
+    xp_to_add = min(xp_earned, xp_cap)
+
+    current_user.xp = (current_user.xp or 0) + xp_to_add
+
+    result = UserGameResult(
+        user_id=current_user.id,
+        game_id=game.id,
+        xp_earned=xp_to_add,
+        language=language
+    )
+    db.session.add(result)
+    db.session.commit()
+
+    return jsonify({
+        "message": f"You earned {xp_to_add} XP from {game.title}",
+        "xp_added": xp_to_add,
+        "xp_total": current_user.xp,
+        "game_id": game.game_id
     }), 200
 
 # --- 5. RUN SERVER ---
