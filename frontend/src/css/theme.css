@@ -1,0 +1,39 @@
+:root {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f7f7f7; 
+    --color-text-primary: #212529;
+    --color-text-secondary: #6c757d; 
+    --color-accent-green: #1a8f65;
+    --green-500: var(--color-accent-green); 
+    --green-400: #20a072;
+    --color-border: rgba(33, 37, 41, 0.1); 
+}
+
+.dark-theme {
+    --color-bg-primary: #1e1e1e; 
+    --color-bg-secondary: #2c2c2c; 
+    --color-text-primary: #ededed;
+    --color-text-secondary: #adadad; 
+    --color-accent-green: #37b275;
+    --green-500: var(--color-accent-green);
+    --green-400: #49d790;
+    --color-border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.site-header * {
+    pointer-events: auto !important;
+}
+.site-header {
+    pointer-events: auto;
+}
+.auth-controls, 
+.auth-controls > * {
+    pointer-events: auto !important;
+}
+

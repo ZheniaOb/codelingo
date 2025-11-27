@@ -54,7 +54,7 @@ export function LanguageSelector({ onSelect, onBack }) {
                   <span style={{ display: 'none', fontSize: '2rem' }}>💻</span>
                 </div>
                 <div className="language-select-info">
-                  <h4 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.25rem', color: '#07121a' }}>
+                  <h4 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.25rem', color: 'var(--color-text-primary)' }}>
                     {lang.name}
                   </h4>
                   <p style={{ fontSize: '0.9rem', color: '#6b7280' }}>{lang.description}</p>

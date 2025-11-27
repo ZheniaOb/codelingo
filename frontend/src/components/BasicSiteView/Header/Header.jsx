@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 import '../../../css/styles.css';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../../LanguageSwitcher'; 
+import LanguageSwitcher from '../../LanguageSwitcher';
+import ThemeSwitcher from '../../ThemeSwitcher'; 
 
 const getInitialUserState = () => {
   const token = localStorage.getItem('token');
@@ -43,7 +44,7 @@ const getInitialUserState = () => {
   }
 };
 
-const Header = () => {
+const Header = ({ theme, toggleTheme }) => { 
   const { t } = useTranslation(); 
   const navigate = useNavigate();
   const [user, setUser] = useState(() => getInitialUserState());
@@ -87,7 +88,6 @@ const Header = () => {
               });
             }
           } catch (apiError) {
-            // Fallback do danych z localStorage lub tokena
             const storedEmail = localStorage.getItem('email');
             setUser({ 
               username: storedEmail?.split('@')[0] || 'User', 
@@ -116,7 +116,12 @@ const Header = () => {
     <header className="site-header">
       <div className="container header-inner">
         <Link to="/" className="brand">
-          <img src="/img/big_logo.png" alt="logo" className="brand-logo" />
+          <img 
+            src="/img/big_logo.png" 
+            alt="logo" 
+            className="brand-logo" 
+            style={theme === 'dark' ? { filter: 'brightness(0.7) saturate(0.95)' } : {}}
+          />
           <span className="brand-title">Codelingo</span>
         </Link>
 
@@ -143,6 +148,7 @@ const Header = () => {
         </nav>
 
         <div className="auth-controls">
+          <ThemeSwitcher theme={theme} toggleTheme={toggleTheme} />
           <LanguageSwitcher /> 
           {user ? (
             <>
