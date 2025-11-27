@@ -936,6 +936,15 @@ body{
     box-shadow: 0 10px 15px rgba(0,0,0,0.1);
 }
 
+.podium-avatar img,
+.podium-avatar-1st img,
+.list-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 
 .rank-icon {
     position: absolute;

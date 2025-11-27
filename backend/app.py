@@ -32,6 +32,7 @@ class User(db.Model):
     role = db.Column(db.String(20), nullable=False, default='user')
     xp = db.Column(db.Integer, default=0) 
     avatar = db.Column(db.String(255), nullable=True)
+    streak = db.Column(db.Integer, default=0)
     
     lessons_completed = db.relationship('UserLessonProgress', backref='user', lazy=True, cascade="all, delete-orphan")
 
@@ -295,6 +296,37 @@ def update_user_data():
         return jsonify(error="Token has expired"), 401
     except jwt.InvalidTokenError:
         return jsonify(error="Invalid token"), 401
+
+@app.route('/api/leaderboard', methods=['GET'])
+def get_leaderboard():
+    limit = request.args.get('limit', default=20, type=int)
+    limit = max(1, min(limit, 50))
+
+    users = User.query.order_by(User.xp.desc()).limit(limit).all()
+
+    def build_initials(source_name):
+        if not source_name:
+            return "??"
+        parts = source_name.strip().split()
+        if len(parts) >= 2:
+            return (parts[0][0] + parts[1][0]).upper()
+        return source_name[:2].upper()
+
+    leaderboard_payload = []
+    for index, user in enumerate(users, start=1):
+        display_name = user.username or (user.email.split('@')[0] if user.email else f"User {user.id}")
+        initials = build_initials(display_name)
+        leaderboard_payload.append({
+            "rank": index,
+            "id": user.id,
+            "username": display_name,
+            "xp": user.xp or 0,
+            "streak": user.streak or 0,
+            "avatar": user.avatar,
+            "initials": initials
+        })
+
+    return jsonify(leaderboard_payload), 200
 
 # --- 4. GAMES ENDPOINTS ---
 
