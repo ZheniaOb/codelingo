@@ -31,6 +31,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='user')
     xp = db.Column(db.Integer, default=0) 
+    avatar = db.Column(db.String(255), nullable=True)
     
     lessons_completed = db.relationship('UserLessonProgress', backref='user', lazy=True, cascade="all, delete-orphan")
 
@@ -207,7 +208,88 @@ def get_user_data():
             "xp_to_next_level": xp_to_next_level,
             "progress_percentage": progress_percentage,
             "xp_for_current_level": xp_for_current_level,
-            "xp_for_next_level": xp_for_next_level
+            "xp_for_next_level": xp_for_next_level,
+            "avatar": current_user.avatar or "/img/small_logo.png"
+        }), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify(error="Token has expired"), 401
+    except jwt.InvalidTokenError:
+        return jsonify(error="Invalid token"), 401
+
+@app.route('/api/me', methods=['PUT'])
+def update_user_data():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or len(auth_header.split(" ")) != 2:
+        return jsonify(error="Authentication token is missing"), 401
+    token = auth_header.split(" ")[1]
+    try:
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+        current_user = User.query.filter_by(id=data['user_id']).first()
+        if not current_user:
+            return jsonify(error="User not found"), 404
+
+        payload = request.get_json() or {}
+        new_username = payload.get('username', current_user.username)
+        new_email = payload.get('email', current_user.email)
+        new_avatar = payload.get('avatar', current_user.avatar)
+
+        if not new_username:
+            return jsonify(error="Username cannot be empty"), 400
+        if not new_email:
+            return jsonify(error="Email cannot be empty"), 400
+
+        # Ensure username/email are unique if changed
+        if new_email != current_user.email and User.query.filter_by(email=new_email).first():
+            return jsonify(error="This email is already registered"), 409
+        if new_username != current_user.username and User.query.filter_by(username=new_username).first():
+            return jsonify(error="This username is already taken"), 409
+
+        current_user.username = new_username
+        current_user.email = new_email
+        current_user.avatar = new_avatar
+        db.session.commit()
+
+        # Recalculate level info for response consistency
+        level = (current_user.xp // 100) + 1
+        xp_for_current_level = (level - 1) * 100
+        xp_for_next_level = level * 100
+        xp_to_next_level = xp_for_next_level - current_user.xp
+        progress_percentage = int(((current_user.xp - xp_for_current_level) / 100) * 100) if xp_for_next_level > xp_for_current_level else 0
+        level_titles = {
+            1: "Beginner",
+            2: "Novice",
+            3: "Learner",
+            4: "Student",
+            5: "Apprentice",
+            6: "Trainee",
+            7: "Junior",
+            8: "Junior Coder",
+            9: "Coder",
+            10: "Developer",
+            11: "Mid Developer",
+            12: "Senior Developer",
+            13: "Expert",
+            14: "Master",
+            15: "Grand Master"
+        }
+        level_title = level_titles.get(level, f"Level {level}")
+        next_level_title = level_titles.get(level + 1, f"Level {level + 1}")
+
+        return jsonify({
+            "id": current_user.id,
+            "username": current_user.username,
+            "email": current_user.email,
+            "role": current_user.role,
+            "xp": current_user.xp or 0,
+            "lessons_count": len(current_user.lessons_completed),
+            "level": level,
+            "level_title": level_title,
+            "next_level_title": next_level_title,
+            "xp_to_next_level": xp_to_next_level,
+            "progress_percentage": progress_percentage,
+            "xp_for_current_level": xp_for_current_level,
+            "xp_for_next_level": xp_for_next_level,
+            "avatar": current_user.avatar or "/img/small_logo.png"
         }), 200
     except jwt.ExpiredSignatureError:
         return jsonify(error="Token has expired"), 401

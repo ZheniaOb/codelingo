@@ -13,12 +13,16 @@ const ProfilePage = () => {
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState('/img/small_logo.png');
+  const [isSaving, setIsSaving] = useState(false);
+  const [statusMessage, setStatusMessage] = useState(null);
 
   const availableAvatars = [
     '/img/small_logo.png',
+    '/img/icons/rocket.png',
+    '/img/icons/trophy.png',
+    '/img/icons/fire.png'
   ];
-
-  const [selectedAvatar, setSelectedAvatar] = useState('/img/small_logo.png');
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -42,6 +46,7 @@ const ProfilePage = () => {
           setUser(data);
           setDisplayName(data.username || data.email?.split('@')[0] || 'User');
           setEmail(data.email || '');
+            setSelectedAvatar(data.avatar || '/img/small_logo.png');
         } else {
           // Fallback do localStorage
           const storedEmail = localStorage.getItem('email');
@@ -52,10 +57,12 @@ const ProfilePage = () => {
               role: localStorage.getItem('role') || 'user',
               xp: 0,
               level: 1,
-              lessons_count: 0
+                lessons_count: 0,
+                avatar: '/img/small_logo.png'
             });
             setDisplayName(storedEmail.split('@')[0]);
             setEmail(storedEmail);
+              setSelectedAvatar('/img/small_logo.png');
           }
           localStorage.removeItem('token');
         }
@@ -70,10 +77,12 @@ const ProfilePage = () => {
             role: localStorage.getItem('role') || 'user',
             xp: 0,
             level: 1,
-            lessons_count: 0
+            lessons_count: 0,
+            avatar: '/img/small_logo.png'
           });
           setDisplayName(storedEmail.split('@')[0]);
           setEmail(storedEmail);
+          setSelectedAvatar('/img/small_logo.png');
         }
       } finally {
         setLoading(false);
@@ -85,13 +94,47 @@ const ProfilePage = () => {
 
   const handleUpdateAvatar = (avatar) => {
     setSelectedAvatar(avatar);
-    setIsEditingAvatar(false);
-    // Tutaj można dodać zapis do API
   };
 
-  const handleSaveChanges = () => {
-    // Tutaj można dodać zapis do API
-    alert(t('profile_saved') || 'Changes saved!');
+  const handleSaveChanges = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setStatusMessage({ type: 'error', text: t('profile_not_logged_in') || 'Please log in first.' });
+      return;
+    }
+
+    setIsSaving(true);
+    setStatusMessage(null);
+
+    try {
+      const response = await fetch('http://localhost:5001/api/me', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: displayName.trim(),
+          email: email.trim(),
+          avatar: selectedAvatar
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update profile');
+      }
+
+      setUser(data);
+      setDisplayName(data.username || '');
+      setEmail(data.email || '');
+      setSelectedAvatar(data.avatar || '/img/small_logo.png');
+      setStatusMessage({ type: 'success', text: t('profile_saved') || 'Changes saved!' });
+    } catch (err) {
+      setStatusMessage({ type: 'error', text: err.message });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (loading) {
@@ -266,15 +309,16 @@ const ProfilePage = () => {
                   className="input-field"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  disabled
                 />
-                <p className="profile-form-hint">
-                  {t('profile_email_hint') || 'Email cannot be changed'}
-                </p>
               </div>
-              <button className="btn btn-cta" onClick={handleSaveChanges}>
-                {t('profile_save_changes') || 'Save Changes'}
+              <button className="btn btn-cta" onClick={handleSaveChanges} disabled={isSaving}>
+                {isSaving ? (t('profile_saving') || 'Saving...') : (t('profile_save_changes') || 'Save Changes')}
               </button>
+              {statusMessage && (
+                <p className={`profile-status-message ${statusMessage.type}`}>
+                  {statusMessage.text}
+                </p>
+              )}
             </div>
           </div>
 

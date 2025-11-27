@@ -2604,6 +2604,21 @@ body{
   margin-top: -0.5rem;
 }
 
+.profile-status-message {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: -0.5rem;
+}
+
+.profile-status-message.success {
+  color: #059669;
+}
+
+.profile-status-message.error {
+  color: #dc2626;
+}
+
 /* Actions Section */
 .profile-actions-section {
   background: #fff;
