@@ -5,7 +5,7 @@
     --color-text-secondary: #6c757d; 
     --color-accent-green: #1a8f65;
     --green-500: var(--color-accent-green); 
-    --green-400: #20a072;
+    --green-400: #20a072; 
     --color-border: rgba(33, 37, 41, 0.1); 
 }
 
@@ -15,9 +15,22 @@
     --color-text-primary: #ededed;
     --color-text-secondary: #adadad; 
     --color-accent-green: #37b275;
-    --green-500: var(--color-accent-green);
+    --green-500: var(--color-accent-green); 
     --green-400: #49d790;
     --color-border: rgba(255, 255, 255, 0.1);
+}
+
+.pink-theme {
+    --color-bg-primary: #fefefe; 
+    --color-bg-secondary: #fce4ec;
+    
+    --color-text-primary: #880e4f;
+    --color-text-secondary: #a04071;
+    
+    --color-accent-green: #e91e63;
+    --green-500: var(--color-accent-green); 
+    --green-400: #ec407a;
+    --color-border: rgba(233, 30, 99, 0.3);
 }
 
 body {
@@ -36,4 +49,3 @@ body {
 .auth-controls > * {
     pointer-events: auto !important;
 }
-

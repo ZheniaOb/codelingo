@@ -4,8 +4,35 @@ import { useTranslation } from 'react-i18next';
 import Header from './BasicSiteView/Header/Header';
 import Footer from './BasicSiteView/Footer/Footer';
 
+const getRobotImageSrc = (theme) => {
+  if (theme === 'pink') {
+    return "/img/pink.png"; 
+  }
+  if (theme === 'dark') {
+    return "/img/black.png"; 
+  }
+  return "/img/small_logo.png";
+};
+
+const getRobotContainerStyle = (theme) => {
+  const baseStyle = { transition: 'filter 0.5s ease, background-color 0.5s ease' };
+  const transparentBackground = { backgroundColor: 'transparent' };
+
+  if (theme === 'dark') {
+    return { ...baseStyle, ...transparentBackground };
+  }
+  
+  if (theme === 'pink') {
+    return { ...baseStyle, ...transparentBackground };
+  }
+  return { ...baseStyle, ...transparentBackground };
+};
+
+
 function Home({ theme, toggleTheme }) {
   const { t } = useTranslation(); 
+  const robotSrc = getRobotImageSrc(theme);
+  const robotStyle = getRobotContainerStyle(theme);
 
   return (
     <div>
@@ -19,13 +46,13 @@ function Home({ theme, toggleTheme }) {
             <a className="btn btn-cta" href="#get-started">{t('get_started_btn')}</a> 
           </div>
 
-          <div className="hero-media">
+<div className="hero-media">
             <div 
               className="hero-card" 
-              style={{ transition: 'filter 0.5s ease' }} 
+              style={getRobotContainerStyle(theme)}
             >
               <img 
-                src="/img/small_logo.png" 
+                src={robotSrc} 
                 alt="project preview" 
                 className="hero-image" 
               />

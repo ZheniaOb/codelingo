@@ -62,7 +62,6 @@ const Header = ({ theme, toggleTheme }) => {
             return;
           }
           
-          // Pobierz dane użytkownika z API
           try {
             const response = await fetch('http://localhost:5001/api/me', {
               headers: {
@@ -79,7 +78,6 @@ const Header = ({ theme, toggleTheme }) => {
                 role: userData.role || payload.role || 'user' 
               });
             } else {
-              // Fallback do danych z localStorage lub tokena
               const storedEmail = localStorage.getItem('email');
               setUser({ 
                 username: storedEmail?.split('@')[0] || 'User', 

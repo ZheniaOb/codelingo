@@ -18,12 +18,14 @@ import JavaScriptPage from "./components/Courses/JavaScript/JavaScriptPage.jsx";
 import JavaPage from "./components/Courses/Java/JavaPage.jsx";
 import HtmlCssPage from "./components/Courses/htmlcss/HtmlCssPage.jsx";
 import ProfilePage from './components/ProfilePage';
-import LessonPage from "./components/Courses/LessonPage/LessonPage.jsx"; // <-- Сохраняем импорт
+import LessonPage from "./components/Courses/LessonPage/LessonPage.jsx";
 
 const Loading = () => <div style={{ textAlign: 'center', padding: '50px' }}>Loading translations...</div>;
+const themes = ['light', 'dark', 'pink'];
+
 const getInitialTheme = () => {
   const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
+  if (savedTheme && themes.includes(savedTheme)) {
     return savedTheme;
   }
   return 'light';
@@ -31,16 +33,21 @@ const getInitialTheme = () => {
 
 function App() {
   const [theme, setTheme] = useState(getInitialTheme);
+  
   const toggleTheme = () => {
-    console.log(`Theme toggled. Current theme: ${theme}`);
-    setTheme(currentTheme => (currentTheme === 'light' ? 'dark' : 'light'));
+    const currentIndex = themes.indexOf(theme);
+    const nextIndex = (currentIndex + 1) % themes.length;
+    const nextTheme = themes[nextIndex];
+    
+    console.log(`Theme toggled. Current: ${theme}, Next: ${nextTheme}`);
+    setTheme(nextTheme);
   };
+
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    document.body.className = theme === 'dark' ? 'dark-theme' : '';
+    document.body.className = `${theme}-theme`; 
   }, [theme]);
   
-  // Функция для проброса props темы
   const renderRouteElement = (Component) => (
     <Component theme={theme} toggleTheme={toggleTheme} />
   );
@@ -50,7 +57,6 @@ function App() {
       <Suspense fallback={<Loading />}>
         
         <Routes>
-          {/* ОБЪЕДИНЕНИЕ: Используем вашу логику renderRouteElement для всех маршрутов */}
           <Route path="/" element={renderRouteElement(Home)} />
           <Route path="/login" element={renderRouteElement(Login)} />
           <Route path="/signup" element={renderRouteElement(SignUp)} />
@@ -68,7 +74,6 @@ function App() {
           <Route path="/admin_panel/manage_users" element={renderRouteElement(ManageUsers)} />
           <Route path="/admin_panel/manage_lessons" element={renderRouteElement(ManageLessons)} />
           <Route path="/admin_panel/manage_games" element={renderRouteElement(ManageGames)} />
-          {/* НОВЫЙ МАРШРУТ (от коллеги): также должен использовать renderRouteElement */}
           <Route path="/courses/:course/lesson/:lessonId" element={renderRouteElement(LessonPage)} />
         </Routes>
       </Suspense>

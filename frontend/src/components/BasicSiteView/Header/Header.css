@@ -1,4 +1,4 @@
-/* Header */
+
 .site-header{
   position:sticky;
   top:0;
@@ -15,7 +15,6 @@
   padding:18px 0;
 }
 
-/* Brand */
 .brand{
   display:flex;
   align-items:center;
@@ -32,7 +31,6 @@
   font-size:18px;
 }
 
-/* Navigation (center) */
 .main-nav{flex:1}
 .nav-list{
   list-style:none;
@@ -53,7 +51,6 @@
 
 .nav-link:hover{background:rgba(0,0,0,0.03)}
 
-/* Auth controls (right) */
 .auth-controls{
   display:flex;
   align-items:center;
@@ -79,28 +76,26 @@
   text-decoration: none;
 }
 
-/* Tablet responsive */
 @media (max-width: 1024px) {
   .header-inner {
-    flex-wrap: wrap;             /* разрешаем блокам переноситься */
+    flex-wrap: wrap;            
     justify-content: space-between;
     align-items: center;
     gap: 12px;
   }
 
   .main-nav ul {
-    flex-wrap: wrap;             /* пункты меню могут переноситься */
+    flex-wrap: wrap;            
     justify-content: center;
   }
 
   .auth-controls {
-    flex-wrap: wrap;             /* кнопки остаются справа */
+    flex-wrap: wrap;          
     justify-content: flex-end;
     gap: 12px;
   }
 }
 
-/* Mobile responsive */
 @media (max-width: 768px) {
   .header-inner {
     flex-direction: column;       
@@ -134,8 +129,6 @@
   }
 }
 
-
-/* User profile link */
 .user-profile-link {
   text-decoration: none; 
   color: inherit;        
