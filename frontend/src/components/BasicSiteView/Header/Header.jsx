@@ -5,10 +5,48 @@ import '../../../css/styles.css';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../../LanguageSwitcher'; 
 
+const getInitialUserState = () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const [, payloadBase64] = token.split('.');
+    if (!payloadBase64) {
+      throw new Error('Invalid token structure');
+    }
+
+    const payload = JSON.parse(atob(payloadBase64));
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    if (payload.exp && payload.exp < currentTime) {
+      localStorage.removeItem('token');
+      return null;
+    }
+
+    const storedEmail = localStorage.getItem('email');
+    const usernameFromEmail = (emailValue) =>
+      emailValue?.split('@')[0] || payload.username || 'User';
+
+    const email = storedEmail || payload.email || null;
+
+    return {
+      username: usernameFromEmail(email),
+      email: email || 'user@example.com',
+      role: payload.role || 'user',
+    };
+  } catch (error) {
+    console.error('Failed to parse token:', error);
+    localStorage.removeItem('token');
+    return null;
+  }
+};
+
 const Header = () => {
   const { t } = useTranslation(); 
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => getInitialUserState());
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -16,6 +54,12 @@ const Header = () => {
       if (token) {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
+          const currentTime = Math.floor(Date.now() / 1000);
+          if (payload.exp && payload.exp < currentTime) {
+            localStorage.removeItem('token');
+            setUser(null);
+            return;
+          }
           
           // Pobierz dane użytkownika z API
           try {
@@ -54,6 +98,7 @@ const Header = () => {
         } catch (err) {
           console.error('Invalid token:', err);
           localStorage.removeItem('token');
+          setUser(null);
         }
       }
     };
