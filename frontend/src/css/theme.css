@@ -1,23 +1,35 @@
 :root {
-    --color-bg-primary: #ffffff;
+    /* --- СВЕТЛАЯ ТЕМА (Light Theme) --- */
+    --color-bg-primary: #ffffff;    
     --color-bg-secondary: #f7f7f7; 
-    --color-text-primary: #212529;
-    --color-text-secondary: #6c757d; 
+    --color-text-primary: #212529;  /* Нейтральный, почти черный */
+    --color-text-secondary: #6c757d; /* Серый */
+    
     --color-accent-green: #1a8f65;
     --green-500: var(--color-accent-green); 
     --green-400: #20a072; 
     --color-border: rgba(33, 37, 41, 0.1); 
+    
+    /* НОВАЯ ПЕРЕМЕННАЯ: Цвет текста на темном акцентном фоне */
+    --color-on-accent: #212529; /* Темный текст для светлых акцентов */
 }
 
 .dark-theme {
-    --color-bg-primary: #1e1e1e; 
-    --color-bg-secondary: #2c2c2c; 
-    --color-text-primary: #ededed;
-    --color-text-secondary: #adadad; 
-    --color-accent-green: #37b275;
+    /* --- ТЕМНАЯ ТЕМА (Dark Theme) --- */
+    --color-bg-primary: #12161f; /* Глубокий темный фон */
+    --color-bg-secondary: #212835; /* Чуть светлее для карточек */
+    
+    --color-text-primary: #ededed; /* Светлый нейтральный текст */
+    --color-text-secondary: #a0a8b5; 
+    
+    --color-accent-green: #38b2ac; /* Спокойный, глубокий акцент */
     --green-500: var(--color-accent-green); 
-    --green-400: #49d790;
+    --green-400: #4dc2ba; 
+    
     --color-border: rgba(255, 255, 255, 0.1);
+    
+    /* НОВАЯ ПЕРЕМЕННАЯ: На темном акцентном фоне текст должен быть белым */
+    --color-on-accent: #ffffff; 
 }
 
 .pink-theme {
@@ -31,8 +43,10 @@
     --green-500: var(--color-accent-green); 
     --green-400: #ec407a;
     --color-border: rgba(233, 30, 99, 0.3);
-}
 
+    /* НОВАЯ ПЕРЕМЕННАЯ: На розовом акцентном фоне текст должен быть темным */
+    --color-on-accent: #880e4f; 
+}
 body {
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);

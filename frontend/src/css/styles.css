@@ -79,7 +79,7 @@ body{
   font-size:44px;
   line-height:1.05;
   margin-bottom:14px;
-  color:var(--color-accent-green); 
+  color: var(--green-500);
   font-weight:600;
 }
 .hero-subtitle{
@@ -94,14 +94,25 @@ body{
   justify-content:center;
   align-items:center;
   position:relative;
-  min-height:320px;
+  min-height:360px;
+}
+
+.hero-card {
+  width: 320px; 
+  height: 320px;
+  border-radius: 50%;
+  overflow: visible; 
+  padding: 20px; 
+  position: relative;
+  background: transparent;
 }
 
 .hero-image {
-  width: 320px;
-  height: 320px;
-  object-fit: cover;
-  border-radius: 8px;
+  width: 100%; 
+  height: 100%;
+  object-fit: contain; 
+  display: block; 
+  border-radius: 0;
   animation: jump 2s ease-in-out infinite;
 }
 
@@ -207,11 +218,11 @@ body{
 
 .stat-title{ font-size:28px; margin:8px 0 4px; color:var(--color-text-primary); font-weight:700; }
 .stat-title.small{ font-size:18px; margin-top:6px; }
-.stat-subtitle{ color:var(--muted); margin:0 0 10px; }
+.stat-subtitle{ color:var(--color-text-secondary); margin:0 0 10px; }
 
 .progress-wrap{
   height:10px;
-  background:#efefef;
+  background:var(--color-bg-secondary);
   border-radius:999px;
   overflow:hidden;
   margin:12px 14% 8px;
@@ -219,17 +230,17 @@ body{
 }
 .progress-fill{
   height:100%;
-  background:linear-gradient(90deg,#0f1724 0%, #d1d5db 100%);
+  background:linear-gradient(90deg, var(--color-text-primary) 0%, var(--color-text-secondary) 100%);
   border-radius:999px;
   transition:width .6s ease;
   box-shadow:0 6px 14px rgba(0,0,0,0.06);
 }
 
-.progress-note{ font-size:13px; color:#6b7280; margin-top:8px; }
+.progress-note{ font-size:13px; color:var(--color-text-secondary); margin-top:8px; }
 
 .level-badge{
   display:inline-block;
-  background:linear-gradient(180deg,#10b981,#059669);
+  background:linear-gradient(180deg,var(--green-500), var(--green-400));
   color:#fff;
   padding:6px 10px;
   border-radius:999px;
@@ -241,8 +252,8 @@ body{
 
 .languages-section{ padding:48px 0 80px; }
 .languages-header{ margin-bottom:28px; text-align:center; }
-.languages-title{ font-size:32px; margin:0 0 8px; color:var(--color-text-primary); font-weight:600; }
-.languages-subtitle{ color:var(--muted); margin:0; }
+.languages-title{ font-size:32px; margin:0 0 8px; color: var(--green-500); font-weight:600; }
+.languages-subtitle{ color:var(--color-text-secondary); margin:0; }
 
 .languages-grid{
   display:grid;
@@ -307,10 +318,14 @@ body{
   flex-shrink:0;
 }
 
-.bg-gradient-python{ background:linear-gradient(180deg,var(--green-500), var(--green-400)); color:#fff; }
-.bg-gradient-js{ background:linear-gradient(180deg,var(--green-500), var(--green-400)); color:#fff; }
-.bg-gradient-html{ background:linear-gradient(180deg,#06b6d4,var(--green-500)); color:#fff; } 
-.bg-gradient-java{ background:linear-gradient(180deg,#0ea5a4,var(--green-500)); color:#fff; } 
+.bg-gradient-python,
+.bg-gradient-js,
+.bg-gradient-html,
+.bg-gradient-java {
+    background:linear-gradient(180deg,var(--green-500), var(--green-400)); 
+    color:#fff;
+}
+
 .icon-white{ color:#fff; }
 
 .language-icon-img{
@@ -367,7 +382,7 @@ body{
 
 .how-section{ padding:56px 0; }
 .how-header{ text-align:center; margin-bottom:28px; }
-.how-title{ font-size:32px; margin:0 0 8px; color:var(--color-text-primary); font-weight:600; }
+.how-title{ font-size:32px; margin:0 0 8px; color: var(--green-500); font-weight:600; }
 .how-sub{ color:var(--color-text-secondary); margin:0; }
 
 .how-grid{
@@ -443,7 +458,7 @@ body{
   filter: invert(1) brightness(2);
   transition: transform .12s ease, filter .12s ease;
 }
-.step-icon:hover .step-icon-img{ transform:translateY(-3px); }
+.step-icon:hover .step-icon-img{ transform: translateY(-3px); }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
@@ -662,7 +677,6 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem;
     color: var(--color-bg-primary); 
     font-size: 40px; 
 }
@@ -731,7 +745,6 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
     justify-content: flex-end;
 }
 .chart-bar {
@@ -751,7 +764,6 @@ body{
     color: var(--color-text-secondary);
 }
 
-
 .achievements-grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -770,8 +782,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem;
-    color: var(--color-bg-primary);
+    color: var(--color-bg-primary); 
     font-size: 32px;
 }
 .achievement-title {
@@ -795,7 +806,6 @@ body{
     height: 32px;
     object-fit: contain;
 }
-
 
 .leaderboard-container {
     max-width: 900px;
@@ -2293,18 +2303,10 @@ body{
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
-/* ---------------------------------------------------- */
-/* --- ЗАТЕМНЕНИЕ ГЛАВНОГО РОБОТА НА ГЛАВНОЙ СТРАНИЦЕ --- */
-/* ---------------------------------------------------- */
-
 .hero-image {
-    /* Добавляем плавный переход для фильтрации */
     transition: filter 0.5s ease; 
 }
 
-/* Правило для активации фильтра только когда body имеет класс dark-theme */
-/* Используем класс изображения `.hero-image` для максимальной точности */
 body.dark-theme .hero-image {
-    /* Затемняет изображение (робота) на 35% и приглушает цвета */
     filter: brightness(0.65) saturate(0.8) hue-rotate(20deg); 
 }

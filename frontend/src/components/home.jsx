@@ -1,4 +1,5 @@
 import React from "react";
+// ИСПРАВЛЕНО: styles.css находится на один уровень выше (в src/css)
 import "../css/styles.css";
 import { useTranslation } from 'react-i18next'; 
 import Header from './BasicSiteView/Header/Header';
@@ -18,13 +19,7 @@ const getRobotContainerStyle = (theme) => {
   const baseStyle = { transition: 'filter 0.5s ease, background-color 0.5s ease' };
   const transparentBackground = { backgroundColor: 'transparent' };
 
-  if (theme === 'dark') {
-    return { ...baseStyle, ...transparentBackground };
-  }
-  
-  if (theme === 'pink') {
-    return { ...baseStyle, ...transparentBackground };
-  }
+  // Здесь может быть дополнительная логика фильтрации, но мы оставим ее чистой
   return { ...baseStyle, ...transparentBackground };
 };
 
@@ -43,13 +38,13 @@ function Home({ theme, toggleTheme }) {
           <div className="hero-content">
             <h1 className="hero-title">{t('hero_title')}</h1> 
             <p className="hero-subtitle">{t('hero_subtitle')}</p> 
-            <a className="btn btn-cta" href="#get-started">{t('get_started_btn')}</a> 
+            <a className="btn btn-cta" href="#get-started">{t('get_started_btn')}</a > 
           </div>
 
-<div className="hero-media">
+          <div className="hero-media">
             <div 
               className="hero-card" 
-              style={getRobotContainerStyle(theme)}
+              style={robotStyle}
             >
               <img 
                 src={robotSrc} 
@@ -109,6 +104,9 @@ function Home({ theme, toggleTheme }) {
           <div className="languages-grid" role="list">
             <article className="language-card" role="listitem">
               <div className="card-bg-overlay"></div>
+              <div className="language-icon bg-gradient-python">
+                <img src="/img/icons/py.png" alt="Python icon" className="language-icon-img" width="28" height="28" />
+              </div>
               <div className="card-body">
                 <h3 className="lang-name">Python</h3>
                 <p className="lang-desc">{t('lang_desc_beginner')}</p> 
@@ -120,6 +118,10 @@ function Home({ theme, toggleTheme }) {
               </div>
             </article>
             <article className="language-card" role="listitem">
+              <div className="card-bg-overlay"></div>
+              <div className="language-icon bg-gradient-js">
+                <img src="/img/icons/js.png" alt="JavaScript icon" className="language-icon-img" width="40" height="40" />
+              </div>
               <div className="card-body">
                 <h3 className="lang-name">JavaScript</h3>
                 <p className="lang-desc">{t('lang_desc_webdev')}</p> 
@@ -132,6 +134,10 @@ function Home({ theme, toggleTheme }) {
             </article>
 
             <article className="language-card" role="listitem">
+              <div className="card-bg-overlay"></div>
+              <div className="language-icon bg-gradient-html">
+                <img src="/img/icons/html_css.png" alt="HTML/CSS icon" className="language-icon-img" width="28" height="28" />
+              </div>
               <div className="card-body">
                 <h3 className="lang-name">HTML/CSS</h3>
                 <p className="lang-desc">{t('lang_desc_webbasics')}</p> 
@@ -142,8 +148,11 @@ function Home({ theme, toggleTheme }) {
                 <a className="btn btn-continue" href="#htmlcss">{t('continue_btn')}</a> 
               </div>
             </article>
-
             <article className="language-card" role="listitem">
+              <div className="card-bg-overlay"></div>
+              <div className="language-icon bg-gradient-java">
+                <img src="/img/icons/java.png" alt="Java icon" className="language-icon-img" width="28" height="28" />
+              </div>
               <div className="card-body">
                 <h3 className="lang-name">Java</h3>
                 <p className="lang-desc">{t('lang_desc_enterprise')}</p> 

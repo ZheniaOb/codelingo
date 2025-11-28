@@ -123,7 +123,11 @@ const Header = ({ theme, toggleTheme }) => {
           <span className="brand-title">Codelingo</span>
         </Link>
 
-        <nav className="main-nav" aria-label={t('nav_main_aria')}>
+        <nav 
+          className="main-nav" 
+          aria-label={t('nav_main_aria')}
+          style={theme !== 'light' ? { color: 'var(--color-text-primary)' } : {}}
+        >
           <ul className="nav-list">
             <li className="nav-item">
               <Link className="nav-link" to="/courses">{t('nav_courses')}</Link>
@@ -146,8 +150,8 @@ const Header = ({ theme, toggleTheme }) => {
         </nav>
 
         <div className="auth-controls">
-          <ThemeSwitcher theme={theme} toggleTheme={toggleTheme} />
-          <LanguageSwitcher /> 
+          <ThemeSwitcher className="square-switcher-btn" theme={theme} toggleTheme={toggleTheme} />
+          <LanguageSwitcher className="square-switcher-btn" /> 
           {user ? (
             <>
               <Link to="/profile" className="user-profile-trigger" title={t('profile_my_profile') || 'My Profile'}>
