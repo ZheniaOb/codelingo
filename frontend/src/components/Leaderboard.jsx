@@ -1,8 +1,8 @@
-
 import React, { useEffect, useMemo, useState } from 'react'; 
 import "../css/styles.css"; 
 import Header from './BasicSiteView/Header/Header';
 import Footer from './BasicSiteView/Footer/Footer';
+import { useTranslation } from 'react-i18next';
 
 const CustomBadge = ({ children, style = {} }) => (
   <div className="podium-badge" style={style}>{children}</div>
@@ -10,16 +10,10 @@ const CustomBadge = ({ children, style = {} }) => (
 
 const getCurrentUserId = () => {
   const token = localStorage.getItem('token');
-  if (!token) {
-    return null;
-  }
-
+  if (!token) return null;
   try {
     const [, payloadBase64] = token.split('.');
-    if (!payloadBase64) {
-      return null;
-    }
-
+    if (!payloadBase64) return null;
     const payload = JSON.parse(atob(payloadBase64));
     const now = Math.floor(Date.now() / 1000);
     if (payload.exp && payload.exp < now) {
@@ -27,13 +21,13 @@ const getCurrentUserId = () => {
       return null;
     }
     return payload.user_id || payload.sub || null;
-  } catch (error) {
-    console.error('Failed to parse token for leaderboard highlight:', error);
+  } catch {
     return null;
   }
 };
 
 const Leaderboard = () => {
+  const { t } = useTranslation();
   const [leaders, setLeaders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,9 +40,7 @@ const Leaderboard = () => {
       setError(null);
       try {
         const response = await fetch('http://localhost:5001/api/leaderboard?limit=20');
-        if (!response.ok) {
-          throw new Error('Failed to load leaderboard');
-        }
+        if (!response.ok) throw new Error(t('leaderboard_error'));
         const data = await response.json();
         const normalized = data.map((entry) => ({
           ...entry,
@@ -56,14 +48,13 @@ const Leaderboard = () => {
         }));
         setLeaders(normalized);
       } catch (err) {
-        setError(err.message || 'Unexpected error');
+        setError(err.message || t('leaderboard_unexpected_error'));
       } finally {
         setLoading(false);
       }
     };
-
     fetchLeaderboard();
-  }, [currentUserId]);
+  }, [currentUserId, t]);
 
   const HeaderFooter = ({ children }) => (
     <>
@@ -83,49 +74,15 @@ const Leaderboard = () => {
 
   const getRankClasses = (rank) => {
     switch (rank) {
-      case 1:
-        return {
-          itemClass: 'podium-item-1st',
-          avatarClass: 'podium-avatar-1st avatar-gold',
-          baseClass: 'podium-base-1st base-gold',
-          iconClass: 'rank-icon-1st icon-gold',
-          iconSrc: '/img/icons/victory_trophy.png',
-          iconAlt: 'Trophy',
-        };
-      case 2:
-        return {
-          itemClass: '',
-          avatarClass: 'podium-avatar avatar-silver',
-          baseClass: 'podium-base base-silver',
-          iconClass: 'rank-icon icon-silver',
-          iconSrc: '/img/icons/medal.png',
-          iconAlt: 'Medal',
-        };
-      case 3:
-        return {
-          itemClass: '',
-          avatarClass: 'podium-avatar avatar-bronze',
-          baseClass: 'podium-base base-bronze',
-          iconClass: 'rank-icon icon-bronze',
-          iconSrc: '/img/icons/award.png',
-          iconAlt: 'Award',
-        };
-      default:
-        return {
-          itemClass: '',
-          avatarClass: 'podium-avatar avatar-silver',
-          baseClass: 'podium-base base-silver',
-          iconClass: 'rank-icon icon-silver',
-          iconSrc: '/img/icons/medal.png',
-          iconAlt: 'Medal',
-        };
+      case 1: return { itemClass: 'podium-item-1st', avatarClass: 'podium-avatar-1st avatar-gold', baseClass: 'podium-base-1st base-gold', iconClass: 'rank-icon-1st icon-gold', iconSrc: '/img/icons/victory_trophy.png', iconAlt: t('leaderboard_trophy') };
+      case 2: return { itemClass: '', avatarClass: 'podium-avatar avatar-silver', baseClass: 'podium-base base-silver', iconClass: 'rank-icon icon-silver', iconSrc: '/img/icons/medal.png', iconAlt: t('leaderboard_medal') };
+      case 3: return { itemClass: '', avatarClass: 'podium-avatar avatar-bronze', baseClass: 'podium-base base-bronze', iconClass: 'rank-icon icon-bronze', iconSrc: '/img/icons/award.png', iconAlt: t('leaderboard_award') };
+      default: return { itemClass: '', avatarClass: 'podium-avatar avatar-silver', baseClass: 'podium-base base-silver', iconClass: 'rank-icon icon-silver', iconSrc: '/img/icons/medal.png', iconAlt: t('leaderboard_medal') };
     }
   };
 
   const renderAvatarContent = (user) => {
-    if (user.avatar) {
-      return <img src={user.avatar} alt={user.username} />;
-    }
+    if (user.avatar) return <img src={user.avatar} alt={user.username} />;
     return user.initials || user.username?.slice(0, 2).toUpperCase() || '??';
   };
 
@@ -133,7 +90,7 @@ const Leaderboard = () => {
     return (
       <HeaderFooter>
         <div className="leaderboard-container container text-center">
-          <p>Loading leaderboard...</p>
+          <p>{t('leaderboard_loading')}</p>
         </div>
       </HeaderFooter>
     );
@@ -153,7 +110,7 @@ const Leaderboard = () => {
     return (
       <HeaderFooter>
         <div className="leaderboard-container container text-center">
-          <p>No leaderboard data available yet.</p>
+          <p>{t('leaderboard_empty')}</p>
         </div>
       </HeaderFooter>
     );
@@ -163,8 +120,8 @@ const Leaderboard = () => {
     <HeaderFooter>
       <div className="leaderboard-container container">
         <div className="text-center">
-          <h1 className="leaderboard-title">Leaderboard</h1>
-          <p className="leaderboard-subtitle">Compete with learners worldwide</p>
+          <h1 className="leaderboard-title">{t('leaderboard_title')}</h1>
+          <p className="leaderboard-subtitle">{t('leaderboard_subtitle')}</p>
         </div>
 
         {podiumLayout.length > 0 && (
@@ -178,7 +135,7 @@ const Leaderboard = () => {
                 return (
                   <div key={user.rank} className={`podium-item ${itemClass}`}>
                     {user.rank === 1 && (
-                      <div className="podium-crown" role="img" aria-label="Crown">
+                      <div className="podium-crown" role="img" aria-label={t('leaderboard_crown')}>
                         👑
                       </div>
                     )}
@@ -193,17 +150,21 @@ const Leaderboard = () => {
                     </div>
 
                     <div className={`podium-base ${baseClass}`}>
-                      {user.rank === 1 && <CustomBadge style={{ marginBottom: '12px' }}>Champion</CustomBadge>}
+                      {user.rank === 1 && (
+                        <CustomBadge style={{ marginBottom: '12px' }}>
+                          {t('leaderboard_champion')}
+                        </CustomBadge>
+                      )}
                       <h3 className={`text-xl ${user.rank === 1 ? 'text-2xl' : ''} mb-1 ${textClass}`} style={{ fontWeight: 600 }}>
                         {user.username}
                       </h3>
                       <p className={`text-2xl ${user.rank === 1 ? 'text-3xl' : ''} ${textClass} mb-1`} style={{ fontWeight: 700 }}>
                         {user.xp.toLocaleString()}
                       </p>
-                      <p className={`text-sm ${textClass}`}>XP</p>
+                      <p className={`text-sm ${textClass}`}>{t('leaderboard_xp')}</p>
                       <div className="flex items-center justify-center gap-1 mt-2">
-                        <span className="list-streak-icon" role="img" aria-label="Flame">🔥</span>
-                        <span className="text-sm">{user.streak} days</span>
+                        <span className="list-streak-icon" role="img" aria-label={t('leaderboard_flame')}>🔥</span>
+                        <span className="text-sm">{t('leaderboard_streak_days', { value: user.streak })}</span>
                       </div>
                     </div>
                   </div>
@@ -230,18 +191,18 @@ const Leaderboard = () => {
                   {user.username}
                   {user.isUser && (
                     <CustomBadge style={{ marginLeft: '8px', backgroundColor: 'var(--green-500)', color: '#fff', fontSize: '10px' }}>
-                      You
+                      {t('leaderboard_you')}
                     </CustomBadge>
                   )}
                 </h3>
                 <div className="list-streak">
-                  <span className="list-streak-icon" role="img" aria-label="Flame">🔥</span>
-                  <span className="text-sm text-gray-600">{user.streak} day streak</span>
+                  <span className="list-streak-icon" role="img" aria-label={t('leaderboard_flame')}>🔥</span>
+                  <span className="text-sm text-gray-600">{t('leaderboard_streak_days', { value: user.streak })}</span>
                 </div>
               </div>
               <div className="list-xp">
                 <p className="list-xp-value">{user.xp.toLocaleString()}</p>
-                <p className="list-xp-label">XP</p>
+                <p className="list-xp-label">{t('leaderboard_xp')}</p>
               </div>
             </div>
           ))}
@@ -249,6 +210,6 @@ const Leaderboard = () => {
       </div>
     </HeaderFooter>
   );
-};
+}; 
 
 export default Leaderboard;

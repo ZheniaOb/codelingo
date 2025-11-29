@@ -37,27 +37,33 @@ body{
   text-align:center;
   cursor:pointer;
   border: none;
+  max-width: 140px; 
 }
+
 .btn-ghost{
   background:transparent;
   color:inherit;
   border:none;
 }
+
 .btn-primary{
   background:transparent;
   color:inherit;
   border:1px solid var(--color-border);
   padding:8px 12px;
   border-radius:8px;
+  white-space: normal; 
 }
+
 .btn-cta{
   background:linear-gradient(180deg,var(--green-500), var(--green-400));
   color:#fff;
   padding:12px 26px;
   border-radius:10px;
   box-shadow:0 8px 28px rgba(20,160,110,0.12);
-
   transition: background .2s ease-in-out;
+  max-width: 200px; 
+  white-space: normal;
 }
 
 .btn-cta:hover {

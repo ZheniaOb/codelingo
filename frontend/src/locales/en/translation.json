@@ -83,5 +83,69 @@
   "profile_email_hint": "Email cannot be changed",
   "profile_save_changes": "Save Changes",
   "profile_saved": "Changes saved!",
-  "profile_quick_actions": "Quick Actions"
+  "profile_quick_actions": "Quick Actions",
+
+  "minigames_title": "Mini Games",
+  "minigames_subtitle": "Learn through play and challenge yourself!",
+  "play_now": "Play Now",
+
+  "difficulty_easy": "Easy",
+  "difficulty_medium": "Medium",
+  "difficulty_hard": "Hard",
+
+  "game_memory_title": "Memory of Code",
+  "game_memory_desc": "Remember and reproduce code fragments",
+
+  "game_refactor_title": "Refactor Rush",
+  "game_refactor_desc": "Fix and simplify bad code",
+
+  "game_variable_title": "Variable Hunt",
+  "game_variable_desc": "Find incorrectly used variables",
+
+  "game_bug_title": "Bug Infection",
+  "game_bug_desc": "Stop bugs from spreading in code",
+
+  "progress_title": "Your Progress",
+  "progress_current_streak": "Current Streak",
+  "progress_record": "Record: {{value}} days",
+  "progress_total_experience": "Total Experience",
+  "progress_to_next_level": "{{xp}} XP to Level {{level}}",
+  "progress_level_badge": "Level {{level}}",
+  "progress_level_title_junior": "Junior Coder",
+  "progress_next_level_title": "Next: Mid Coder",
+  "progress_weekly_activity": "Weekly Activity",
+  "progress_recent_achievements": "Recent Achievements",
+
+  "day_mon": "Mon",
+  "day_tue": "Tue",
+  "day_wed": "Wed",
+  "day_thu": "Thu",
+  "day_fri": "Fri",
+  "day_sat": "Sat",
+  "day_sun": "Sun",
+
+  "achievement_fire_title": "Fire Streak",
+  "achievement_fire_desc": "7 day streak!",
+  "achievement_sharp_title": "Sharpshooter",
+  "achievement_sharp_desc": "100% accuracy",
+  "achievement_early_title": "Early Bird",
+  "achievement_early_desc": "Learned before 9am",
+
+  "leaderboard_title": "Leaderboard",
+  "leaderboard_subtitle": "Compete with learners worldwide",
+  "leaderboard_crown": "Crown",
+  "leaderboard_champion": "Champion",
+  "leaderboard_xp": "XP",
+  "leaderboard_flame": "Flame",
+  "leaderboard_streak_days": "{{value}} day streak",
+  "leaderboard_you": "You",
+  "leaderboard_loading": "Loading leaderboard...",
+  "leaderboard_empty": "No leaderboard data available yet.",
+  "leaderboard_error": "Failed to load leaderboard",
+  "leaderboard_unexpected_error": "Unexpected error",
+  "leaderboard_trophy": "Trophy",
+  "leaderboard_medal": "Medal",
+  "leaderboard_award": "Award"
+
+
 }

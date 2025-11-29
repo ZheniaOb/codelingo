@@ -1,0 +1,110 @@
+.language-switcher {
+  position: relative;
+  display: inline-block;
+}
+
+/* Кнопка */
+.lang-btn {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Выпадающее меню */
+.lang-dropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  border-radius: 8px;
+  list-style: none;
+  padding: 4px 0;
+  margin: 0;
+  animation: fadeIn 0.2s ease-in-out;
+  z-index: 1000;
+  font-size: 0.8rem;
+  min-width: 140px;
+}
+
+.lang-option {
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.lang-option.active {
+  font-weight: bold;
+}
+
+.flag {
+  font-size: 1rem;
+}
+
+/* --- Светлая тема --- */
+.light-theme .lang-btn {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+.light-theme .lang-btn:hover {
+  background: #ececec;
+}
+.light-theme .lang-dropdown {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.light-theme .lang-option:hover {
+  background: #f0f0f0;
+}
+
+/* --- Тёмная тема --- */
+.dark-theme .lang-btn {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+.dark-theme .lang-btn:hover {
+  background: #333;
+  color: var(--green-400); /* акцент при наведении */
+}
+.dark-theme .lang-dropdown {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(0,255,200,0.25);
+}
+.dark-theme .lang-option:hover {
+  background: var(--color-bg-secondary);
+  color: var(--green-500); /* неоновая подсветка */
+}
+
+/* --- Розовая тема --- */
+.pink-theme .lang-btn {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+.pink-theme .lang-btn:hover {
+  background: var(--green-400);
+  color: var(--color-on-accent);
+}
+.pink-theme .lang-dropdown {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(233,30,99,0.3);
+}
+.pink-theme .lang-option:hover {
+  background: var(--green-400);
+  color: var(--color-on-accent);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

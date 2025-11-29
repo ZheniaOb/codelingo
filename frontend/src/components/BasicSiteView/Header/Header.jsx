@@ -165,8 +165,8 @@ const Header = ({ theme, toggleTheme }) => {
             </>
           ) : (
             <>
-              <Link className="auth-link" to="/login">{t('nav_login')}</Link>
-              <Link className="btn btn-primary" to="/signup">{t('nav_signup')}</Link>
+              <Link className="auth-link auth-btn" to="/login">{t('nav_login')}</Link>
+              <Link className="btn btn-primary auth-btn" to="/signup">{t('nav_signup')}</Link>
             </>
           )}
         </div>
