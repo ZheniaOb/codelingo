@@ -1,46 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const SunIcon = () => <span>☀️</span>; 
-const MoonIcon = () => <span>🌙</span>;
-const PinkIcon = () => <span>💖</span>;
+const themes = [
+  { code: 'light', color: '#f7f7f7', label: 'Light theme' },
+  { code: 'dark', color: '#212835', label: 'Dark theme' },
+  { code: 'pink', color: 'rgb(251, 0, 126)', label: 'Pink theme' },
+];
 
-const ThemeSwitcher = (props) => { 
-  const { theme, toggleTheme } = props; 
-  
-  let icon;
-  let label;
-
-  if (theme === 'light') {
-    icon = <MoonIcon />;
-    label = 'Switch to dark theme';
-  } else if (theme === 'dark') {
-    icon = <PinkIcon />;
-    label = 'Switch to pink theme';
-  } else {
-    icon = <SunIcon />;
-    label = 'Switch to light theme';
-  }
+const ThemeSwitcher = ({ theme, setTheme, className }) => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <button
-      onClick={toggleTheme}
-      className={`btn btn-primary ${props.className || ''}`} 
-      aria-label={label}
-      style={{
-        background: 'linear-gradient(180deg, var(--green-500), var(--green-400))',
-        color: '#fff', 
-        border: 'none',
-        fontWeight: '600',
-        cursor: 'pointer',
-        fontSize: '18px', 
-        lineHeight: '1',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      {icon}
-    </button>
+    <div className={`theme-switcher ${className || ''}`}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="switcher-btn"
+        aria-label="Choose theme"
+      >
+        🎨
+      </button>
+
+      <div className={`theme-menu ${open ? 'open' : 'closed'}`}>
+        <div className="palette">
+          {themes.map((t) => (
+            <button
+              key={t.code}
+              onClick={() => { setTheme(t.code); setOpen(false); }}
+              className={`color-circle ${t.code} ${theme === t.code ? 'active' : ''}`}
+              aria-label={t.label}
+              title={t.label}
+            ></button>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

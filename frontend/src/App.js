@@ -34,29 +34,20 @@ const getInitialTheme = () => {
 
 function App() {
   const [theme, setTheme] = useState(getInitialTheme);
-  
-  const toggleTheme = () => {
-    const currentIndex = themes.indexOf(theme);
-    const nextIndex = (currentIndex + 1) % themes.length;
-    const nextTheme = themes[nextIndex];
-    
-    console.log(`Theme toggled. Current: ${theme}, Next: ${nextTheme}`);
-    setTheme(nextTheme);
-  };
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
     document.body.className = `${theme}-theme`; 
   }, [theme]);
-  
+
   const renderRouteElement = (Component) => (
-    <Component theme={theme} toggleTheme={toggleTheme} />
+    <Component theme={theme} setTheme={setTheme} />
   );
 
   return (
     <Router>
       <Suspense fallback={<Loading />}>
-        <Header theme={theme} toggleTheme={toggleTheme} />
+        <Header theme={theme} setTheme={setTheme} />
         <Routes>
           <Route path="/" element={renderRouteElement(Home)} />
           <Route path="/login" element={renderRouteElement(Login)} />

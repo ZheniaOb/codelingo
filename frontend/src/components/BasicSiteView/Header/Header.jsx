@@ -8,15 +8,11 @@ import ThemeSwitcher from '../../ThemeSwitcher';
 
 const getInitialUserState = () => {
   const token = localStorage.getItem('token');
-  if (!token) {
-    return null;
-  }
+  if (!token) return null;
 
   try {
     const [, payloadBase64] = token.split('.');
-    if (!payloadBase64) {
-      throw new Error('Invalid token structure');
-    }
+    if (!payloadBase64) throw new Error('Invalid token structure');
 
     const payload = JSON.parse(atob(payloadBase64));
     const currentTime = Math.floor(Date.now() / 1000);
@@ -45,10 +41,11 @@ const getInitialUserState = () => {
   }
 };
 
-const Header = ({ theme, toggleTheme }) => { 
+const Header = ({ theme, setTheme }) => { 
   const { t } = useTranslation(); 
   const navigate = useNavigate();
   const [user, setUser] = useState(() => getInitialUserState());
+  const [openMenu, setOpenMenu] = useState(null); 
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -157,8 +154,21 @@ const Header = ({ theme, toggleTheme }) => {
         </nav>
 
         <div className="auth-controls">
-          <ThemeSwitcher className="square-switcher-btn" theme={theme} toggleTheme={toggleTheme} />
-          <LanguageSwitcher className="square-switcher-btn" /> 
+          <ThemeSwitcher
+            className="square-switcher-btn"
+            theme={theme}
+            setTheme={setTheme}
+            isOpen={openMenu === 'theme'}
+            onToggle={() => setOpenMenu(openMenu === 'theme' ? null : 'theme')}
+            onClose={() => setOpenMenu(null)}
+          />
+          <LanguageSwitcher
+            className="square-switcher-btn"
+            isOpen={openMenu === 'lang'}
+            onToggle={() => setOpenMenu(openMenu === 'lang' ? null : 'lang')}
+            onClose={() => setOpenMenu(null)}
+          /> 
+
           {user ? (
             <>
               <Link to="/profile" className="user-profile-trigger" title={t('profile_my_profile') || 'My Profile'}>

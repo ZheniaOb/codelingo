@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import '../css/LanguageSwitcher.css';
 
@@ -14,31 +14,29 @@ const languages = [
   { code: 'ar', name: 'العربية', flag: '🇸🇦' }
 ];
 
-const LanguageSwitcher = ({ className }) => {
+const LanguageSwitcher = ({ className, isOpen, onToggle, onClose }) => {
   const { i18n } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const currentLang = i18n.language.substring(0, 2);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
-    setOpen(false);
+    onClose(); 
   };
-
-  const currentLang = i18n.language.substring(0, 2);
 
   return (
     <div className={`language-switcher ${className || ''}`}>
       <button 
         className="lang-btn" 
-        onClick={() => setOpen(!open)}
+        onClick={onToggle}
       >
         <span className="flag">
           {languages.find(l => l.code === currentLang)?.flag || '🌐'}
         </span>
         <span className="lang-code">{currentLang.toUpperCase()}</span>
-        <span className="arrow">{open ? '▲' : '▼'}</span>
+        <span className="arrow">{isOpen ? '▲' : '▼'}</span>
       </button>
 
-      {open && (
+      {isOpen && (
         <ul className="lang-dropdown">
           {languages.map((lang) => (
             <li 
