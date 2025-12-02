@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../BasicSiteView/Header/Header";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./HtmlCssPage.css";
 
@@ -67,7 +66,6 @@ const HtmlCssPage = () => {
 
   return (
     <div className="htmlcss-page">
-      <Header />
 
       <div className="htmlcss-themes-wrapper">
         {/* THEME 1 */}

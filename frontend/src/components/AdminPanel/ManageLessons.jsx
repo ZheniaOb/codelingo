@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../BasicSiteView/Header/Header';
 import Footer from '../BasicSiteView/Footer/Footer';
 import '../../css/styles.css';
 
@@ -188,7 +187,6 @@ const ManageLessons = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Header />
       <main style={{ flex: 1, padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
           <h2>Manage Lessons</h2>

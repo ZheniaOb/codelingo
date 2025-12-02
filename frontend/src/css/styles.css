@@ -2073,6 +2073,14 @@ body{
   gap: 1rem;
 }
 
+.profile-avatars-grid img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
 @media (min-width: 768px) {
   .profile-avatars-grid {
     grid-template-columns: repeat(6, 1fr);
@@ -2086,6 +2094,7 @@ body{
   overflow: hidden;
   aspect-ratio: 1;
   transition: transform 0.2s, border-color 0.2s;
+  
 }
 
 .profile-avatar-option:hover {

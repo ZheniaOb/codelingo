@@ -1,6 +1,5 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Header from "../../BasicSiteView/Header/Header";
 import "./LessonPage.css";
 
 
@@ -14,7 +13,6 @@ const LessonPage = () => {
 
   return (
     <div className="lesson-page">
-      <Header />
       <main className="lesson-main">
         <button
           type="button"

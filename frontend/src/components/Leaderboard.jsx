@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'; 
 import "../css/styles.css"; 
-import Header from './BasicSiteView/Header/Header';
+
 import Footer from './BasicSiteView/Footer/Footer';
 import { useTranslation } from 'react-i18next';
 
@@ -58,7 +58,7 @@ const Leaderboard = () => {
 
   const HeaderFooter = ({ children }) => (
     <>
-      <Header />
+     
       <main>{children}</main>
       <Footer />
     </>

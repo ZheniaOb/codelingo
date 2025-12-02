@@ -1,16 +1,14 @@
 import React from "react";
-// ИСПРАВЛЕНО: styles.css находится на один уровень выше (в src/css)
 import "../css/styles.css";
 import { useTranslation } from 'react-i18next'; 
-import Header from './BasicSiteView/Header/Header';
 import Footer from './BasicSiteView/Footer/Footer';
 
 const getRobotImageSrc = (theme) => {
   if (theme === 'pink') {
-    return "/img/pink.png"; 
+    return "/img/avatar/pink.png"; 
   }
   if (theme === 'dark') {
-    return "/img/black.png"; 
+    return "/img/avatar/black.png"; 
   }
   return "/img/small_logo.png";
 };
@@ -31,7 +29,6 @@ function Home({ theme, toggleTheme }) {
 
   return (
     <div>
-      <Header theme={theme} toggleTheme={toggleTheme} />
 
       <main>
         <section className="hero container" id="home">

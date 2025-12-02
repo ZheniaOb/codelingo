@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Header from './BasicSiteView/Header/Header';
+
 import Footer from './BasicSiteView/Footer/Footer';
 import '../css/styles.css';
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../BasicSiteView/Header/Header';
 import Footer from '../BasicSiteView/Footer/Footer';
 import '../../css/styles.css';
 
@@ -50,7 +49,6 @@ const ManageUsers = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Header />
 
       <main style={{ flex: 1, padding: '2rem' }}>
         <div style={{

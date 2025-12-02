@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next"; 
-import Header from "./BasicSiteView/Header/Header";
 import Footer from "./BasicSiteView/Footer/Footer";
 import "../css/styles.css";
 
@@ -65,7 +64,7 @@ const MiniGamesPage = () => {
 
   return (
     <div className="minigames-page">
-      <Header />
+     
 
       <div className="minigames-container">
         <div className="minigames-header">

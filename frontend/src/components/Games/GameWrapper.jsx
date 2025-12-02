@@ -5,7 +5,6 @@ import { RefactorRushGame } from "./RefactorRushGame";
 import { VariableHuntGame } from "./VariableHuntGame";
 import { BugInfectionGame } from "./BugInfectionGame";
 import { LanguageSelector } from "./LanguageSelector";
-import Header from "../BasicSiteView/Header/Header";
 import Footer from "../BasicSiteView/Footer/Footer";
 import "../../css/styles.css";
 
@@ -32,7 +31,6 @@ export function GameWrapper() {
   if (!GameComponent) {
     return (
       <div>
-        <Header />
         <div className="min-h-screen bg-gradient-to-b from-green-50 to-white p-6 flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-3xl text-red-500 mb-4">Game not found</h2>
@@ -119,7 +117,6 @@ export function GameWrapper() {
   if (!selectedLanguage) {
     return (
       <div>
-        <Header />
         <LanguageSelector 
           onSelect={handleLanguageSelect} 
           onBack={handleBack}
@@ -132,7 +129,6 @@ export function GameWrapper() {
   if (showCompletion) {
     return (
       <div>
-        <Header />
         <div className="game-container">
           <div className="flex items-center justify-center min-h-[80vh]">
             <div className="game-card text-center max-w-lg" style={{ animation: 'bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
@@ -193,7 +189,6 @@ export function GameWrapper() {
 
   return (
     <div>
-      <Header />
       <GameComponent 
         onComplete={handleComplete} 
         onBack={handleBackToLanguageSelect}

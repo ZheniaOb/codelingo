@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../BasicSiteView/Header/Header";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./PythonPage.css";
 
@@ -63,7 +62,6 @@ const navigate = useNavigate();
 
   return (
     <div className="python-page">
-      <Header />
       <div className="themes-wrapper">
         {/* Theme 1 (left) */}
         <section className="theme-path theme-1">

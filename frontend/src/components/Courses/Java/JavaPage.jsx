@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../BasicSiteView/Header/Header";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./JavaPage.css";
 
@@ -66,7 +65,6 @@ const JavaPage = () => {
   };
   return (
     <div className="java-page">
-      <Header />
 
       <div className="java-themes-wrapper">
         {/* Theme 1 (left) */}

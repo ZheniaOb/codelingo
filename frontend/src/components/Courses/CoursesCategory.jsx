@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "../BasicSiteView/Header/Header";
 import Footer from "../BasicSiteView/Footer/Footer";
 import "./CoursesCategory.css";
 
@@ -33,7 +32,6 @@ const getIcon = (id, title) => {
 
 const CoursesList = () => (
   <div className="courses-page">
-    <Header />
 
     <section className="courses-hero">
       <h1 className="courses-title">Choose your course</h1>

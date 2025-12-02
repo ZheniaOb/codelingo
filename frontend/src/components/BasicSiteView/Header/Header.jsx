@@ -27,15 +27,16 @@ const getInitialUserState = () => {
     }
 
     const storedEmail = localStorage.getItem('email');
+    const storedAvatar = localStorage.getItem('avatar');
     const usernameFromEmail = (emailValue) =>
       emailValue?.split('@')[0] || payload.username || 'User';
 
     const email = storedEmail || payload.email || null;
-
     return {
       username: usernameFromEmail(email),
       email: email || 'user@example.com',
       role: payload.role || 'user',
+      avatar: storedAvatar || '/img/small_logo.png'
     };
   } catch (error) {
     console.error('Failed to parse token:', error);
@@ -72,25 +73,31 @@ const Header = ({ theme, toggleTheme }) => {
             
             if (response.ok) {
               const userData = await response.json();
-              setUser({ 
+              const storedAvatar = localStorage.getItem('avatar') || '/img/small_logo.png';
+              setUser(prev => ({ 
                 username: userData.email?.split('@')[0] || 'User', 
                 email: userData.email || 'user@example.com',
-                role: userData.role || payload.role || 'user' 
-              });
+                role: userData.role || payload.role || 'user',
+                avatar: userData.avatar || prev?.avatar || storedAvatar
+              }));
             } else {
               const storedEmail = localStorage.getItem('email');
+              const storedAvatar = localStorage.getItem('avatar') || '/img/small_logo.png';
               setUser({ 
                 username: storedEmail?.split('@')[0] || 'User', 
                 email: storedEmail || 'user@example.com',
-                role: payload.role || 'user' 
+                role: payload.role || 'user',
+                avatar: storedAvatar 
               });
             }
           } catch (apiError) {
             const storedEmail = localStorage.getItem('email');
+            const storedAvatar = localStorage.getItem('avatar') || '/img/small_logo.png';
             setUser({ 
               username: storedEmail?.split('@')[0] || 'User', 
               email: storedEmail || 'user@example.com',
-              role: payload.role || 'user' 
+              role: payload.role || 'user',
+              avatar: storedAvatar
             });
           }
         } catch (err) {
@@ -156,7 +163,7 @@ const Header = ({ theme, toggleTheme }) => {
             <>
               <Link to="/profile" className="user-profile-trigger" title={t('profile_my_profile') || 'My Profile'}>
                 <img 
-                  src="/img/small_logo.png" 
+                  src={user.avatar || '/img/small_logo.png'}
                   alt="Profile" 
                   className="user-profile-avatar-small"
                 />

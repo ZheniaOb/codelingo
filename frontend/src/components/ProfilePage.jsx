@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import Header from './BasicSiteView/Header/Header';
 import Footer from './BasicSiteView/Footer/Footer';
 import "../css/styles.css";
 
@@ -19,9 +18,10 @@ const ProfilePage = () => {
 
   const availableAvatars = [
     '/img/small_logo.png',
-    '/img/icons/rocket.png',
-    '/img/icons/trophy.png',
-    '/img/icons/fire.png'
+    '/img/avatar/black.png',
+    '/img/avatar/purple.png',
+    '/img/avatar/pink.png',
+    '/img/avatar/red.png',
   ];
 
   useEffect(() => {
@@ -129,6 +129,8 @@ const ProfilePage = () => {
       setDisplayName(data.username || '');
       setEmail(data.email || '');
       setSelectedAvatar(data.avatar || '/img/small_logo.png');
+      localStorage.setItem('avatar', data.avatar || '/img/small_logo.png');
+      window.location.reload();
       setStatusMessage({ type: 'success', text: t('profile_saved') || 'Changes saved!' });
     } catch (err) {
       setStatusMessage({ type: 'error', text: err.message });
@@ -140,7 +142,6 @@ const ProfilePage = () => {
   if (loading) {
     return (
       <div className="profile-page-wrapper">
-        <Header />
         <main className="profile-main">
           <div className="profile-container">
             <div className="profile-loading">
@@ -156,7 +157,6 @@ const ProfilePage = () => {
   if (!user) {
     return (
       <div className="profile-page-wrapper">
-        <Header />
         <main className="profile-main">
           <div className="profile-container">
             <div className="profile-card text-center">
@@ -184,8 +184,6 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-page-wrapper">
-      <Header />
-      
       <main className="profile-main">
         <div className="profile-container-vertical">
           {/* Profile Header Section */}

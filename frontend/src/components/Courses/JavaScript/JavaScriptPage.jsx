@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../BasicSiteView/Header/Header";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./JavaScriptPage.css";
 
@@ -66,7 +65,6 @@ const JavaScriptPage = () => {
 
   return (
     <div className="js-page">
-      <Header />
 
       <div className="js-themes-wrapper">
         {/* Theme 1 */}

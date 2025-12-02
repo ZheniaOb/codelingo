@@ -18,6 +18,7 @@ import JavaScriptPage from "./components/Courses/JavaScript/JavaScriptPage.jsx";
 import JavaPage from "./components/Courses/Java/JavaPage.jsx";
 import HtmlCssPage from "./components/Courses/htmlcss/HtmlCssPage.jsx";
 import ProfilePage from './components/ProfilePage';
+import Header from "./components/BasicSiteView/Header/Header";
 import LessonPage from "./components/Courses/LessonPage/LessonPage.jsx";
 
 const Loading = () => <div style={{ textAlign: 'center', padding: '50px' }}>Loading translations...</div>;
@@ -55,7 +56,7 @@ function App() {
   return (
     <Router>
       <Suspense fallback={<Loading />}>
-        
+        <Header theme={theme} toggleTheme={toggleTheme} />
         <Routes>
           <Route path="/" element={renderRouteElement(Home)} />
           <Route path="/login" element={renderRouteElement(Login)} />
