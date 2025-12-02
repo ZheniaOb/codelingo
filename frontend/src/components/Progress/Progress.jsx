@@ -1,6 +1,6 @@
 import React from 'react'; 
-import "../css/styles.css"; 
-import Footer from './BasicSiteView/Footer/Footer';
+import "./Progress.css"; 
+import Footer from '../BasicSiteView/Footer/Footer';
 import { useTranslation } from 'react-i18next';
 
 const weeklyActivity = [

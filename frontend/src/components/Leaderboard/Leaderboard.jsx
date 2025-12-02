@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'; 
-import "../css/styles.css"; 
+import "./Leaderboard.css"; 
 
-import Footer from './BasicSiteView/Footer/Footer';
+import Footer from '../BasicSiteView/Footer/Footer';
 import { useTranslation } from 'react-i18next';
 
 const CustomBadge = ({ children, style = {} }) => (

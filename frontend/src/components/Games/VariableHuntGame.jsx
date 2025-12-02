@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../../css/styles.css";
+import "./MiniGames.css";
 
 const API_URL = "http://localhost:5001/api";
 

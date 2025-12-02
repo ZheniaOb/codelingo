@@ -108,6 +108,7 @@
     box-shadow .22s ease,
     background .22s ease,
     border-color .22s ease;
+    cursor: pointer;
 }
 
 /* hover */
@@ -125,6 +126,7 @@
   opacity:0;
   box-shadow:none;
   transition:opacity .25s ease, box-shadow .25s ease;
+  
 }
 .htmlcss-path-node:hover::after{
   opacity:0;

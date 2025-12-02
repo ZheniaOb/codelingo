@@ -1,7 +1,7 @@
 import React from "react";
-import "../css/styles.css";
+import "../Home/Home.css";
 import { useTranslation } from 'react-i18next'; 
-import Footer from './BasicSiteView/Footer/Footer';
+import Footer from '../BasicSiteView/Footer/Footer';
 
 const getRobotImageSrc = (theme) => {
   if (theme === 'pink') {
@@ -108,8 +108,11 @@ function Home({ theme, toggleTheme }) {
                 <h3 className="lang-name">Python</h3>
                 <p className="lang-desc">{t('lang_desc_beginner')}</p> 
                 <div className="lesson-row">
-                  <span className="lesson-note">{t('lesson_progress', { current: 5, total: 30 })}</span> 
+                  <span className="lesson-note">{t('lesson_progress', { current: 5, total: 30 })}</span>
                   <span className="lesson-percent">17%</span>
+                </div>
+                <div className="progress-wrap">
+                  <div className="progress-fill" style={{ width: "17%" }}></div>
                 </div>
                 <a className="btn btn-continue" href="/courses/python">{t('continue_btn')}</a> 
               </div>
@@ -125,6 +128,9 @@ function Home({ theme, toggleTheme }) {
                 <div className="lesson-row">
                   <span className="lesson-note">{t('lesson_progress', { current: 12, total: 30 })}</span>
                   <span className="lesson-percent">40%</span>
+                </div>
+                <div className="progress-wrap">
+                  <div className="progress-fill" style={{ width: "40%" }}></div>
                 </div>
                 <a className="btn btn-continue" href="#javascript">{t('continue_btn')}</a> 
               </div>
@@ -142,6 +148,9 @@ function Home({ theme, toggleTheme }) {
                   <span className="lesson-note">{t('lesson_progress', { current: 18, total: 30 })}</span>
                   <span className="lesson-percent">60%</span>
                 </div>
+                <div className="progress-wrap">
+                  <div className="progress-fill" style={{ width: "60%" }}></div>
+                </div>
                 <a className="btn btn-continue" href="#htmlcss">{t('continue_btn')}</a> 
               </div>
             </article>
@@ -156,6 +165,9 @@ function Home({ theme, toggleTheme }) {
                 <div className="lesson-row">
                   <span className="lesson-note">{t('lesson_progress', { current: 3, total: 30 })}</span>
                   <span className="lesson-percent">10%</span>
+                </div>
+                <div className="progress-wrap">
+                  <div className="progress-fill" style={{ width: "10%" }}></div>
                 </div>
                 <a className="btn btn-continue" href="#java">{t('continue_btn')}</a> 
               </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../css/styles.css";
+import "./MiniGames.css";
 
 const LANGUAGES = [
   { id: "python", name: "Python", icon: "/img/icons/py.png", description: "Great for beginners" },
@@ -19,21 +19,21 @@ export function LanguageSelector({ onSelect, onBack }) {
 
   return (
     <div className="game-container">
-      <div className="max-w-4xl mx-auto">
+      <div className="language-select-wrapper">
         <div className="game-header">
           <h2 className="game-title">Choose Programming Language</h2>
           <button onClick={onBack} className="game-btn game-btn-secondary">
-            ← Back
+            1 Back
           </button>
         </div>
 
         <div className="game-card">
-          <h3 style={{ marginBottom: '0.5rem' }}>Select a language to play</h3>
-          <p className="text-center mb-8" style={{ color: '#6b7280' }}>
+          <h3 className="language-select-title">Select a language to play</h3>
+          <p className="language-select-subtitle">
             Choose the programming language you want to practice. Tasks will be in your selected language.
           </p>
 
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="language-select-grid">
             {LANGUAGES.map((lang) => (
               <button
                 key={lang.id}
@@ -71,8 +71,7 @@ export function LanguageSelector({ onSelect, onBack }) {
           <button
             onClick={handleContinue}
             disabled={!selectedLanguage}
-            className="game-btn game-btn-primary w-full"
-            style={{ fontSize: '1.1rem', padding: '1.25rem 2rem' }}
+            className="game-btn game-btn-primary language-select-cta"
           >
             {selectedLanguage ? `Continue with ${LANGUAGES.find(l => l.id === selectedLanguage)?.name}` : "Select a language to continue"}
           </button>

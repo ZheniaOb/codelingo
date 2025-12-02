@@ -198,26 +198,12 @@ const ManageGames = () => {
     }
   };
 
-  const buttonStyle = {
-    display: 'block',
-    width: '100%',
-    textAlign: 'left',
-    padding: '0.75rem 1rem',
-    marginBottom: '0.5rem',
-    borderRadius: '6px',
-    border: '1px solid #ccc',
-    backgroundColor: '#f7f7f7',
-    cursor: 'pointer',
-    transition: '0.2s',
-  };
-  const buttonHoverStyle = { backgroundColor: '#e0e0e0' };
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <main style={{ flex: 1, padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
-          <h2>Manage Games</h2>
-          <button onClick={handleBack} style={{ padding: '0.6rem 1.2rem' }}>← Back</button>
+    <div className="admin-page">
+      <main className="admin-main admin-main--wide">
+        <div className="admin-header-row">
+          <h2 className="admin-page-title">Manage Games</h2>
+          <button onClick={handleBack} className="btn btn-primary admin-back-btn">← Back</button>
         </div>
 
         {loading && <p>Loading...</p>}
@@ -228,9 +214,7 @@ const ManageGames = () => {
             {!selectedGame && games.map(game => (
               <button
                 key={game.id}
-                style={buttonStyle}
-                onMouseOver={e => e.currentTarget.style.backgroundColor = buttonHoverStyle.backgroundColor}
-                onMouseOut={e => e.currentTarget.style.backgroundColor = buttonStyle.backgroundColor}
+                className="admin-list-button"
                 onClick={() => fetchTasks(game.id)}
               >
                 🎮 {game.title} ({game.difficulty}) - {game.xp_reward} XP
@@ -241,19 +225,19 @@ const ManageGames = () => {
               <>
                 <button
                   onClick={() => setAddingNew(!addingNew)}
-                  style={{ ...buttonStyle, fontWeight: 'bold', marginBottom: '1rem' }}
+                  className="admin-list-button admin-list-button--primary"
                 >
                   ➕ Add New Task
                 </button>
 
                 {addingNew && (
-                  <div style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '6px' }}>
-                    <div style={{ marginBottom: '0.5rem' }}>
+                  <div className="admin-card">
+                    <div className="admin-field">
                       <label>Task Type:</label>
                       <select
                         value={newTask.task_type}
                         onChange={e => setNewTask({ ...newTask, task_type: e.target.value })}
-                        style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }}
+                        className="admin-input admin-select"
                       >
                         <option value="memory_code">Memory Code</option>
                         <option value="refactor">Refactor</option>
@@ -261,62 +245,62 @@ const ManageGames = () => {
                         <option value="bug_infection">Bug Infection</option>
                       </select>
                     </div>
-                    <div style={{ marginBottom: '0.5rem' }}>
+                    <div className="admin-field">
                       <label>Language:</label>
                       <select
                         value={newTask.language}
                         onChange={e => setNewTask({ ...newTask, language: e.target.value })}
-                        style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }}
+                        className="admin-input admin-select"
                       >
                         {LANGUAGES.map(lang => (
                           <option key={lang} value={lang}>{lang}</option>
                         ))}
                       </select>
                     </div>
-                    <div style={{ marginBottom: '0.5rem' }}>
+                    <div className="admin-field">
                       <label>Task Data (JSON):</label>
                       <textarea
                         value={newTask.task_data}
                         onChange={e => setNewTask({ ...newTask, task_data: e.target.value })}
-                        style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem', minHeight: '150px', fontFamily: 'monospace' }}
+                        className="admin-input admin-textarea admin-textarea--code"
                         placeholder='{"code": "function sum(a, b) { return a + b; }"}'
                       />
                     </div>
-                    <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '1rem' }}>
-                      <div style={{ flex: 1 }}>
+                    <div className="admin-field-row">
+                      <div className="admin-field admin-field--half">
                         <label>Order:</label>
                         <input
                           type="number"
                           value={newTask.order}
                           onChange={e => setNewTask({ ...newTask, order: e.target.value })}
-                          style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }}
+                          className="admin-input"
                         />
                       </div>
-                      <div style={{ flex: 1 }}>
+                      <div className="admin-field admin-field--half">
                         <label>XP Reward:</label>
                         <input
                           type="number"
                           value={newTask.xp_reward}
                           onChange={e => setNewTask({ ...newTask, xp_reward: e.target.value })}
-                          style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }}
+                          className="admin-input"
                         />
                       </div>
                     </div>
-                    <button onClick={addTask} style={{ marginRight: '0.5rem' }}>Save</button>
-                    <button onClick={() => setAddingNew(false)}>Cancel</button>
+                    <button onClick={addTask} className="btn btn-primary admin-inline-btn">Save</button>
+                    <button onClick={() => setAddingNew(false)} className="btn btn-ghost admin-inline-btn">Cancel</button>
                   </div>
                 )}
 
                 {tasks.map(task => (
-                  <div key={task.id} style={{ ...buttonStyle, backgroundColor: '#fff' }}>
+                  <div key={task.id} className="admin-card admin-card--clickable">
                     {task.editMode ? (
                       <div>
-                        <div style={{ marginBottom: '0.5rem' }}>
+                        <div className="admin-field">
                           <label>Task Type:</label>
                           <select
                             value={task.task_type}
                             onChange={e => handleTaskChange(task.id, 'task_type', e.target.value)}
-                            style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }}
+                            className="admin-input admin-select"
                           >
                             <option value="memory_code">Memory Code</option>
                             <option value="refactor">Refactor</option>
@@ -324,59 +308,59 @@ const ManageGames = () => {
                             <option value="bug_infection">Bug Infection</option>
                           </select>
                         </div>
-                        <div style={{ marginBottom: '0.5rem' }}>
+                        <div className="admin-field">
                           <label>Language:</label>
                           <select
                             value={task.language}
                             onChange={e => handleTaskChange(task.id, 'language', e.target.value)}
-                            style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }}
+                            className="admin-input admin-select"
                           >
                             {LANGUAGES.map(lang => (
                               <option key={lang} value={lang}>{lang}</option>
                             ))}
                           </select>
                         </div>
-                        <div style={{ marginBottom: '0.5rem' }}>
+                        <div className="admin-field">
                           <label>Task Data (JSON):</label>
                           <textarea
                             value={task.task_data_text}
                             onChange={e => handleTaskChange(task.id, 'task_data_text', e.target.value)}
-                            style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem', minHeight: '150px', fontFamily: 'monospace' }}
+                            className="admin-input admin-textarea admin-textarea--code"
                           />
                         </div>
-                        <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '1rem' }}>
-                          <div style={{ flex: 1 }}>
+                        <div className="admin-field-row">
+                          <div className="admin-field admin-field--half">
                             <label>Order:</label>
                             <input
                               type="number"
                               value={task.order}
                               onChange={e => handleTaskChange(task.id, 'order', e.target.value)}
-                              style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }}
+                              className="admin-input"
                             />
                           </div>
-                          <div style={{ flex: 1 }}>
+                          <div className="admin-field admin-field--half">
                             <label>XP Reward:</label>
                             <input
                               type="number"
                               value={task.xp_reward}
                               onChange={e => handleTaskChange(task.id, 'xp_reward', e.target.value)}
-                              style={{ width: '100%', marginTop: '0.2rem', padding: '0.3rem' }}
+                              className="admin-input"
                             />
                           </div>
                         </div>
-                        <button onClick={() => saveTask(task)} style={{ marginRight: '0.5rem' }}>Save</button>
-                        <button onClick={() => toggleEdit(task.id)} style={{ marginRight: '0.5rem' }}>Cancel</button>
-                        <button onClick={() => deleteTask(task.id)} style={{ color: 'red' }}>Delete</button>
+                        <button onClick={() => saveTask(task)} className="btn btn-primary admin-inline-btn">Save</button>
+                        <button onClick={() => toggleEdit(task.id)} className="btn btn-ghost admin-inline-btn">Cancel</button>
+                        <button onClick={() => deleteTask(task.id)} className="btn btn-ghost admin-inline-btn admin-inline-btn--danger">Delete</button>
                       </div>
                     ) : (
-                      <div onClick={() => toggleEdit(task.id)} style={{ cursor: 'pointer' }}>
-                        <div style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>
+                      <div onClick={() => toggleEdit(task.id)} className="admin-card-click">
+                        <div className="admin-card-title">
                           📝 {task.task_type} ({task.language})
                         </div>
-                        <div style={{ fontSize: '0.9em', color: '#666', marginBottom: '0.25rem' }}>
+                        <div className="admin-card-meta">
                           Order: {task.order} | XP: {task.xp_reward}
                         </div>
-                        <div style={{ fontSize: '0.85em', color: '#888', fontFamily: 'monospace', maxHeight: '100px', overflow: 'auto' }}>
+                        <div className="admin-card-preview">
                           {JSON.stringify(task.task_data).substring(0, 100)}...
                         </div>
                       </div>

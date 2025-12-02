@@ -6,7 +6,7 @@ import { VariableHuntGame } from "./VariableHuntGame";
 import { BugInfectionGame } from "./BugInfectionGame";
 import { LanguageSelector } from "./LanguageSelector";
 import Footer from "../BasicSiteView/Footer/Footer";
-import "../../css/styles.css";
+import "./MiniGames.css";
 
 const API_URL = "http://localhost:5001/api";
 

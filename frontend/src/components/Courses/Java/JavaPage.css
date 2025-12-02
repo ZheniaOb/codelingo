@@ -110,6 +110,7 @@
     box-shadow .22s ease,
     background .22s ease,
     border-color .22s ease;
+    cursor: pointer;
 }
 
 /* hover — как у Python */

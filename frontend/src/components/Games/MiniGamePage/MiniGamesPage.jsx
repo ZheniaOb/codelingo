@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next"; 
-import Footer from "./BasicSiteView/Footer/Footer";
-import "../css/styles.css";
+import Footer from "../../BasicSiteView/Footer/Footer";
+import "./MiniGamePage.css";
 
 const games = [
   {
