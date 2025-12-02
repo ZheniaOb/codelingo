@@ -1,13 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import Footer from './BasicSiteView/Footer/Footer';
 import '../css/styles.css';
 
 const Admin_Panel = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Header />
 
       <main
         style={{
