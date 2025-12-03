@@ -144,5 +144,22 @@
   "leaderboard_unexpected_error": "Erreur inattendue",
   "leaderboard_trophy": "Trophée",
   "leaderboard_medal": "Médaille",
-  "leaderboard_award": "Récompense"
+  "leaderboard_award": "Récompense",
+
+  "courses_title": "Choisissez votre cours",
+  "courses_subtitle": "Choisissez une voie et commencez à apprendre avec des leçons courtes et des XP.",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} leçons",
+  "howit_title": "Comment ça marche",
+  "howit_steps_label": "Étapes d'apprentissage",
+  "howit_step1_title": "Sélectionnez un cours",
+  "howit_step1_text": "Choisissez la direction que vous voulez et ouvrez un cours.",
+  "howit_step2_title": "Complétez des leçons courtes",
+  "howit_step2_text": "Apprenez par petites étapes et renforcez par la pratique.",
+  "howit_step3_title": "Gagnez des XP",
+  "howit_step3_text": "Accumulez des points et grimpez dans le classement."
+
 }

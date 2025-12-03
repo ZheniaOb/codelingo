@@ -144,5 +144,22 @@
   "leaderboard_you": "Ty",
   "leaderboard_trophy": "Trofeum",
   "leaderboard_medal": "Medal",
-  "leaderboard_award": "Nagroda"
+  "leaderboard_award": "Nagroda",
+
+  "courses_title": "Wybierz kurs",
+  "courses_subtitle": "Wybierz ścieżkę i zacznij naukę krótkimi lekcjami i XP.",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} lekcji",
+  "howit_title": "Jak to działa",
+  "howit_steps_label": "Etapy nauki",
+  "howit_step1_title": "Wybierz kurs",
+  "howit_step1_text": "Wybierz kierunek i otwórz kurs.",
+  "howit_step2_title": "Ukończ krótkie lekcje",
+  "howit_step2_text": "Ucz się w małych porcjach i utrwalaj praktyką.",
+  "howit_step3_title": "Zdobywaj XP",
+  "howit_step3_text": "Zbieraj punkty i wspinaj się w rankingu."
+
 }
