@@ -144,5 +144,22 @@
   "leaderboard_unexpected_error": "خطأ غير متوقع",
   "leaderboard_trophy": "كأس",
   "leaderboard_medal": "ميدالية",
-  "leaderboard_award": "جائزة"
+  "leaderboard_award": "جائزة",
+
+  "courses_title": "اختر دورتك",
+  "courses_subtitle": "اختر المسار وابدأ التعلم من خلال دروس قصيرة و XP.",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} درس",
+  "howit_title": "كيف يعمل",
+  "howit_steps_label": "خطوات التعلم",
+  "howit_step1_title": "اختر دورة",
+  "howit_step1_text": "حدد الاتجاه الذي تريده وافتح الدورة.",
+  "howit_step2_title": "أكمل دروس قصيرة",
+  "howit_step2_text": "تعلم على شكل أجزاء صغيرة وعزز بالممارسة.",
+  "howit_step3_title": "اكسب نقاط XP",
+  "howit_step3_text": "احصل على النقاط وتسلق لوحة الصدارة."
+
 }

@@ -144,6 +144,23 @@
   "leaderboard_you": "Ви",
   "leaderboard_trophy": "Трофей",
   "leaderboard_medal": "Медаль",
-  "leaderboard_award": "Нагорода"
+  "leaderboard_award": "Нагорода",
+
+  "courses_title": "Обери свій курс",
+  "courses_subtitle": "Обери напрямок і почни навчання з коротких уроків та XP.",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} уроків",
+  "howit_title": "Як це працює",
+  "howit_steps_label": "Етапи навчання",
+  "howit_step1_title": "Обери курс",
+  "howit_step1_text": "Визнач напрямок і відкрий курс.",
+  "howit_step2_title": "Виконуй короткі уроки",
+  "howit_step2_text": "Навчайся невеликими блоками та закріплюй практикою.",
+  "howit_step3_title": "Заробляй XP",
+  "howit_step3_text": "Отримуй бали та піднімайся в рейтингу."
+
 
 }

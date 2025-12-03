@@ -144,6 +144,23 @@
   "leaderboard_you": "你",
   "leaderboard_trophy": "奖杯",
   "leaderboard_medal": "奖牌",
-  "leaderboard_award": "奖励"
+  "leaderboard_award": "奖励",
+
+  "courses_title": "选择你的课程",
+  "courses_subtitle": "选择一个方向，通过简短课程和经验值开始学习。",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} 课时",
+  "howit_title": "学习流程",
+  "howit_steps_label": "学习步骤",
+  "howit_step1_title": "选择课程",
+  "howit_step1_text": "选择你想要的方向并打开课程。",
+  "howit_step2_title": "完成简短课程",
+  "howit_step2_text": "分阶段学习并通过练习巩固。",
+  "howit_step3_title": "获得经验值",
+  "howit_step3_text": "积累积分并提升排行榜名次。"
+
 
 }

@@ -144,7 +144,24 @@
   "leaderboard_you": "Вы",
   "leaderboard_trophy": "Трофей",
   "leaderboard_medal": "Медаль",
-  "leaderboard_award": "Награда"
+  "leaderboard_award": "Награда",
+
+  "courses_title": "Выберите курс",
+  "courses_subtitle": "Выберите направление и начните обучение с коротких уроков и XP.",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} уроков",
+  "howit_title": "Как это работает",
+  "howit_steps_label": "Этапы обучения",
+  "howit_step1_title": "Выберите курс",
+  "howit_step1_text": "Определите направление и откройте курс.",
+  "howit_step2_title": "Проходите короткие уроки",
+  "howit_step2_text": "Учитесь небольшими блоками и закрепляйте практикой.",
+  "howit_step3_title": "Зарабатывайте XP",
+  "howit_step3_text": "Получайте очки и поднимайтесь в рейтинге."
+
 
 
 

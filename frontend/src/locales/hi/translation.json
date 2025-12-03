@@ -144,5 +144,22 @@
   "leaderboard_unexpected_error": "अप्रत्याशित त्रुटि",
   "leaderboard_trophy": "ट्रॉफी",
   "leaderboard_medal": "पदक",
-  "leaderboard_award": "पुरस्कार"
+  "leaderboard_award": "पुरस्कार",
+  
+  "courses_title": "अपना पाठ्यक्रम चुनें",
+  "courses_subtitle": "एक मार्ग चुनें और छोटे पाठों और XP के साथ सीखना शुरू करें।",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} पाठ",
+  "howit_title": "यह कैसे काम करता है",
+  "howit_steps_label": "सीखने के चरण",
+  "howit_step1_title": "एक पाठ्यक्रम चुनें",
+  "howit_step1_text": "अपनी दिशा चुनें और पाठ्यक्रम खोलें।",
+  "howit_step2_title": "छोटे पाठ पूरे करें",
+  "howit_step2_text": "छोटे हिस्सों में सीखें और अभ्यास से मजबूत करें।",
+  "howit_step3_title": "XP अर्जित करें",
+  "howit_step3_text": "अंक प्राप्त करें और लीडरबोर्ड पर ऊपर जाएं।"
+
 }

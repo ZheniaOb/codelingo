@@ -145,7 +145,21 @@
   "leaderboard_unexpected_error": "Unexpected error",
   "leaderboard_trophy": "Trophy",
   "leaderboard_medal": "Medal",
-  "leaderboard_award": "Award"
+  "leaderboard_award": "Award",
 
+  "courses_title": "Choose your course",
+  "courses_subtitle": "Pick a track and start learning with short lessons and XP.",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} lessons",
+  "howit_title": "How it works",
+  "howit_step1_title": "Select a course",
+  "howit_step1_text": "Pick the direction you want and open a course.",
+  "howit_step2_title": "Complete short lessons",
+  "howit_step2_text": "Learn in small chunks and reinforce with practice.",
+  "howit_step3_title": "Earn XP",
+  "howit_step3_text": "Gain points and climb the leaderboard."
 
 }

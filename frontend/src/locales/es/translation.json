@@ -145,7 +145,24 @@
   "leaderboard_you": "Tú",
   "leaderboard_trophy": "Trofeo",
   "leaderboard_medal": "Medalla",
-  "leaderboard_award": "Premio"
+  "leaderboard_award": "Premio",
+
+  "courses_title": "Elige tu curso",
+  "courses_subtitle": "Elige una ruta y comienza a aprender con lecciones cortas y XP.",
+  "course_python": "Python",
+  "course_javascript": "JavaScript",
+  "course_java": "Java",
+  "course_htmlcss": "HTML / CSS",
+  "lessons_count": "{{count}} lecciones",
+  "howit_title": "Cómo funciona",
+  "howit_steps_label": "Pasos de aprendizaje",
+  "howit_step1_title": "Selecciona un curso",
+  "howit_step1_text": "Elige la dirección que quieras y abre un curso.",
+  "howit_step2_title": "Completa lecciones cortas",
+  "howit_step2_text": "Aprende en pequeñas partes y refuerza con práctica.",
+  "howit_step3_title": "Gana XP",
+  "howit_step3_text": "Obtén puntos y sube en la clasificación."
+
 
 
 
