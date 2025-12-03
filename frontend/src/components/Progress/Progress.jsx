@@ -1,7 +1,9 @@
-import React from 'react'; 
-import "./Progress.css"; 
+import React, { useState, useEffect } from 'react';
+import "./Progress.css";
 import Footer from '../BasicSiteView/Footer/Footer';
 import { useTranslation } from 'react-i18next';
+
+const API_URL = "http://localhost:5001/api";
 
 const weeklyActivity = [
   { day: "Mon", xp: 50 },
@@ -14,9 +16,11 @@ const weeklyActivity = [
 ];
 
 const achievements = [
+
   { iconPath: "/img/icons/fire.png", titleKey: "achievement_fire_title", descriptionKey: "achievement_fire_desc" },
   { iconPath: "/img/icons/Sharpshooter.png", titleKey: "achievement_sharp_title", descriptionKey: "achievement_sharp_desc" }, 
   { iconPath: "/img/icons/book.png", titleKey: "achievement_early_title", descriptionKey: "achievement_early_desc" }, 
+
 ];
 
 const StatCard = ({ children, className = '' }) => (
@@ -29,7 +33,35 @@ const CustomBadge = ({ children, className = '' }) => (
 
 const Progress = () => {
   const { t } = useTranslation();
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const maxXp = Math.max(...weeklyActivity.map((d) => d.xp));
+
   const HeaderFooter = ({ children }) => (
     <>
       <main className="progress-page-wrapper">
@@ -39,17 +71,36 @@ const Progress = () => {
     </>
   );
 
+  if (loading) {
+    return (
+      <HeaderFooter>
+        <div className="progress-container container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+           <div className="loading-spinner"></div>
+        </div>
+      </HeaderFooter>
+    );
+  }
+
+  const currentXP = userData?.xp || 0;
+  const currentLevel = userData?.level || 1;
+  const levelTitle = userData?.level_title || "Beginner";
+  const nextLevelTitle = userData?.next_level_title || "Next Level";
+  const xpToNextLevel = userData?.xp_to_next_level || 100;
+  const progressPercent = userData?.progress_percentage || 0;
+  const currentStreak = userData?.streak || 0;
+
   return (
     <HeaderFooter>
       <div className="progress-container container">
         <h1 className="progress-title">{t('progress_title')}</h1>
+
         <div className="stats-grid">
 
           <StatCard>
             <div className="icon-wrapper">
              <img src="/img/icons/fire.png" alt="Streak" className="progress-icon" /> 
             </div>
-            <h3 className="stat-value">7 {t('days_unit')}</h3>
+            <h3 className="stat-value">{currentStreak} {t('days_unit')}</h3>
             <p className="stat-label">{t('progress_current_streak')}</p>
             <CustomBadge>{t('progress_record', { value: 15 })}</CustomBadge>
           </StatCard>
@@ -59,22 +110,26 @@ const Progress = () => {
              <img src="/img/icons/thunder.png" alt="XP" className="progress-icon" />
             </div>
 
-            <h3 className="stat-value">1,240 XP</h3>
+
+
+
+            <h3 className="stat-value">{currentXP.toLocaleString()} XP</h3>
+
             <p className="stat-label">{t('progress_total_experience')}</p>
-            
+
             <div className="custom-progress-bar">
-                <div className="custom-progress-fill" style={{ width: '65%' }}></div>
+                <div className="custom-progress-fill" style={{ width: `${progressPercent}%` }}></div>
             </div>
-            <p className="level-info">{t('progress_to_next_level', { xp: 260, level: 13 })}</p>
+            <p className="level-info">{t('progress_to_next_level', { xp: xpToNextLevel, level: currentLevel + 1 })}</p>
           </StatCard>
 
           <StatCard>
             <div className="icon-wrapper">
               <img src="/img/icons/book.png" alt="Streak" className="progress-icon" /> 
             </div>
-            <CustomBadge>{t('progress_level_badge', { level: 12 })}</CustomBadge>
-            <h3 className="stat-value" style={{ fontSize: '20px' }}>{t('progress_level_title_junior')}</h3>
-            <p className="level-info">{t('progress_next_level_title')}</p>
+            <CustomBadge>{t('progress_level_badge', { level: currentLevel })}</CustomBadge>
+            <h3 className="stat-value" style={{ fontSize: '20px' }}>{levelTitle}</h3>
+            <p className="level-info">{nextLevelTitle}</p>
           </StatCard>
         </div>
 
@@ -87,8 +142,8 @@ const Progress = () => {
             <div className="activity-chart">
                 {weeklyActivity.map((day) => (
                     <div key={day.day} className="chart-bar-container">
-                        <div 
-                            className="chart-bar" 
+                        <div
+                            className="chart-bar"
                             style={{ height: `${(day.xp / maxXp) * 100}%` }}
                         />
                         <span className="chart-day">{t(`day_${day.day.toLowerCase()}`)}</span>

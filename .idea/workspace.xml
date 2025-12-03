@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6782b9e4-5f35-4e99-9903-b2131f0b29b6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AdminPanel/ManageLessons.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AdminPanel/ManageLessons.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AdminPanel/ManageUsers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AdminPanel/ManageUsers.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Progress/Progress.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Progress/Progress.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
