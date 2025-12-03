@@ -187,12 +187,12 @@ def get_user_data():
     if err_resp:
         return err_resp, code
 
-    # Oblicz level na podstawie XP (100 XP per level)
-    level = (current_user.xp // 100) + 1
-    xp_for_current_level = (level - 1) * 100
-    xp_for_next_level = level * 100
-    xp_to_next_level = xp_for_next_level - current_user.xp
-    progress_percentage = int(((current_user.xp - xp_for_current_level) / 100) * 100) if xp_for_next_level > xp_for_current_level else 0
+    # Oblicz level na podstawie XP (200xp = 2lvl -> 500xp = 3lvl -> 900xp = 4lvl itd.)
+    level = int((-1 + (9 + 0.08 * (current_user.xp or 0)) ** 0.5) / 2)
+    xp_for_current_level = int(50 * (level - 1) * (level + 2))
+    xp_for_next_level = int(50 * level * (level + 3))
+    xp_to_next_level = xp_for_next_level - (current_user.xp or 0)
+    progress_percentage = int(((current_user.xp or 0) - xp_for_current_level) / (xp_for_next_level - xp_for_current_level) * 100) if xp_for_next_level > xp_for_current_level else 0
     
     # Level titles
     level_titles = {
