@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import '../css/theme.css';
 
 const themes = [
   { code: 'light', color: '#f7f7f7', label: 'Light theme' },
@@ -6,28 +7,27 @@ const themes = [
   { code: 'pink', color: 'rgb(251, 0, 126)', label: 'Pink theme' },
 ];
 
-const ThemeSwitcher = ({ theme, setTheme, className }) => {
-  const [open, setOpen] = useState(false);
-
+const ThemeSwitcher = ({ theme, setTheme, isOpen, onToggle, onClose, className }) => {
   return (
     <div className={`theme-switcher ${className || ''}`}>
       <button
-        onClick={() => setOpen(!open)}
+        onClick={onToggle}
         className="switcher-btn"
         aria-label="Choose theme"
       >
         🎨
       </button>
 
-      <div className={`theme-menu ${open ? 'open' : 'closed'}`}>
+      <div className={`theme-menu ${isOpen ? 'open' : 'closed'}`}>
         <div className="palette">
           {themes.map((t) => (
             <button
               key={t.code}
-              onClick={() => { setTheme(t.code); setOpen(false); }}
+              onClick={() => { setTheme(t.code); onClose(); }}
               className={`color-circle ${t.code} ${theme === t.code ? 'active' : ''}`}
               aria-label={t.label}
               title={t.label}
+              style={{ backgroundColor: t.color }}
             ></button>
           ))}
         </div>

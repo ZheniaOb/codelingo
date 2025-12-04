@@ -160,6 +160,24 @@
   "howit_step2_title": "Complete short lessons",
   "howit_step2_text": "Learn in small chunks and reinforce with practice.",
   "howit_step3_title": "Earn XP",
-  "howit_step3_text": "Gain points and climb the leaderboard."
+  "howit_step3_text": "Gain points and climb the leaderboard.",
 
+  "minigames": {
+  "choose_language": "Choose Programming Language",
+  "back": "Back",
+  "select_title": "Select a language to play",
+  "select_subtitle": "Choose the programming language you want to practice. Tasks will be in your selected language.",
+  "continue_select": "Select a language to continue",
+  "continue_with": "Continue with {{language}}",
+  "languages": {
+    "python": "Python",
+    "python_desc": "Great for beginners",
+    "javascript": "JavaScript",
+    "javascript_desc": "Web development",
+    "java": "Java",
+    "java_desc": "Enterprise development",
+    "htmlcss": "HTML / CSS",
+    "htmlcss_desc": "Web basics"
+  }
+}
 }

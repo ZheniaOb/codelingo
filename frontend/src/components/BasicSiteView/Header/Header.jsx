@@ -164,8 +164,8 @@ const Header = ({ theme, setTheme }) => {
           />
           <LanguageSwitcher
             className="square-switcher-btn"
-            isOpen={openMenu === 'lang'}
-            onToggle={() => setOpenMenu(openMenu === 'lang' ? null : 'lang')}
+            isOpen={openMenu === 'language'}
+            onToggle={() => setOpenMenu(openMenu === 'language' ? null : 'language')}
             onClose={() => setOpenMenu(null)}
           /> 
 

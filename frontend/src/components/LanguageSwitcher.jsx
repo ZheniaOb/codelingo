@@ -5,11 +5,11 @@ import '../css/LanguageSwitcher.css';
 const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
   { code: 'pl', name: 'Polski', flag: '🇵🇱' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
   { code: 'ru', name: 'Русский', flag: '🇷🇺' },
   { code: 'uk', name: 'Українська', flag: '🇺🇦' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
   { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
   { code: 'ar', name: 'العربية', flag: '🇸🇦' }
 ];
@@ -25,10 +25,7 @@ const LanguageSwitcher = ({ className, isOpen, onToggle, onClose }) => {
 
   return (
     <div className={`language-switcher ${className || ''}`}>
-      <button 
-        className="lang-btn" 
-        onClick={onToggle}
-      >
+      <button className="lang-btn" onClick={onToggle}>
         <span className="flag">
           {languages.find(l => l.code === currentLang)?.flag || '🌐'}
         </span>

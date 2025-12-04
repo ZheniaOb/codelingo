@@ -160,6 +160,24 @@
   "howit_step2_title": "Ukończ krótkie lekcje",
   "howit_step2_text": "Ucz się w małych porcjach i utrwalaj praktyką.",
   "howit_step3_title": "Zdobywaj XP",
-  "howit_step3_text": "Zbieraj punkty i wspinaj się w rankingu."
+  "howit_step3_text": "Zbieraj punkty i wspinaj się w rankingu.",
 
+  "minigames": {
+  "choose_language": "Wybierz język programowania",
+  "back": "Powrót",
+  "select_title": "Wybierz język do gry",
+  "select_subtitle": "Wybierz język programowania, w którym chcesz ćwiczyć. Zadania będą w wybranym języku.",
+  "continue_select": "Wybierz język, aby kontynuować",
+  "continue_with": "Kontynuuj z {{language}}",
+  "languages": {
+    "python": "Python",
+    "python_desc": "Świetny dla początkujących",
+    "javascript": "JavaScript",
+    "javascript_desc": "Tworzenie aplikacji webowych",
+    "java": "Java",
+    "java_desc": "Rozwój korporacyjny",
+    "htmlcss": "HTML / CSS",
+    "htmlcss_desc": "Podstawy webowe"
+  }
+}
 }

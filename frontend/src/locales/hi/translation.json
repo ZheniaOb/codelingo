@@ -160,6 +160,24 @@
   "howit_step2_title": "छोटे पाठ पूरे करें",
   "howit_step2_text": "छोटे हिस्सों में सीखें और अभ्यास से मजबूत करें।",
   "howit_step3_title": "XP अर्जित करें",
-  "howit_step3_text": "अंक प्राप्त करें और लीडरबोर्ड पर ऊपर जाएं।"
+  "howit_step3_text": "अंक प्राप्त करें और लीडरबोर्ड पर ऊपर जाएं।",
 
+  "minigames": {
+  "choose_language": "प्रोग्रामिंग भाषा चुनें",
+  "back": "वापस",
+  "select_title": "खेलने के लिए भाषा चुनें",
+  "select_subtitle": "वह प्रोग्रामिंग भाषा चुनें जिसे आप अभ्यास करना चाहते हैं। कार्य आपके चुने हुए भाषा में होंगे।",
+  "continue_select": "जारी रखने के लिए भाषा चुनें",
+  "continue_with": "{{language}} के साथ जारी रखें",
+  "languages": {
+    "python": "Python",
+    "python_desc": "शुरुआती लोगों के लिए बेहतरीन",
+    "javascript": "JavaScript",
+    "javascript_desc": "वेब विकास",
+    "java": "Java",
+    "java_desc": "एंटरप्राइज विकास",
+    "htmlcss": "HTML / CSS",
+    "htmlcss_desc": "वेब की मूल बातें"
+  }
+}
 }

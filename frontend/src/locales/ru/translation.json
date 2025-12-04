@@ -84,8 +84,7 @@
   "footer_link_community": "Сообщество",
   "footer_copyright": "© 2025 Codelingo. Все права защищены.",
 
-  "minigames_title": "Мини-игры",
-  "minigames_subtitle": "Учись играя и бросай себе вызов!",
+
   "play_now": "Играть",
 
   "difficulty_easy": "Легко",
@@ -160,9 +159,24 @@
   "howit_step2_title": "Проходите короткие уроки",
   "howit_step2_text": "Учитесь небольшими блоками и закрепляйте практикой.",
   "howit_step3_title": "Зарабатывайте XP",
-  "howit_step3_text": "Получайте очки и поднимайтесь в рейтинге."
+  "howit_step3_text": "Получайте очки и поднимайтесь в рейтинге.",
 
-
-
-
+  "minigames": {
+    "choose_language": "Выберите язык программирования",
+    "back": "Назад",
+    "select_title": "Выберите язык для игры",
+    "select_subtitle": "Задания будут соответствовать выбранному языку.",
+    "continue_select": "Выберите язык, чтобы продолжить",
+    "continue_with": "Продолжить с {{language}}",
+    "languages": {
+      "python": "Python",
+      "python_desc": "Отлично подходит для начинающих",
+      "javascript": "JavaScript",
+      "javascript_desc": "Разработка веб‑приложений",
+      "java": "Java",
+      "java_desc": "Корпоративная разработка",
+      "htmlcss": "HTML / CSS",
+      "htmlcss_desc": "Основы веба"
+    }
+ }
 }

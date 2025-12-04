@@ -160,6 +160,24 @@
   "howit_step2_title": "أكمل دروس قصيرة",
   "howit_step2_text": "تعلم على شكل أجزاء صغيرة وعزز بالممارسة.",
   "howit_step3_title": "اكسب نقاط XP",
-  "howit_step3_text": "احصل على النقاط وتسلق لوحة الصدارة."
+  "howit_step3_text": "احصل على النقاط وتسلق لوحة الصدارة.",
 
+  "minigames": {
+  "choose_language": "اختر لغة البرمجة",
+  "back": "رجوع",
+  "select_title": "اختر لغة للعب",
+  "select_subtitle": "اختر لغة البرمجة التي تريد التدرب عليها. ستكون المهام باللغة التي اخترتها.",
+  "continue_select": "اختر لغة للمتابعة",
+  "continue_with": "تابع باستخدام {{language}}",
+  "languages": {
+    "python": "بايثون",
+    "python_desc": "رائع للمبتدئين",
+    "javascript": "جافاسكريبت",
+    "javascript_desc": "تطوير الويب",
+    "java": "جافا",
+    "java_desc": "تطوير المؤسسات",
+    "htmlcss": "HTML / CSS",
+    "htmlcss_desc": "أساسيات الويب"
+  }
+}
 }

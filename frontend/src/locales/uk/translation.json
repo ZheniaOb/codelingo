@@ -160,7 +160,24 @@
   "howit_step2_title": "Виконуй короткі уроки",
   "howit_step2_text": "Навчайся невеликими блоками та закріплюй практикою.",
   "howit_step3_title": "Заробляй XP",
-  "howit_step3_text": "Отримуй бали та піднімайся в рейтингу."
+  "howit_step3_text": "Отримуй бали та піднімайся в рейтингу.",
 
-
+  "minigames": {
+  "choose_language": "Виберіть мову програмування",
+  "back": "Назад",
+  "select_title": "Виберіть мову для гри",
+  "select_subtitle": "Виберіть мову програмування, яку хочете практикувати. Завдання будуть у вибраній мові.",
+  "continue_select": "Виберіть мову, щоб продовжити",
+  "continue_with": "Продовжити з {{language}}",
+  "languages": {
+    "python": "Python",
+    "python_desc": "Чудово підходить для початківців",
+    "javascript": "JavaScript",
+    "javascript_desc": "Веб‑розробка",
+    "java": "Java",
+    "java_desc": "Корпоративна розробка",
+    "htmlcss": "HTML / CSS",
+    "htmlcss_desc": "Основи вебу"
+  }
+}
 }
