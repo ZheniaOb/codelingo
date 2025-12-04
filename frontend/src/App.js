@@ -6,6 +6,7 @@ import Login from "./components/Authorization/login.jsx";
 import SignUp from "./components/Authorization/SignUp.jsx";
 import Progress from "./components/Progress/Progress.jsx";
 import Leaderboard from "./components/Leaderboard/Leaderboard.jsx";
+import LessonsHistory from "./components/LessonsHistory/LessonsHistory.jsx";
 import Courses from "./components/Courses/CoursesCategory";
 import PythonPage from "./components/Courses/Python/PythonPage";
 import Admin_Panel from './components/AdminPanel/Admin_Panel.jsx';
@@ -37,7 +38,7 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    document.body.className = `${theme}-theme`; 
+    document.body.className = `${theme}-theme`;
   }, [theme]);
 
   const renderRouteElement = (Component) => (
@@ -54,6 +55,7 @@ function App() {
           <Route path="/signup" element={renderRouteElement(SignUp)} />
           <Route path="/progress" element={renderRouteElement(Progress)} />
           <Route path="/leaderboard" element={renderRouteElement(Leaderboard)} />
+          <Route path="/LessonsHistory" element={renderRouteElement(LessonsHistory)} />
           <Route path="/courses" element={renderRouteElement(Courses)} />
           <Route path="/courses/python" element={renderRouteElement(PythonPage)} />
           <Route path="/courses/javascript" element={renderRouteElement(JavaScriptPage)} />

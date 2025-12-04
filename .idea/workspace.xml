@@ -5,9 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6782b9e4-5f35-4e99-9903-b2131f0b29b6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Courses/LessonPage/LessonPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Courses/LessonPage/LessonPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Courses/LessonPage/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Courses/LessonPage/LessonPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Home/home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Home/home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ProfilePage/ProfilePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ProfilePage/ProfilePage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Progress/Progress.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Progress/Progress.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/locales/en/translation.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/locales/en/translation.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/locales/pl/translation.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/locales/pl/translation.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

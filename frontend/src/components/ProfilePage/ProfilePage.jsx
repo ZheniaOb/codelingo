@@ -354,6 +354,13 @@ const ProfilePage = () => {
                 <img src="/img/icons/rocket.png" alt="Games" />
                 <span>{t('nav_minigames') || 'Mini Games'}</span>
               </button>
+              <button
+                className="profile-action-btn-vertical"
+                onClick={() => navigate('/LessonsHistory')}
+              >
+                <img src="/img/icons/book.png" alt="Lessons History" />
+                <span>{t('nav_LessonsHistory') || 'Lessons History'}</span>
+              </button>
             </div>
           </div>
         </div>

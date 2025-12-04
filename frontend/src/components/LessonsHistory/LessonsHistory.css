@@ -1,0 +1,93 @@
+/* LessonsHistory.css */
+
+.history-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.history-main {
+  flex: 1;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.history-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* Tabela */
+.lessons-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.lessons-history-table th,
+.lessons-history-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.lessons-history-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #444;
+}
+
+.language-badge {
+  background-color: #e0f2fe;
+  color: #0284c7;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Empty State Styles - TO JEST NOWE */
+.empty-history-state {
+  text-align: center;
+  background: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-title {
+  color: #1f2937;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-description {
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.btn-start-learning {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-start-learning:hover {
+  background-color: #059669;
+}

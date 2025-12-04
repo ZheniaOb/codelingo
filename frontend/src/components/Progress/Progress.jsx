@@ -16,11 +16,9 @@ const weeklyActivity = [
 ];
 
 const achievements = [
-
-  { iconPath: "/img/icons/fire.png", titleKey: "achievement_fire_title", descriptionKey: "achievement_fire_desc" },
-  { iconPath: "/img/icons/Sharpshooter.png", titleKey: "achievement_sharp_title", descriptionKey: "achievement_sharp_desc" }, 
-  { iconPath: "/img/icons/book.png", titleKey: "achievement_early_title", descriptionKey: "achievement_early_desc" }, 
-
+  { iconPath: "/img/icons/fire.png", titleKey: "achievement_fire_title", descriptionKey: "achievement_fire_desc", color: "#10B981" },
+  { iconPath: "/img/icons/Sharpshooter.png", titleKey: "achievement_sharp_title", descriptionKey: "achievement_sharp_desc", color: "#34D399" },
+  { iconPath: "/img/icons/book.png", titleKey: "achievement_early_title", descriptionKey: "achievement_early_desc", color: "#059669" },
 ];
 
 const StatCard = ({ children, className = '' }) => (
@@ -87,7 +85,7 @@ const Progress = () => {
   const nextLevelTitle = userData?.next_level_title || "Next Level";
   const xpToNextLevel = userData?.xp_to_next_level || 100;
   const progressPercent = userData?.progress_percentage || 0;
-  const currentStreak = userData?.streak || 0;
+  const currentStreak = userData?.streak || 7;
 
   return (
     <HeaderFooter>
@@ -97,8 +95,8 @@ const Progress = () => {
         <div className="stats-grid">
 
           <StatCard>
-            <div className="icon-wrapper">
-             <img src="/img/icons/fire.png" alt="Streak" className="progress-icon" /> 
+            <div className="icon-wrapper" style={{ backgroundImage: 'linear-gradient(to bottom right, #10B981, #059669)' }}>
+              <img src="/img/icons/fire.png" alt="Streak" className="w-10 h-10 progress-icon" />
             </div>
             <h3 className="stat-value">{currentStreak} {t('days_unit')}</h3>
             <p className="stat-label">{t('progress_current_streak')}</p>
@@ -106,15 +104,10 @@ const Progress = () => {
           </StatCard>
 
           <StatCard>
-            <div className="icon-wrapper">
-             <img src="/img/icons/thunder.png" alt="XP" className="progress-icon" />
+            <div className="icon-wrapper" style={{ backgroundImage: 'linear-gradient(to bottom right, #34D399, #10B981)' }}>
+              <img src="/img/icons/thunder.png" alt="XP" className="w-10 h-10 progress-icon" />
             </div>
-
-
-
-
             <h3 className="stat-value">{currentXP.toLocaleString()} XP</h3>
-
             <p className="stat-label">{t('progress_total_experience')}</p>
 
             <div className="custom-progress-bar">
@@ -124,8 +117,8 @@ const Progress = () => {
           </StatCard>
 
           <StatCard>
-            <div className="icon-wrapper">
-              <img src="/img/icons/book.png" alt="Streak" className="progress-icon" /> 
+            <div className="icon-wrapper" style={{ backgroundImage: 'linear-gradient(to bottom right, #10B981, #059669)' }}>
+              <img src="/img/icons/trophy.png" alt="Trophy" className="w-10 h-10 progress-icon" />
             </div>
             <CustomBadge>{t('progress_level_badge', { level: currentLevel })}</CustomBadge>
             <h3 className="stat-value" style={{ fontSize: '20px' }}>{levelTitle}</h3>
@@ -135,10 +128,9 @@ const Progress = () => {
 
         <StatCard className="weekly-activity-card">
             <div className="activity-header">
-              <span className="icon" role="img" aria-label="Calendar">📅</span>
+              <span className="icon" role="img" aria-label="Calendar" style={{ color: '#10B981', fontSize: '24px' }}>📅</span>
               <h2 className="text-2xl" style={{ fontWeight: '600', color: '#08121a' }}>{t('progress_weekly_activity')}</h2>
             </div>
-
             <div className="activity-chart">
                 {weeklyActivity.map((day) => (
                     <div key={day.day} className="chart-bar-container">

@@ -40,6 +40,7 @@
   "nav_minigames": "Mini Games",
   "nav_leaderboard": "Leaderboard",
   "nav_progress": "Progress",
+  "nav_LessonsHistory": "Lessons History",
   "nav_login": "Log In",
   "nav_signup": "Sign Up",
   
@@ -146,6 +147,15 @@
   "leaderboard_trophy": "Trophy",
   "leaderboard_medal": "Medal",
   "leaderboard_award": "Award",
+
+  "history_title": "Lesson History",
+  "history_header_lesson": "Lesson",
+  "history_header_module": "Module",
+  "history_header_language": "Language",
+  "history_header_date": "Completed Date",
+  "history_empty_title": "No completed lessons yet",
+  "history_empty_desc": "Go to courses and finish your first lesson!",
+  "history_btn_start": "Start Learning",
 
   "courses_title": "Choose your course",
   "courses_subtitle": "Pick a track and start learning with short lessons and XP.",

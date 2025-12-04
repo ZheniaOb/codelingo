@@ -1,22 +1,22 @@
 {
   "language_name": "Polski",
-  "welcome_title": "Witaj w Codelingo",
+  "welcome_title": "Witamy w Codelingo",
   "switch_button": "EN",
   "home_description": "Ucz się kodować poprzez kursy i mini-gry!",
   "login_button": "Zaloguj się",
-  
+
   "hero_title": "Ucz się kodowania jak w grze!",
   "hero_subtitle": "Codzienne lekcje, serie, punkty XP i projekty z życia wzięte",
   "get_started_btn": "Rozpocznij za darmo",
-  
-  "stats_aria_label": "Szybkie statystyki użytkownika",
+
+  "stats_aria_label": "Statystyki użytkownika",
   "days_unit": "dni",
   "stat_streak_label": "Seria 🔥",
   "stat_xp_label": "Punkty doświadczenia",
   "to_next_level": "Do następnego poziomu: 260 XP",
   "level_badge": "Poziom {{level}}",
   "level_title": "Młodszy Koder",
-  
+
   "languages_title": "Wybierz swój język programowania",
   "languages_subtitle": "Rozpocznij swoją przygodę z kodowaniem",
   "lang_desc_beginner": "Dla początkujących",
@@ -25,21 +25,22 @@
   "lang_desc_enterprise": "Rozwój korporacyjny",
   "lesson_progress": "Lekcja {{current}}/{{total}}",
   "continue_btn": "Kontynuuj",
-  
+
   "how_it_works_title": "Jak to działa",
   "how_it_works_subtitle": "Trzy proste kroki do sukcesu",
   "step_1_title": "Krótkie lekcje",
-  "step_1_desc": "5–10 minut dziennie — ucz się teorii w małych porcjach",
+  "step_1_desc": "5–10 minut dziennie — ucz się teorii w małych dawkach",
   "step_2_title": "Ćwicz w przeglądarce",
-  "step_2_desc": "Pisz kod od razu — nie wymaga instalacji",
+  "step_2_desc": "Pisz kod od razu, bez zbędnych instalacji",
   "step_3_title": "Prawdziwe projekty",
-  "step_3_desc": "Twórz prawdziwe aplikacje i dodawaj je do swojego portfolio",
+  "step_3_desc": "Twórz prawdziwe aplikacje i dodaj je do swojego portfolio",
 
   "nav_home": "Strona Główna",
   "nav_courses": "Kursy",
-  "nav_minigames": "Mini Gry",
+  "nav_minigames": "Minigry",
   "nav_leaderboard": "Tablica Wyników",
   "nav_progress": "Postępy",
+  "nav_LessonsHistory": "Historia Lekcji",
   "nav_login": "Zaloguj się",
   "nav_signup": "Zarejestruj się",
 
@@ -47,10 +48,10 @@
   "nav_hello_user": "Witaj, użytkowniku",
   "nav_logout": "Wyloguj",
   "Courses": "Kursy",
-  "Mini Games": "Mini Gry",
+  "Mini Games": "Minigry",
   "Progress": "Postęp",
   "Leaderboard": "Ranking",
-  
+
   "profile_my_profile": "Mój Profil",
   "profile_loading": "Ładowanie profilu...",
   "profile_not_logged_in": "Nie jesteś zalogowany",
@@ -70,8 +71,8 @@
   "profile_save_changes": "Zapisz zmiany",
   "profile_saved": "Zmiany zapisane!",
   "profile_quick_actions": "Szybkie akcje",
-  
-  "footer_desc": "Ucz się kodować poprzez kursy i mini-gry!",
+
+  "footer_desc": "Ucz się kodować poprzez kursy i minigry!",
   "footer_company_title": "Firma",
   "footer_link_about": "O nas",
   "footer_link_blog": "Blog",
@@ -92,7 +93,7 @@
   "difficulty_medium": "Średni",
   "difficulty_hard": "Trudny",
 
-  "game_memory_title": "Pamięć kodu",
+  "game_memory_title": "Kod na pamięć",
   "game_memory_desc": "Zapamiętaj i odtwórz fragmenty kodu",
 
   "game_refactor_title": "Refaktoryzacja na czas",
@@ -128,8 +129,8 @@
   "achievement_sharp_title": "Strzelec wyborowy",
   "achievement_sharp_desc": "100% celności",
   "achievement_early_title": "Ranny ptaszek",
-  "achievement_early_desc": "Uczył się przed 9 rano",
-  
+  "achievement_early_desc": "Ucz się przed 9 rano",
+
   "leaderboard_title": "Tablica wyników",
   "leaderboard_subtitle": "Rywalizuj z uczniami na całym świecie",
   "leaderboard_loading": "Ładowanie tablicy wyników...",
@@ -145,6 +146,15 @@
   "leaderboard_trophy": "Trofeum",
   "leaderboard_medal": "Medal",
   "leaderboard_award": "Nagroda",
+
+  "history_title": "Historia Lekcji",
+  "history_header_lesson": "Lekcja",
+  "history_header_module": "Moduł",
+  "history_header_language": "Język",
+  "history_header_date": "Data Ukończenia",
+  "history_empty_title": "Brak ukończonych lekcji",
+  "history_empty_desc": "Przejdź do kursów i ukończ pierwszą lekcję!",
+  "history_btn_start": "Rozpocznij Naukę",
 
   "courses_title": "Wybierz kurs",
   "courses_subtitle": "Wybierz ścieżkę i zacznij naukę krótkimi lekcjami i XP.",
