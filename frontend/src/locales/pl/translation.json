@@ -189,5 +189,19 @@
     "htmlcss": "HTML / CSS",
     "htmlcss_desc": "Podstawy webowe"
   }
-}
+},
+  "lesson_loading": "Ładowanie lekcji...",
+  "lesson_start_test": "Rozpocznij test",
+  "lesson_no_exercises": "Do tej lekcji nie dodano jeszcze ćwiczeń.",
+  "lesson_content_not_found": "Nie znaleziono treści lekcji.",
+  "lesson_completed": "Lekcja ukończona!",
+  "lesson_out_of_lives": "Skończyły się życia!",
+  "lesson_try_again_message": "Nie martw się, błędy pomagają się uczyć. Spróbuj ponownie, aby zdobyć XP!",
+  "lesson_try_again_btn": "Spróbuj ponownie",
+  "lesson_quit_btn": "Wyjdź",
+  "lesson_continue_btn": "Kontynuuj",
+  "lesson_excellent": "Doskonale!",
+  "lesson_correct_answer_was": "Poprawna odpowiedź to:",
+  "lesson_correct_answer": "Poprawna odpowiedź:",
+  "lesson_lives_remaining": "Pozostało żyć:"
 }

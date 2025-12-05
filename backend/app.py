@@ -607,6 +607,102 @@ def complete_lesson(lesson_id):
     }), 200
 
 
+@app.route('/api/courses/<string:language_name>', methods=['GET'])
+def get_course_structure(language_name):
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp:
+        return err_resp, code
+
+    # Find language by name (case insensitive)
+    language = Language.query.filter(Language.name.ilike(language_name)).first()
+    if not language:
+        return jsonify(error="Language not found"), 404
+
+    # Get all modules for this language
+    modules = Module.query.filter_by(language_id=language.id).order_by(Module.order).all()
+    
+    # Get user's completed lessons
+    completed_lesson_ids = set(
+        progress.lesson_id 
+        for progress in UserLessonProgress.query.filter_by(user_id=current_user.id).all()
+    )
+
+    course_structure = []
+    all_lessons_flat = []
+    
+    for module in modules:
+        lessons = Lesson.query.filter_by(module_id=module.id).order_by(Lesson.order).all()
+        
+        module_lessons = []
+        for lesson in lessons:
+            all_lessons_flat.append(lesson.id)
+            is_completed = lesson.id in completed_lesson_ids
+            
+            module_lessons.append({
+                "id": lesson.id,
+                "title": lesson.title,
+                "order": lesson.order,
+                "lesson_type": lesson.lesson_type,
+                "status": "completed" if is_completed else "locked"
+            })
+        
+        course_structure.append({
+            "id": module.id,
+            "title": module.title,
+            "description": module.description,
+            "order": module.order,
+            "lessons": module_lessons
+        })
+
+    # Determine current lesson (first uncompleted lesson)
+    current_lesson_id = None
+    for module_data in course_structure:
+        for lesson_data in module_data["lessons"]:
+            if lesson_data["status"] == "locked":
+                current_lesson_id = lesson_data["id"]
+                lesson_data["status"] = "current"
+                break
+        if current_lesson_id:
+            break
+
+    # Add exam nodes after each module (every 4 lessons)
+    result_modules = []
+    for module_data in course_structure:
+        module_lessons = []
+        lessons = module_data["lessons"]
+        
+        # Add lessons
+        for lesson in lessons:
+            module_lessons.append({
+                "id": lesson["id"],
+                "type": "lesson",
+                "status": lesson["status"],
+                "lessonId": lesson["id"]
+            })
+        
+        # Add exam node after lessons (if there are lessons)
+        if lessons:
+            module_lessons.append({
+                "id": f"exam_{module_data['id']}",
+                "type": "exam",
+                "status": "exam"
+            })
+        
+        result_modules.append({
+            "id": module_data["id"],
+            "title": module_data["title"],
+            "description": module_data["description"],
+            "order": module_data["order"],
+            "nodes": module_lessons
+        })
+
+    return jsonify({
+        "language_id": language.id,
+        "language_name": language.name,
+        "modules": result_modules
+    }), 200
+
+
 # --- 5. RUN SERVER ---
 if __name__ == '__main__':
     with app.app_context():
