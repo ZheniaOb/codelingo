@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./HtmlCssPage.css";
@@ -55,8 +55,8 @@ const htmlCssPath6 = [
 ];
 
 const HtmlCssPage = () => {
-
   const navigate = useNavigate();
+  const [currentTheme, setCurrentTheme] = useState("light"); 
 
   const handleNodeClick = (node) => {
     if (node.status === "locked") return;
@@ -65,37 +65,36 @@ const HtmlCssPage = () => {
   };
 
   return (
-    <div className="htmlcss-page">
+    <div className={`htmlcss-page ${currentTheme}-theme`}>
 
       <div className="htmlcss-themes-wrapper">
-        {/* THEME 1 */}
+       {/* THEME 1 */}
         <section className="htmlcss-theme-path htmlcss-theme-1">
-          <div className="htmlcss-theme-header">
-            <h2 className="htmlcss-path-title">
-              <span className="htmlcss-theme-index">THEME 1</span>
-              <span className="htmlcss-theme-name">HTML BASICS & STRUCTURE</span>
-            </h2>
-          </div>
-          <div className="htmlcss-path-column">
-            {htmlCssPath1.map(n => (
-              <button
-                key={n.id}
-                type="button"
-                className={["htmlcss-path-node", n.type, n.status].join(" ")}
-                onClick={() => handleNodeClick(n)}
+        <div className="htmlcss-theme-header">
+          <h2 className="htmlcss-path-title">
+            <span className="htmlcss-theme-index">THEME 1</span>
+            <span className="htmlcss-theme-name">HTML BASICS & STRUCTURE</span>
+           </h2>
+         </div>
+         <div className="htmlcss-path-column">
+           {htmlCssPath1.map((n) => (
+             <button
+               key={n.id}
+               type="button"
+               className={["htmlcss-path-node", n.type, n.status].join(" ")}
+               onClick={() => handleNodeClick(n)}
               >
-                <img
-                  className="htmlcss-icon-img"
+               <img
+                 className="htmlcss-icon-img"
                   src={n.type === "exam" ? examIcon : starIcon}
-                  alt={n.type}
+                 alt={n.type}
                 />
               </button>
-            ))}
-          </div>
-        </section>
+           ))}
+         </div>
+          </section>
 
-        <div className="htmlcss-themes-divider" aria-hidden="true" />
-
+            <div className="htmlcss-themes-divider" aria-hidden="true" />
         {/* THEME 2 */}
         <section className="htmlcss-theme-path htmlcss-theme-2">
           <div className="htmlcss-theme-header">
@@ -106,7 +105,7 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath2.map(n => (
-                <button
+              <button
                 key={n.id}
                 type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}
@@ -134,7 +133,7 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath3.map(n => (
-                <button
+              <button
                 key={n.id}
                 type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}
@@ -162,7 +161,7 @@ const HtmlCssPage = () => {
           </div>
           <div className="htmlcss-path-column">
             {htmlCssPath4.map(n => (
-                <button
+              <button
                 key={n.id}
                 type="button"
                 className={["htmlcss-path-node", n.type, n.status].join(" ")}

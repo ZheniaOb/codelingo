@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./PythonPage.css";
@@ -6,7 +6,7 @@ import "./PythonPage.css";
 const starIcon = "/img/icons/star.png";
 const examIcon = "/img/icons/exam_trophy.png";
 
-const pathNodes = [
+const pathNodes1 = [
   { id: 1, type: "lesson", status: "completed", lessonId: 1 },
   { id: 2, type: "lesson", status: "completed", lessonId: 2 },
   { id: 3, type: "lesson", status: "completed", lessonId: 3 },
@@ -29,6 +29,7 @@ const pathNodes3 = [
   { id: 14, type: "lesson", status: "locked" },
   { id: 15, type: "exam",   status: "exam" },
 ];
+
 const pathNodes4 = [
   { id: 16, type: "lesson", status: "locked" },
   { id: 17, type: "lesson", status: "locked" },
@@ -36,6 +37,7 @@ const pathNodes4 = [
   { id: 19, type: "lesson", status: "locked" },
   { id: 20, type: "exam",   status: "exam" },
 ];
+
 const pathNodes5 = [
   { id: 21, type: "lesson", status: "locked" },
   { id: 22, type: "lesson", status: "locked" },
@@ -43,6 +45,7 @@ const pathNodes5 = [
   { id: 24, type: "lesson", status: "locked" },
   { id: 25, type: "exam",   status: "exam" },
 ];
+
 const pathNodes6 = [
   { id: 26, type: "lesson", status: "locked" },
   { id: 27, type: "lesson", status: "locked" },
@@ -52,7 +55,8 @@ const pathNodes6 = [
 ];
 
 const PythonPage = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [currentTheme, setCurrentTheme] = useState("light"); 
 
   const handleNodeClick = (node) => {
     if (node.status === "locked") return;
@@ -61,7 +65,7 @@ const navigate = useNavigate();
   };
 
   return (
-    <div className="python-page">
+    <div className={`python-page ${currentTheme}-theme`}>
       <div className="themes-wrapper">
         {/* Theme 1 (left) */}
         <section className="theme-path theme-1">
@@ -72,7 +76,7 @@ const navigate = useNavigate();
             </h2>
           </div>
           <div className="path-column">
-            {pathNodes.map(n => (
+            {pathNodes1.map(n => (
               <button
                 key={n.id}
                 type="button"

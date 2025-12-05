@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./JavaPage.css";
@@ -55,19 +55,20 @@ const javaPath6 = [
 ];
 
 const JavaPage = () => {
-  
- const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [currentTheme, setCurrentTheme] = useState("light");
 
   const handleNodeClick = (node) => {
     if (node.status === "locked") return;
     if (!node.lessonId) return;
     navigate(`/courses/java/lesson/${node.lessonId}`);
   };
-  return (
-    <div className="java-page">
 
+  return (
+    <div className={`htmlcss-page ${currentTheme}-theme`}>
+      
       <div className="java-themes-wrapper">
-        {/* Theme 1 (left) */}
+        {/* THEME 1 */}
         <section className="java-theme-path java-theme-1">
           <div className="java-theme-header">
             <h2 className="java-path-title">
@@ -76,8 +77,8 @@ const JavaPage = () => {
             </h2>
           </div>
           <div className="java-path-column">
-            {javaPath1.map(n => (
-          <button
+            {javaPath1.map((n) => (
+              <button
                 key={n.id}
                 type="button"
                 className={["java-path-node", n.type, n.status].join(" ")}
@@ -95,7 +96,7 @@ const JavaPage = () => {
 
         <div className="java-themes-divider" aria-hidden="true" />
 
-        {/* Theme 2 (right) */}
+        {/* THEME 2 */}
         <section className="java-theme-path java-theme-2">
           <div className="java-theme-header">
             <h2 className="java-path-title">
@@ -104,7 +105,7 @@ const JavaPage = () => {
             </h2>
           </div>
           <div className="java-path-column">
-            {javaPath2.map(n => (
+            {javaPath2.map((n) => (
               <button
                 key={n.id}
                 type="button"
@@ -123,7 +124,7 @@ const JavaPage = () => {
 
         <div className="java-themes-divider" aria-hidden="true" />
 
-        {/* Theme 3 (left) */}
+        {/* THEME 3 */}
         <section className="java-theme-path java-theme-3">
           <div className="java-theme-header">
             <h2 className="java-path-title">
@@ -132,7 +133,7 @@ const JavaPage = () => {
             </h2>
           </div>
           <div className="java-path-column">
-            {javaPath3.map(n => (
+            {javaPath3.map((n) => (
               <button
                 key={n.id}
                 type="button"
@@ -151,7 +152,7 @@ const JavaPage = () => {
 
         <div className="java-themes-divider" aria-hidden="true" />
 
-        {/* Theme 4 (right) */}
+        {/* THEME 4 */}
         <section className="java-theme-path java-theme-4">
           <div className="java-theme-header">
             <h2 className="java-path-title">
@@ -160,7 +161,7 @@ const JavaPage = () => {
             </h2>
           </div>
           <div className="java-path-column">
-            {javaPath4.map(n => (
+            {javaPath4.map((n) => (
               <button
                 key={n.id}
                 type="button"
@@ -179,7 +180,7 @@ const JavaPage = () => {
 
         <div className="java-themes-divider" aria-hidden="true" />
 
-        {/* Theme 5 (left) */}
+        {/* THEME 5 */}
         <section className="java-theme-path java-theme-5">
           <div className="java-theme-header">
             <h2 className="java-path-title">
@@ -188,7 +189,7 @@ const JavaPage = () => {
             </h2>
           </div>
           <div className="java-path-column">
-            {javaPath5.map(n => (
+            {javaPath5.map((n) => (
               <button
                 key={n.id}
                 type="button"
@@ -207,7 +208,7 @@ const JavaPage = () => {
 
         <div className="java-themes-divider" aria-hidden="true" />
 
-        {/* Theme 6 (right) */}
+        {/* THEME 6 */}
         <section className="java-theme-path java-theme-6">
           <div className="java-theme-header">
             <h2 className="java-path-title">

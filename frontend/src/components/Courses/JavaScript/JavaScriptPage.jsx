@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./JavaScriptPage.css";
@@ -56,6 +56,7 @@ const jsPath6 = [
 
 const JavaScriptPage = () => {
    const navigate = useNavigate();
+   const [currentTheme, setCurrentTheme] = useState("light"); 
 
   const handleNodeClick = (node) => {
     if (node.status === "locked") return;
@@ -64,7 +65,7 @@ const JavaScriptPage = () => {
   };
 
   return (
-    <div className="js-page">
+    <div className={`js-page ${currentTheme}-theme`}>
 
       <div className="js-themes-wrapper">
         {/* Theme 1 */}
