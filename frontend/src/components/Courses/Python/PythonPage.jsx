@@ -69,7 +69,7 @@ const PythonPage = () => {
   };
 
   return (
-    <div className="python-page">
+    <div className={`python-page ${currentTheme}-theme`}>
       <div className="themes-wrapper">
         {modules.map((module, moduleIndex) => {
           const themeClass = getThemeClass(module.order);
