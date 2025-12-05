@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import "./LessonPage.css";
 
 const API_URL = "http://localhost:5001/api";
@@ -17,7 +18,10 @@ const shuffleArray = (array) => {
 const LessonPage = () => {
   const { lessonId } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
+  const [lessonTitle, setLessonTitle] = useState("");
+  const [lessonContent, setLessonContent] = useState("");
   const [allExercises, setAllExercises] = useState([]);
   const [exerciseQueue, setExerciseQueue] = useState([]);
   const [currentExercise, setCurrentExercise] = useState(null);
@@ -25,6 +29,7 @@ const LessonPage = () => {
   const [lives, setLives] = useState(3);
   const [correctCount, setCorrectCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showLecture, setShowLecture] = useState(true); // Показывать ли лекцию сначала
 
   const [selectedOptionKey, setSelectedOptionKey] = useState(null);
   const [textInput, setTextInput] = useState("");
@@ -51,11 +56,12 @@ const LessonPage = () => {
       if (!response.ok) throw new Error("Failed to load lesson");
       const data = await response.json();
 
+      // Сохраняем контент лекции
+      setLessonTitle(data.title || "");
+      setLessonContent(data.content || "");
+
       if (data.exercises && Array.isArray(data.exercises) && data.exercises.length > 0) {
         setAllExercises(data.exercises);
-        const shuffled = shuffleArray(data.exercises);
-        setCurrentExercise(shuffled[0]);
-        setExerciseQueue(shuffled.slice(1));
       } else {
         setAllExercises([]);
       }
@@ -65,6 +71,25 @@ const LessonPage = () => {
       setLoading(false);
     }
   };
+
+  const startTest = () => {
+    if (allExercises.length > 0) {
+      const shuffled = shuffleArray(allExercises);
+      setCurrentExercise(shuffled[0]);
+      setExerciseQueue(shuffled.slice(1));
+      setShowLecture(false);
+    }
+  };
+
+  // Если контент лекции пустой, сразу показываем тесты
+  useEffect(() => {
+    if (!loading && showLecture && (!lessonContent || lessonContent.trim() === "") && allExercises.length > 0) {
+      const shuffled = shuffleArray(allExercises);
+      setCurrentExercise(shuffled[0]);
+      setExerciseQueue(shuffled.slice(1));
+      setShowLecture(false);
+    }
+  }, [loading, lessonContent, allExercises.length, showLecture]);
 
   const handleCheckAnswer = (userAnswerKey, correctAnswer) => {
     if (isChecking || isCompleted || isGameOver) return;
@@ -149,9 +174,70 @@ const LessonPage = () => {
     }
   };
 
-  if (loading) return <div className="lesson-page"><div className="loader">Loading lesson...</div></div>;
+  if (loading) return <div className="lesson-page"><div className="loader">{t("lesson_loading")}</div></div>;
+  
+  // Показываем лекцию сначала
+  if (showLecture) {
+    return (
+      <div className="lesson-page">
+        <header className="lesson-header">
+          <button className="lesson-close-btn" onClick={() => navigate(-1)}>✕</button>
+        </header>
+        <main className="lesson-main" style={{ padding: "40px 20px", maxWidth: "800px", margin: "0 auto" }}>
+          <div className="lesson-content">
+            <h1 style={{ fontSize: "2rem", marginBottom: "1.5rem", color: "#0d1e26" }}>
+              {lessonTitle}
+            </h1>
+            <div 
+              style={{ 
+                fontSize: "1.1rem", 
+                lineHeight: "1.8", 
+                color: "#374151",
+                whiteSpace: "pre-wrap",
+                marginBottom: "2rem"
+              }}
+            >
+              {lessonContent}
+            </div>
+            {allExercises && allExercises.length > 0 ? (
+              <button
+                onClick={startTest}
+                style={{
+                  padding: "14px 32px",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                  background: "linear-gradient(135deg, #22D3EE, #6EE7B7)",
+                  color: "#0d1e26",
+                  border: "none",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  boxShadow: "0 8px 20px rgba(34, 211, 238, 0.3)",
+                  transition: "transform 0.2s, box-shadow 0.2s"
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.transform = "translateY(-2px)";
+                  e.target.style.boxShadow = "0 12px 24px rgba(34, 211, 238, 0.4)";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.transform = "translateY(0)";
+                  e.target.style.boxShadow = "0 8px 20px rgba(34, 211, 238, 0.3)";
+                }}
+              >
+                {t("lesson_start_test")}
+              </button>
+            ) : (
+              <div style={{ color: "#6b7280", fontSize: "1rem" }}>
+                {t("lesson_no_exercises")}
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   if (!allExercises || allExercises.length === 0) {
-      return <div className="lesson-page"><main className="lesson-main">Lesson content not found.</main></div>;
+      return <div className="lesson-page"><main className="lesson-main">{t("lesson_content_not_found")}</main></div>;
   }
 
   if (isCompleted) {
@@ -159,15 +245,15 @@ const LessonPage = () => {
         <div className="lesson-page">
             <main className="lesson-main result-view">
                 <div className="result-card">
-                    <h1>🎉 {completionMessage || "Lesson Completed!"}</h1>
+                    <h1>🎉 {completionMessage || t("lesson_completed")}</h1>
                     <div className="xp-reward">
                         <span className="xp-amount">+{xpEarned} XP</span>
                     </div>
                     <div className="stats-summary">
-                        <p>Lives remaining: {lives}/3</p>
+                        <p>{t("lesson_lives_remaining")} {lives}/3</p>
                     </div>
                     <button className="lesson-continue-btn" onClick={() => navigate('/courses')}>
-                        Continue
+                        {t("lesson_continue_btn")}
                     </button>
                 </div>
             </main>
@@ -181,23 +267,23 @@ const LessonPage = () => {
             <main className="lesson-main result-view">
                 <div className="result-card" style={{ borderColor: '#ef4444' }}>
                     <div style={{fontSize: '4rem', marginBottom: '1rem'}}>💔</div>
-                    <h1 style={{color: '#ef4444'}}>Out of lives!</h1>
+                    <h1 style={{color: '#ef4444'}}>{t("lesson_out_of_lives")}</h1>
                     <p style={{color: '#6b7280', fontSize: '1.2rem', marginBottom: '2rem'}}>
-                        Don't worry, mistakes help you learn. Try again to earn XP!
+                        {t("lesson_try_again_message")}
                     </p>
                     <button
                         className="lesson-continue-btn"
                         onClick={() => window.location.reload()} // Odśwież stronę żeby zresetować
                         style={{background: '#ef4444', boxShadow: '0 8px 20px rgba(239, 68, 68, 0.3)'}}
                     >
-                        Try Again
+                        {t("lesson_try_again_btn")}
                     </button>
                     <button
                         className="lesson-continue-btn"
                         onClick={() => navigate('/courses')}
                         style={{background: 'transparent', color: '#6b7280', boxShadow: 'none', marginTop: '10px'}}
                     >
-                        Quit
+                        {t("lesson_quit_btn")}
                     </button>
                 </div>
             </main>
@@ -295,16 +381,16 @@ const LessonPage = () => {
             {feedback === 'correct' && (
                 <div className="feedback-content">
                     <span className="feedback-icon">✅</span>
-                    <span>Excellent!</span>
+                    <span>{t("lesson_excellent")}</span>
                 </div>
             )}
              {feedback === 'incorrect' && (
                 <div className="feedback-content">
                     <span className="feedback-icon">❌</span>
                     {isMultipleChoice ? (
-                        <span>Correct answer was: <strong>{currentExercise.answer.toUpperCase()}</strong></span>
+                        <span>{t("lesson_correct_answer_was")} <strong>{currentExercise.answer.toUpperCase()}</strong></span>
                     ) : (
-                        <span>Correct answer: <strong>{currentExercise.answer}</strong></span>
+                        <span>{t("lesson_correct_answer")} <strong>{currentExercise.answer}</strong></span>
                     )}
                 </div>
             )}

@@ -178,5 +178,19 @@
       "htmlcss": "HTML / CSS",
       "htmlcss_desc": "Основы веба"
     }
- }
+ },
+  "lesson_loading": "Загрузка урока...",
+  "lesson_start_test": "Начать тест",
+  "lesson_no_exercises": "Упражнения для этого урока пока не добавлены.",
+  "lesson_content_not_found": "Контент урока не найден.",
+  "lesson_completed": "Урок завершен!",
+  "lesson_out_of_lives": "Жизни закончились!",
+  "lesson_try_again_message": "Не волнуйтесь, ошибки помогают учиться. Попробуйте снова, чтобы заработать XP!",
+  "lesson_try_again_btn": "Попробовать снова",
+  "lesson_quit_btn": "Выйти",
+  "lesson_continue_btn": "Продолжить",
+  "lesson_excellent": "Отлично!",
+  "lesson_correct_answer_was": "Правильный ответ:",
+  "lesson_correct_answer": "Правильный ответ:",
+  "lesson_lives_remaining": "Осталось жизней:"
 }

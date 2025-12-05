@@ -189,5 +189,19 @@
     "htmlcss": "HTML / CSS",
     "htmlcss_desc": "Web basics"
   }
-}
+},
+  "lesson_loading": "Loading lesson...",
+  "lesson_start_test": "Start Test",
+  "lesson_no_exercises": "No exercises have been added to this lesson yet.",
+  "lesson_content_not_found": "Lesson content not found.",
+  "lesson_completed": "Lesson Completed!",
+  "lesson_out_of_lives": "Out of lives!",
+  "lesson_try_again_message": "Don't worry, mistakes help you learn. Try again to earn XP!",
+  "lesson_try_again_btn": "Try Again",
+  "lesson_quit_btn": "Quit",
+  "lesson_continue_btn": "Continue",
+  "lesson_excellent": "Excellent!",
+  "lesson_correct_answer_was": "Correct answer was:",
+  "lesson_correct_answer": "Correct answer:",
+  "lesson_lives_remaining": "Lives remaining:"
 }

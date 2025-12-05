@@ -1,213 +1,111 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../BasicSiteView/Footer/Footer";
 import "./PythonPage.css";
 
+const API_URL = "http://localhost:5001/api";
 const starIcon = "/img/icons/star.png";
 const examIcon = "/img/icons/exam_trophy.png";
 
-const pathNodes1 = [
-  { id: 1, type: "lesson", status: "completed", lessonId: 1 },
-  { id: 2, type: "lesson", status: "completed", lessonId: 2 },
-  { id: 3, type: "lesson", status: "completed", lessonId: 3 },
-  { id: 4, type: "lesson", status: "current", lessonId: 4 },
-  { id: 5, type: "exam",   status: "exam" },
-];
-
-const pathNodes2 = [
-  { id: 6,  type: "lesson", status: "locked" },
-  { id: 7,  type: "lesson", status: "locked" },
-  { id: 8,  type: "lesson", status: "locked" },
-  { id: 9,  type: "lesson", status: "locked" },
-  { id: 10, type: "exam",   status: "exam" },
-];
-
-const pathNodes3 = [
-  { id: 11, type: "lesson", status: "locked" },
-  { id: 12, type: "lesson", status: "locked" },
-  { id: 13, type: "lesson", status: "locked" },
-  { id: 14, type: "lesson", status: "locked" },
-  { id: 15, type: "exam",   status: "exam" },
-];
-
-const pathNodes4 = [
-  { id: 16, type: "lesson", status: "locked" },
-  { id: 17, type: "lesson", status: "locked" },
-  { id: 18, type: "lesson", status: "locked" },
-  { id: 19, type: "lesson", status: "locked" },
-  { id: 20, type: "exam",   status: "exam" },
-];
-
-const pathNodes5 = [
-  { id: 21, type: "lesson", status: "locked" },
-  { id: 22, type: "lesson", status: "locked" },
-  { id: 23, type: "lesson", status: "locked" },
-  { id: 24, type: "lesson", status: "locked" },
-  { id: 25, type: "exam",   status: "exam" },
-];
-
-const pathNodes6 = [
-  { id: 26, type: "lesson", status: "locked" },
-  { id: 27, type: "lesson", status: "locked" },
-  { id: 28, type: "lesson", status: "locked" },
-  { id: 29, type: "lesson", status: "locked" },
-  { id: 30, type: "exam",   status: "exam" },
-];
-
 const PythonPage = () => {
   const navigate = useNavigate();
-  const [currentTheme, setCurrentTheme] = useState("light"); 
+  const [modules, setModules] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchCourseData();
+  }, []);
+
+  const fetchCourseData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/courses/python`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to load course data");
+      }
+      
+      const data = await response.json();
+      setModules(data.modules || []);
+    } catch (err) {
+      console.error("Error fetching course data:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleNodeClick = (node) => {
-    if (node.status === "locked") return;
+    if (node.status === "locked" || node.status === "exam") return;
     if (!node.lessonId) return;
     navigate(`/courses/python/lesson/${node.lessonId}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="python-page">
+        <div style={{ padding: "40px", textAlign: "center" }}>Loading course...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="python-page">
+        <div style={{ padding: "40px", textAlign: "center", color: "#ef4444" }}>
+          Error: {error}
+        </div>
+      </div>
+    );
+  }
+
+  // Determine theme class based on module order (alternating left/right)
+  const getThemeClass = (order) => {
+    const themeNumber = ((order - 1) % 6) + 1;
+    return `theme-${themeNumber}`;
   };
 
   return (
     <div className={`python-page ${currentTheme}-theme`}>
       <div className="themes-wrapper">
-        {/* Theme 1 (left) */}
-        <section className="theme-path theme-1">
-          <div className="theme-header">
-            <h2 className="path-title">
-              <span className="theme-index">THEME 1</span>
-              <span className="theme-name">VARIABLES AND DATA TYPES</span>
-            </h2>
-          </div>
-          <div className="path-column">
-            {pathNodes1.map(n => (
-              <button
-                key={n.id}
-                type="button"
-                className={["path-node", n.type, n.status].join(" ")}
-                onClick={() => handleNodeClick(n)}
-              >
-                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type} />
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <div className="themes-divider" aria-hidden="true"></div>
-
-        {/* Theme 2 (right) */}
-        <section className="theme-path theme-2">
-          <div className="theme-header">
-            <h2 className="path-title">
-              <span className="theme-index">THEME 2</span>
-              <span className="theme-name">CONDITIONS (IF STATEMENTS)</span>
-            </h2>
-          </div>
-          <div className="path-column">
-            {pathNodes2.map(n => (
-              <button
-                key={n.id}
-                type="button"
-                className={["path-node", n.type, n.status].join(" ")}
-                onClick={() => handleNodeClick(n)}
-              >
-                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type} />
-              </button>
-            ))}
-          </div>
-        </section>
-
-<div className="themes-divider" aria-hidden="true"></div>
-
-        {/* Theme 3 (left) */}
-        <section className="theme-path theme-3">
-          <div className="theme-header">
-            <h2 className="path-title">
-              <span className="theme-index">THEME 3</span>
-              <span className="theme-name">LOOPS</span>
-            </h2>
-          </div>
-          <div className="path-column">
-            {pathNodes3.map(n => (
-              <button
-                key={n.id}
-                type="button"
-                className={["path-node", n.type, n.status].join(" ")}
-                onClick={() => handleNodeClick(n)}
-              >
-                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type} />
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <div className="themes-divider" aria-hidden="true"></div>
-
-        {/* Theme 4 (right) */}
-        <section className="theme-path theme-4">
-          <div className="theme-header">
-            <h2 className="path-title">
-              <span className="theme-index">THEME 4</span>
-              <span className="theme-name">LISTS AND COLLECTIONS</span>
-            </h2>
-          </div>
-          <div className="path-column">
-            {pathNodes4.map(n => (
-              <button
-                key={n.id}
-                type="button"
-                className={["path-node", n.type, n.status].join(" ")}
-                onClick={() => handleNodeClick(n)}
-              >
-                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type} />
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <div className="themes-divider" aria-hidden="true"></div>
-
-        {/* Theme 5 (left) */}
-        <section className="theme-path theme-5">
-          <div className="theme-header">
-            <h2 className="path-title">
-              <span className="theme-index">THEME 5</span>
-              <span className="theme-name">FUNCTIONS AND PROGRAM STRUCTURE</span>
-            </h2>
-          </div>
-          <div className="path-column">
-            {pathNodes5.map(n => (
-              <button
-                key={n.id}
-                type="button"
-                className={["path-node", n.type, n.status].join(" ")}
-                onClick={() => handleNodeClick(n)}
-              >
-                <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type}/>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <div className="themes-divider" aria-hidden="true"></div>
-
-        {/* Theme 6 (right) */}
-        <section className="theme-path theme-6">
-          <div className="theme-header">
-            <h2 className="path-title">
-              <span className="theme-index">THEME 6</span>
-              <span className="theme-name">DATA STRUCTURES & PRACTICAL USES</span>
-            </h2>
-          </div>
-            <div className="path-column">
-              {pathNodes6.map(n => (
-                <button
-                  key={n.id}
-                  type="button"
-                  className={["path-node", n.type, n.status].join(" ")}
-                  onClick={() => handleNodeClick(n)}
-                >
-                  <img className="icon-img" src={n.type === "exam" ? examIcon : starIcon} alt={n.type}/>
-                </button>
-              ))}
-            </div>
-        </section>
+        {modules.map((module, moduleIndex) => {
+          const themeClass = getThemeClass(module.order);
+          return (
+            <React.Fragment key={module.id}>
+              <section className={`theme-path ${themeClass}`}>
+                <div className="theme-header">
+                  <h2 className="path-title">
+                    <span className="theme-index">THEME {module.order}</span>
+                    <span className="theme-name">{module.title.toUpperCase()}</span>
+                  </h2>
+                </div>
+                <div className="path-column">
+                  {module.nodes.map((node, nodeIndex) => (
+                    <button
+                      key={node.id}
+                      type="button"
+                      className={["path-node", node.type, node.status].join(" ")}
+                      onClick={() => handleNodeClick(node)}
+                      disabled={node.status === "locked" || node.status === "exam"}
+                    >
+                      <img
+                        className="icon-img"
+                        src={node.type === "exam" ? examIcon : starIcon}
+                        alt={node.type}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </section>
+              {moduleIndex < modules.length - 1 && (
+                <div className="themes-divider" aria-hidden="true"></div>
+              )}
+            </React.Fragment>
+          );
+        })}
       </div>
       <Footer />
     </div>
