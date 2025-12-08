@@ -12,6 +12,7 @@ const PythonPage = () => {
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentTheme, setCurrentTheme] = useState("light"); 
 
   useEffect(() => {
     fetchCourseData();
@@ -62,14 +63,13 @@ const PythonPage = () => {
     );
   }
 
-  // Determine theme class based on module order (alternating left/right)
   const getThemeClass = (order) => {
     const themeNumber = ((order - 1) % 6) + 1;
     return `theme-${themeNumber}`;
   };
 
   return (
-    <div className="python-page">
+    <div className={`python-page ${currentTheme}-theme`}>
       <div className="themes-wrapper">
         {modules.map((module, moduleIndex) => {
           const themeClass = getThemeClass(module.order);

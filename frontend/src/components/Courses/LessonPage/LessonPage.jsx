@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import ReactMarkdown from "react-markdown"; 
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import "./LessonPage.css";
 
 const API_URL = "http://localhost:5001/api";
@@ -20,6 +23,8 @@ const LessonPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const [currentTheme, setCurrentTheme] = useState("root"); 
+
   const [lessonTitle, setLessonTitle] = useState("");
   const [lessonContent, setLessonContent] = useState("");
   const [allExercises, setAllExercises] = useState([]);
@@ -29,7 +34,7 @@ const LessonPage = () => {
   const [lives, setLives] = useState(3);
   const [correctCount, setCorrectCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [showLecture, setShowLecture] = useState(true); // Показывать ли лекцию сначала
+  const [showLecture, setShowLecture] = useState(true); 
 
   const [selectedOptionKey, setSelectedOptionKey] = useState(null);
   const [textInput, setTextInput] = useState("");
@@ -37,14 +42,13 @@ const LessonPage = () => {
   const [feedback, setFeedback] = useState(null);
 
   const [isCompleted, setIsCompleted] = useState(false);
-  const [isGameOver, setIsGameOver] = useState(false); // NOWY STAN
+  const [isGameOver, setIsGameOver] = useState(false); 
 
   const [xpEarned, setXpEarned] = useState(0);
   const [completionMessage, setCompletionMessage] = useState("");
 
   useEffect(() => {
     fetchLesson();
-    // eslint-disable-next-line
   }, [lessonId]);
 
   const fetchLesson = async () => {
@@ -56,7 +60,6 @@ const LessonPage = () => {
       if (!response.ok) throw new Error("Failed to load lesson");
       const data = await response.json();
 
-      // Сохраняем контент лекции
       setLessonTitle(data.title || "");
       setLessonContent(data.content || "");
 
@@ -81,7 +84,6 @@ const LessonPage = () => {
     }
   };
 
-  // Если контент лекции пустой, сразу показываем тесты
   useEffect(() => {
     if (!loading && showLecture && (!lessonContent || lessonContent.trim() === "") && allExercises.length > 0) {
       const shuffled = shuffleArray(allExercises);
@@ -174,129 +176,111 @@ const LessonPage = () => {
     }
   };
 
-  if (loading) return <div className="lesson-page"><div className="loader">{t("lesson_loading")}</div></div>;
+  if (loading) return <div className={`lesson-page ${currentTheme}`}><div className="loader">{t("lesson_loading")}</div></div>;
   
-  // Показываем лекцию сначала
   if (showLecture) {
     return (
-      <div className="lesson-page">
+      <div className={`lesson-page ${currentTheme}`}>
         <header className="lesson-header">
           <button className="lesson-close-btn" onClick={() => navigate(-1)}>✕</button>
         </header>
-        <main className="lesson-main" style={{ padding: "40px 20px", maxWidth: "800px", margin: "0 auto" }}>
-          <div className="lesson-content">
-            <h1 style={{ fontSize: "2rem", marginBottom: "1.5rem", color: "#0d1e26" }}>
-              {lessonTitle}
-            </h1>
-            <div 
-              style={{ 
-                fontSize: "1.1rem", 
-                lineHeight: "1.8", 
-                color: "#374151",
-                whiteSpace: "pre-wrap",
-                marginBottom: "2rem"
-              }}
-            >
-              {lessonContent}
-            </div>
-            {allExercises && allExercises.length > 0 ? (
-              <button
-                onClick={startTest}
-                style={{
-                  padding: "14px 32px",
-                  fontSize: "1.1rem",
-                  fontWeight: "600",
-                  background: "linear-gradient(135deg, #22D3EE, #6EE7B7)",
-                  color: "#0d1e26",
-                  border: "none",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  boxShadow: "0 8px 20px rgba(34, 211, 238, 0.3)",
-                  transition: "transform 0.2s, box-shadow 0.2s"
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.transform = "translateY(-2px)";
-                  e.target.style.boxShadow = "0 12px 24px rgba(34, 211, 238, 0.4)";
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.transform = "translateY(0)";
-                  e.target.style.boxShadow = "0 8px 20px rgba(34, 211, 238, 0.3)";
-                }}
-              >
-                {t("lesson_start_test")}
-              </button>
+        <main className="lesson-main">
+           <div className="lesson-content">
+            <h1 className="lesson-title">{lessonTitle}</h1>
+
+              <div className="lesson-text">
+                <ReactMarkdown
+                  components={{
+                    code({node, inline, className, children, ...props}) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      return !inline && match ? (
+                        <SyntaxHighlighter style={oneDark} language={match[1]} PreTag="div" {...props}>
+                          {String(children).replace(/\n$/, "")}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      );
+                    }
+                  }}
+                >
+                  {lessonContent}
+                </ReactMarkdown>
+              </div>
+
+                {allExercises && allExercises.length > 0 ? (
+                <button className="lesson-start-btn" onClick={startTest}>
+                  {t("lesson_start_test")}
+                </button>
             ) : (
-              <div style={{ color: "#6b7280", fontSize: "1rem" }}>
+              <div className="lesson-no-exercises">
                 {t("lesson_no_exercises")}
               </div>
-            )}
-          </div>
+               )}            </div>
         </main>
       </div>
     );
   }
 
-  if (!allExercises || allExercises.length === 0) {
-      return <div className="lesson-page"><main className="lesson-main">{t("lesson_content_not_found")}</main></div>;
+  if (!allExercises || allExercises.length === 0) {                  return <div className={`lesson-page ${currentTheme}`}><main className="lesson-main">{t("lesson_content_not_found")}</main></div>;
   }
 
   if (isCompleted) {
     return (
-        <div className="lesson-page">
+        <div className={`lesson-page ${currentTheme}`}>
             <main className="lesson-main result-view">
                 <div className="result-card">
                     <h1>🎉 {completionMessage || t("lesson_completed")}</h1>
-                    <div className="xp-reward">
-                        <span className="xp-amount">+{xpEarned} XP</span>
-                    </div>
-                    <div className="stats-summary">
-                        <p>{t("lesson_lives_remaining")} {lives}/3</p>
-                    </div>
-                    <button className="lesson-continue-btn" onClick={() => navigate('/courses')}>
-                        {t("lesson_continue_btn")}
-                    </button>
+                        <div className="xp-reward">
+                          <span className="xp-amount">+{xpEarned} XP</span>
+                        </div>
+                        <div className="stats-summary">
+                          <p>{t("lesson_lives_remaining")} {lives}/3</p>
+                        </div>
+                        <button className="lesson-continue-btn" onClick={() => navigate('/courses')}>
+                          {t("lesson_continue_btn")}
+                        </button>
                 </div>
             </main>
         </div>
     );
   }
-
-  if (isGameOver) {
-    return (
-        <div className="lesson-page">
-            <main className="lesson-main result-view">
-                <div className="result-card" style={{ borderColor: '#ef4444' }}>
-                    <div style={{fontSize: '4rem', marginBottom: '1rem'}}>💔</div>
-                    <h1 style={{color: '#ef4444'}}>{t("lesson_out_of_lives")}</h1>
-                    <p style={{color: '#6b7280', fontSize: '1.2rem', marginBottom: '2rem'}}>
-                        {t("lesson_try_again_message")}
-                    </p>
-                    <button
-                        className="lesson-continue-btn"
-                        onClick={() => window.location.reload()} // Odśwież stronę żeby zresetować
-                        style={{background: '#ef4444', boxShadow: '0 8px 20px rgba(239, 68, 68, 0.3)'}}
-                    >
-                        {t("lesson_try_again_btn")}
-                    </button>
-                    <button
-                        className="lesson-continue-btn"
-                        onClick={() => navigate('/courses')}
-                        style={{background: 'transparent', color: '#6b7280', boxShadow: 'none', marginTop: '10px'}}
-                    >
-                        {t("lesson_quit_btn")}
-                    </button>
-                </div>
-            </main>
+  
+ if (isGameOver) {
+  return (
+    <div className={`lesson-page ${currentTheme}`}>
+      <main className="lesson-main result-view">
+        <div className="result-card result-card-gameover">
+          <div className="gameover-icon">💔</div>
+          <h1 className="gameover-title">{t("lesson_out_of_lives")}</h1>
+          <p className="gameover-message">
+            {t("lesson_try_again_message")}
+          </p>
+          <button
+            className="lesson-continue-btn gameover-retry-btn"
+            onClick={() => window.location.reload()}
+          >
+            {t("lesson_try_again_btn")}
+          </button>
+          <button
+            className="lesson-continue-btn gameover-quit-btn"
+            onClick={() => navigate('/courses')}
+          >
+            {t("lesson_quit_btn")}
+          </button>
         </div>
-    );
-  }
+      </main>
+    </div>
+  );
+}
 
   if (!currentExercise) return null;
 
   const isMultipleChoice = currentExercise.options && currentExercise.options.length > 0;
 
   return (
-    <div className="lesson-page">
+    <div className={`lesson-page ${currentTheme}`}>
       <header className="lesson-header">
         <button className="lesson-close-btn" onClick={() => navigate(-1)}>✕</button>
 
@@ -369,9 +353,9 @@ const LessonPage = () => {
                 <button
                     className="lesson-check-btn"
                     onClick={() => handleTextSubmit(currentExercise.answer)}
-                    disabled={isChecking || !textInput}
+                  disabled={isChecking || !textInput}
                 >
-                    Check Answer
+                  {t("lesson_check_answer")}
                 </button>
             </div>
         )}

@@ -1,3 +1,67 @@
+:root {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f7f7f7;
+  --color-text-primary: #0d1e26;
+  --color-text-secondary: #374151;
+  --color-accent: #22D3EE;
+  --color-accent-soft: #BAE6FD;
+  --color-border: rgba(33, 37, 41, 0.1);
+  --color-on-accent: #0d1e26;
+  --color-error: #ef4444;
+  --color-error-dark: #991b1b;
+  --color-success: #065f46;
+
+  --py-mint: #6EE7B7;
+  --py-mint-soft: #A7F3D0;
+  --py-teal: #22D3EE;
+  --py-teal-soft: #BAE6FD;
+  --py-bg-top: #ECFEFF;
+  --py-bg-bottom: #F0FDF4;
+}
+
+.dark-theme {
+  --color-bg-primary: #12161f;
+  --color-bg-secondary: #212835;
+  --color-text-primary: #ededed;
+  --color-text-secondary: #a0a8b5;
+  --color-accent: #10B981;
+  --color-accent-soft: #059669;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-on-accent: #ffffff;
+  --color-error: #f87171;
+  --color-error-dark: #7f1d1d;
+  --color-success: #34d399;
+
+  --py-mint: #34d399;
+  --py-mint-soft: #059669;
+  --py-teal: #0EA5E9;
+  --py-teal-soft: #38bdf8;
+  --py-bg-top: #1a202c;
+  --py-bg-bottom: #2d3748;
+  
+}
+
+.pink-theme {
+  --color-bg-primary: #fefefe;
+  --color-bg-secondary: #fce4ec;
+  --color-text-primary: #880e4f;
+  --color-text-secondary: #a04071;
+  --color-accent: #e91e63;
+  --color-accent-soft: #ec407a;
+  --color-border: rgba(233, 30, 99, 0.3);
+  --color-on-accent: #880e4f;
+  --color-error: #e91e63;
+  --color-error-dark: #ad1457;
+  --color-success: #880e4f;
+
+  --py-mint: #f48fb1;
+  --py-mint-soft: #f8bbd0;
+  --py-teal: #ec407a;
+  --py-teal-soft: #f06292;
+  --py-bg-top: #fff0f6;
+  --py-bg-bottom: #fce4ec;
+}
+
 .lesson-page {
     min-height: 100vh;
     background: linear-gradient(135deg, var(--color-bg-secondary, #f3f4f6) 0%, var(--color-bg-primary, #ffffff) 50%, var(--color-bg-secondary, #f3f4f6) 100%);
@@ -23,7 +87,6 @@
     z-index: 0;
 }
 
-/* --- HEADER --- */
 .lesson-header {
     position: relative;
     z-index: 10;
@@ -36,8 +99,6 @@
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-
-    /* Glassmorphism effect jak w game-header */
     background: var(--color-bg-primary, rgba(255, 255, 255, 0.8));
     backdrop-filter: blur(10px);
     border-radius: 20px;
@@ -61,12 +122,11 @@
 }
 
 .lesson-close-btn:hover {
-    color: #ef4444;
-    background-color: rgba(239, 68, 68, 0.1);
-    transform: rotate(90deg);
+  color: var(--color-error);
+  background-color: rgba(239, 68, 68, 0.1);
+  transform: rotate(90deg);
 }
 
-/* --- PROGRESS BAR --- */
 .lesson-progress-bar-container {
     flex: 1;
     height: 12px;
@@ -85,11 +145,25 @@
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
 }
 
-/* --- LIVES (HEARTS) --- */
 .lesson-lives {
     display: flex;
     gap: 5px;
     font-size: 1.5rem;
+}
+
+.lesson-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-primary); 
+}
+
+.lesson-content {
+  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
 }
 
 .heart-full {
@@ -103,8 +177,38 @@
     transform: scale(0.9);
 }
 
-/* --- MAIN CONTENT --- */
+.lesson-start-btn {
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--color-accent), var(--py-mint));
+  color: var(--color-on-accent);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(34, 211, 238, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.lesson-start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(34, 211, 238, 0.4);
+}
+
+.lesson-start-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(34, 211, 238, 0.3);
+}
+
+.lesson-no-exercises {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
 .lesson-main {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
     position: relative;
     z-index: 10;
     flex: 1;
@@ -112,14 +216,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
-    max-width: 900px;
     width: 100%;
-    margin: 0 auto;
     animation: fadeInDown 0.6s ease-out;
 }
 
-/* --- QUESTION CARD --- */
 .question-card {
     background: var(--color-bg-primary, #ffffff);
     padding: 2.5rem;
@@ -148,12 +248,11 @@
 .question-card h2 {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--color-text-primary, #111827);
+    color: var(--color-text-primary);
     line-height: 1.4;
     margin: 0;
 }
 
-/* --- OPTIONS GRID (ABCD) --- */
 .options-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -162,11 +261,11 @@
 }
 
 .option-btn {
+    color: var(--color-text-primary);
+    border: 2px solid var(--color-border);
+    background: var(--color-bg-primary);
     padding: 1.5rem;
     border-radius: 16px;
-    border: 2px solid var(--color-border, #e5e7eb);
-    background: var(--color-bg-primary, #ffffff);
-    color: var(--color-text-primary, #374151);
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
@@ -188,21 +287,20 @@
     transform: translateY(-2px);
 }
 
-/* Style dla stanów odpowiedzi */
 .option-correct {
-    border-color: var(--green-500, #10b981) !important;
-    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
-    color: #065f46 !important;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2) !important;
-    transform: scale(1.02);
+  border-color: var(--color-success) !important;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
+  color: var(--color-success) !important;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2) !important;
+  transform: scale(1.02);
 }
 
 .option-incorrect {
-    border-color: #ef4444 !important;
-    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
-    color: #991b1b !important;
-    animation: shake 0.5s;
-    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2) !important;
+  border-color: var(--color-error) !important;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+  color: var(--color-error-dark) !important;
+  animation: shake 0.5s;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2) !important;
 }
 
 .option-disabled {
@@ -211,7 +309,38 @@
     transform: none !important;
 }
 
-/* --- INPUT CONTAINER (Open Questions) --- */
+.result-card-gameover {
+  border-color: var(--color-error);
+}
+
+.gameover-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.gameover-title {
+  color: var(--color-error);
+}
+
+.gameover-message {
+  color: var(--color-text-secondary);
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.gameover-retry-btn {
+  background: var(--color-error);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+}
+
+.gameover-quit-btn {
+  background: transparent;
+  color: var(--color-text-secondary);
+  box-shadow: none;
+  margin-top: 10px;
+}
+
+
 .input-answer-container {
     display: flex;
     flex-direction: column;
@@ -221,11 +350,18 @@
     animation: fadeInUp 0.5s ease-out;
 }
 
+.lesson-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+}
+
 .lesson-text-input {
     width: 100%;
     padding: 1.25rem;
     font-size: 1.1rem;
-    font-family: 'Fira Code', monospace; /* Spójność z kodem w minigrach */
+    font-family: 'Fira Code', monospace; 
     border: 2px solid var(--color-border, #e5e7eb);
     border-radius: 16px;
     outline: none;
@@ -266,7 +402,6 @@
     transform: none;
 }
 
-/* --- FOOTER FEEDBACK --- */
 .lesson-footer {
     position: fixed;
     bottom: 0;
@@ -309,7 +444,6 @@
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
-/* --- RESULT VIEW (Koniec lekcji) --- */
 .result-view {
     height: 100%;
 }
@@ -344,10 +478,13 @@
     font-size: 4rem;
     font-weight: 800;
     background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-    -webkit-background-clip: text;
+    background-clip: text;         
+    -webkit-background-clip: text;    
     -webkit-text-fill-color: transparent;
+    color: transparent;                
     filter: drop-shadow(0 4px 0 rgba(245, 158, 11, 0.2));
 }
+
 
 .stats-summary {
     font-size: 1.2rem;
@@ -374,7 +511,6 @@
     box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4);
 }
 
-/* --- ANIMATIONS --- */
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -407,7 +543,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     .options-grid {
         grid-template-columns: 1fr;
