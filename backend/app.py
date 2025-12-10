@@ -634,24 +634,41 @@ def get_course_structure(language_name):
         lessons = Lesson.query.filter_by(module_id=module.id).order_by(Lesson.order).all()
         
         module_lessons = []
+        has_exam_lesson = False
         for lesson in lessons:
             all_lessons_flat.append(lesson.id)
             is_completed = lesson.id in completed_lesson_ids
-            
-            module_lessons.append({
-                "id": lesson.id,
-                "title": lesson.title,
-                "order": lesson.order,
-                "lesson_type": lesson.lesson_type,
-                "status": "completed" if is_completed else "locked"
-            })
+
+            # Treat lessons with type "exam" as exam nodes; do not add a duplicate exam node later
+            if (lesson.lesson_type or "").lower() == "quiz":
+                has_exam_lesson = True
+                module_lessons.append({
+                    "id": lesson.id,
+                    "title": lesson.title,
+                    "order": lesson.order,
+                    "lesson_type": lesson.lesson_type,
+                    "status": "exam",
+                    "type": "exam",
+                    "lessonId": None
+                })
+            else:
+                module_lessons.append({
+                    "id": lesson.id,
+                    "title": lesson.title,
+                    "order": lesson.order,
+                    "lesson_type": lesson.lesson_type,
+                    "status": "completed" if is_completed else "locked",
+                    "type": "lesson",
+                    "lessonId": lesson.id
+                })
         
         course_structure.append({
             "id": module.id,
             "title": module.title,
             "description": module.description,
             "order": module.order,
-            "lessons": module_lessons
+            "lessons": module_lessons,
+            "has_exam_lesson": has_exam_lesson
         })
 
     # Determine current lesson (first uncompleted lesson)
@@ -673,19 +690,20 @@ def get_course_structure(language_name):
         
         # Add lessons
         for lesson in lessons:
+            # When lessons already include exam entries, keep their type/status as provided
             module_lessons.append({
                 "id": lesson["id"],
-                "type": "lesson",
+                "type": lesson.get("type", "lesson"),
                 "status": lesson["status"],
-                "lessonId": lesson["id"]
+                "lessonId": lesson.get("lessonId", lesson["id"]) if lesson.get("type", "lesson") != "quiz" else None
             })
         
-        # Add exam node after lessons (if there are lessons)
-        if lessons:
+        # Add exam node after lessons only if module has lessons and no explicit exam lesson
+        if lessons and not module_data.get("has_exam_lesson"):
             module_lessons.append({
-                "id": f"exam_{module_data['id']}",
-                "type": "exam",
-                "status": "exam"
+                "id": f"quiz_{module_data['id']}",
+                "type": "quiz",
+                "status": "quiz"
             })
         
         result_modules.append({

@@ -40,7 +40,8 @@ const PythonPage = () => {
   };
 
   const handleNodeClick = (node) => {
-    if (node.status === "locked" || node.status === "exam") return;
+    const isQuiz = node.status === "quiz" || node.type === "quiz";
+    if (node.status === "locked" || node.status === "exam" || isQuiz) return;
     if (!node.lessonId) return;
     navigate(`/courses/python/lesson/${node.lessonId}`);
   };
@@ -89,11 +90,11 @@ const PythonPage = () => {
                       type="button"
                       className={["path-node", node.type, node.status].join(" ")}
                       onClick={() => handleNodeClick(node)}
-                      disabled={node.status === "locked" || node.status === "exam"}
+                      disabled={node.status === "locked" || node.status === "exam" || node.status === "quiz" || node.type === "quiz"}
                     >
                       <img
                         className="icon-img"
-                        src={node.type === "exam" ? examIcon : starIcon}
+                        src={node.type === "exam" || node.type === "quiz" ? examIcon : starIcon}
                         alt={node.type}
                       />
                     </button>
