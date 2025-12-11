@@ -13,7 +13,8 @@ print("Starting backend...")
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+# Allow frontend dev server on localhost:3000 to access all /api/* endpoints
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 db_url = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
@@ -60,6 +61,26 @@ class User(db.Model):
 
     def check_password(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
+
+
+class Item(db.Model):
+    __tablename__ = 'items'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    item_type = db.Column(db.String(50), nullable=False)  # e.g. 'avatar', 'theme'
+    price_xp = db.Column(db.Integer, nullable=False, default=0)
+    asset_url = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    is_available = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class UserInventory(db.Model):
+    __tablename__ = 'user_inventory'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('items.id'), nullable=False)
+    purchase_date = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    is_equipped = db.Column(db.Boolean, default=False)
 
 
 class Language(db.Model):
@@ -719,6 +740,94 @@ def get_course_structure(language_name):
         "language_name": language.name,
         "modules": result_modules
     }), 200
+
+
+@app.route('/api/shop/items', methods=['GET'])
+def get_shop_items():
+    # Token is optional: if present and valid, mark owned items for this user;
+    # otherwise return all items with owned = False.
+    auth_header = request.headers.get('Authorization')
+    current_user_id = None
+    if auth_header and len(auth_header.split(" ")) == 2:
+        _, token = auth_header.split(" ")
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            current_user_id = data.get('user_id')
+        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+            current_user_id = None
+
+    items = Item.query.filter_by(is_available=True).all()
+
+    owned_item_ids = set()
+    if current_user_id is not None:
+        owned_item_ids = set(
+            inv.item_id for inv in UserInventory.query.filter_by(user_id=current_user_id).all()
+        )
+
+    payload = []
+    for item in items:
+        payload.append({
+            "id": item.id,
+            "name": item.name,
+            "item_type": item.item_type,
+            "price_xp": item.price_xp,
+            "asset_url": item.asset_url,
+            "description": item.description,
+            "owned": item.id in owned_item_ids
+        })
+
+    return jsonify(payload), 200
+
+
+@app.route('/api/shop/buy', methods=['POST'])
+def buy_shop_item():
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp:
+        return err_resp, code
+
+    data = request.get_json() or {}
+    item_id = data.get('item_id')
+
+    if not item_id:
+        return jsonify(error="item_id is required"), 400
+
+    item = Item.query.filter_by(id=item_id, is_available=True).first()
+    if not item:
+        return jsonify(error="Item not found"), 404
+
+    # Prevent duplicate purchases
+    existing = UserInventory.query.filter_by(user_id=current_user.id, item_id=item.id).first()
+    if existing:
+        return jsonify(
+            message="Item already owned",
+            item_id=item.id,
+            xp=current_user.xp
+        ), 200
+
+    if (current_user.xp or 0) < (item.price_xp or 0):
+        return jsonify(error="Not enough XP to buy this item"), 400
+
+    current_user.xp = (current_user.xp or 0) - (item.price_xp or 0)
+
+    inventory_entry = UserInventory(
+        user_id=current_user.id,
+        item_id=item.id
+    )
+    db.session.add(inventory_entry)
+    db.session.commit()
+
+    return jsonify(
+        message="Item purchased successfully",
+        item={
+            "id": item.id,
+            "name": item.name,
+            "item_type": item.item_type,
+            "price_xp": item.price_xp,
+            "asset_url": item.asset_url,
+            "description": item.description,
+        },
+        xp=current_user.xp
+    ), 200
 
 
 # --- 5. RUN SERVER ---

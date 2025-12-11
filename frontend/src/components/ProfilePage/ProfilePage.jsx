@@ -15,14 +15,16 @@ const ProfilePage = () => {
   const [selectedAvatar, setSelectedAvatar] = useState('/img/small_logo.png');
   const [isSaving, setIsSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState(null);
-
-  const availableAvatars = [
-    '/img/small_logo.png',
-    '/img/avatar/black.png',
-    '/img/avatar/purple.png',
-    '/img/avatar/pink.png',
-    '/img/avatar/red.png',
+  const defaultAvatarOptions = [
+    { url: '/img/small_logo.png', owned: true },
+    { url: '/img/avatar/black.png', owned: false },
+    { url: '/img/avatar/purple.png', owned: false },
+    { url: '/img/avatar/pink.png', owned: false },
+    { url: '/img/avatar/red.png', owned: false },
   ];
+
+  const [availableAvatars, setAvailableAvatars] = useState(defaultAvatarOptions);
+  const [showLockedModal, setShowLockedModal] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -32,6 +34,50 @@ const ProfilePage = () => {
         setLoading(false);
         return;
       }
+
+      const fetchAvatarsFromShop = async (authToken) => {
+        try {
+          const resp = await fetch('http://localhost:5001/api/shop/items', {
+            headers: {
+              'Authorization': `Bearer ${authToken}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!resp.ok) return;
+
+          const items = await resp.json();
+          const avatarItems = (items || []).filter((item) => item.item_type === 'avatar');
+
+          const fromShop = avatarItems.map((item) => ({
+            id: item.id,
+            url: item.asset_url,
+            owned: !!item.owned,
+          }));
+
+          const mergedMap = new Map();
+          defaultAvatarOptions.forEach((a) => {
+            mergedMap.set(a.url, a);
+          });
+
+          fromShop.forEach((a) => {
+            const existing = mergedMap.get(a.url);
+            if (existing) {
+              mergedMap.set(a.url, {
+                ...existing,
+                owned: existing.owned || a.owned,
+                id: a.id,
+              });
+            } else {
+              mergedMap.set(a.url, a);
+            }
+          });
+
+          setAvailableAvatars(Array.from(mergedMap.values()));
+        } catch (e) {
+          console.error('Error fetching avatars from shop:', e);
+        }
+      };
 
       try {
         const response = await fetch('http://localhost:5001/api/me', {
@@ -46,7 +92,8 @@ const ProfilePage = () => {
           setUser(data);
           setDisplayName(data.username || data.email?.split('@')[0] || 'User');
           setEmail(data.email || '');
-            setSelectedAvatar(data.avatar || '/img/small_logo.png');
+          setSelectedAvatar(data.avatar || '/img/small_logo.png');
+          await fetchAvatarsFromShop(token);
         } else {
           // Fallback do localStorage
           const storedEmail = localStorage.getItem('email');
@@ -57,12 +104,12 @@ const ProfilePage = () => {
               role: localStorage.getItem('role') || 'user',
               xp: 0,
               level: 1,
-                lessons_count: 0,
-                avatar: '/img/small_logo.png'
+              lessons_count: 0,
+              avatar: '/img/small_logo.png'
             });
             setDisplayName(storedEmail.split('@')[0]);
             setEmail(storedEmail);
-              setSelectedAvatar('/img/small_logo.png');
+            setSelectedAvatar('/img/small_logo.png');
           }
           localStorage.removeItem('token');
         }
@@ -225,15 +272,29 @@ const ProfilePage = () => {
                 {t('profile_choose_avatar') || 'Choose your avatar'}
               </h3>
               <div className="profile-avatars-grid">
-                {availableAvatars.map((avatar, index) => (
-                  <div
-                    key={index}
-                    className={`profile-avatar-option ${selectedAvatar === avatar ? 'selected' : ''}`}
-                    onClick={() => handleUpdateAvatar(avatar)}
-                  >
-                    <img src={avatar} alt={`Avatar ${index + 1}`} />
-                  </div>
-                ))}
+                {availableAvatars.map((avatar, index) => {
+                  const isSelected = selectedAvatar === avatar.url;
+                  const isLocked = !avatar.owned;
+
+                  const handleClick = () => {
+                    if (isLocked) {
+                      setShowLockedModal(true);
+                      return;
+                    }
+                    handleUpdateAvatar(avatar.url);
+                  };
+
+                  return (
+                    <div
+                      key={avatar.id || index}
+                      className={`profile-avatar-option ${isSelected ? 'selected' : ''} ${isLocked ? 'locked' : ''}`}
+                      onClick={handleClick}
+                    >
+                      <img src={avatar.url} alt={`Avatar ${index + 1}`} />
+                      {isLocked && <div className="profile-avatar-lock-overlay">🔒</div>}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -365,7 +426,38 @@ const ProfilePage = () => {
           </div>
         </div>
       </main>
-      
+      {showLockedModal && (
+        <div className="profile-modal-backdrop" onClick={() => setShowLockedModal(false)}>
+          <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
+            <h4 className="profile-modal-title">
+              Avatar locked
+            </h4>
+            <p className="profile-modal-text">
+              You need to buy this avatar in the Shop before you can use it.
+            </p>
+            <div className="profile-modal-actions">
+              <button
+                type="button"
+                className="btn btn-cta"
+                onClick={() => setShowLockedModal(false)}
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-cta"
+                onClick={() => {
+                  setShowLockedModal(false);
+                  navigate('/shop');
+                }}
+              >
+                Go to shop
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

@@ -21,6 +21,7 @@ import HtmlCssPage from "./components/Courses/htmlcss/HtmlCssPage.jsx";
 import ProfilePage from './components/ProfilePage/ProfilePage.jsx';
 import Header from "./components/BasicSiteView/Header/Header";
 import LessonPage from "./components/Courses/LessonPage/LessonPage.jsx";
+import ShopPage from "./components/Shop/ShopPage.jsx";
 
 const Loading = () => <div style={{ textAlign: 'center', padding: '50px' }}>Loading translations...</div>;
 const themes = ['light', 'dark', 'pink'];
@@ -69,6 +70,7 @@ function App() {
           <Route path="/admin_panel/manage_lessons" element={renderRouteElement(ManageLessons)} />
           <Route path="/admin_panel/manage_games" element={renderRouteElement(ManageGames)} />
           <Route path="/courses/:course/lesson/:lessonId" element={renderRouteElement(LessonPage)} />
+          <Route path="/shop" element={renderRouteElement(ShopPage)} />
         </Routes>
       </Suspense>
     </Router>

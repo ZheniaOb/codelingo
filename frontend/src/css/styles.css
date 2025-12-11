@@ -64,6 +64,7 @@ body{
   transition: background .2s ease-in-out;
   max-width: 200px; 
   white-space: normal;
+  margin-top: 10px;
 }
 
 .btn-cta:hover {

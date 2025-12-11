@@ -30,6 +30,7 @@ const Login = () => {
         localStorage.setItem("email", formData.email);
 
         navigate("/");
+        window.location.reload();
       } else {
         setError(data.error || "Invalid credentials");
       }

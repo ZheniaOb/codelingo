@@ -140,6 +140,9 @@ const Header = ({ theme, setTheme }) => {
               <Link className="nav-link" to="/minigames">{t('nav_minigames')}</Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link" to="/shop">Shop</Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link" to="/progress">{t('nav_progress')}</Link>
             </li>
             <li className="nav-item">
