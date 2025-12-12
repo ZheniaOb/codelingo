@@ -9,6 +9,7 @@ function ShopPage({ theme, setTheme }) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [userXp, setUserXp] = useState(null);
+	const [currentAvatar, setCurrentAvatar] = useState(null);
 	const [showXpModal, setShowXpModal] = useState(false);
 	const [showEquipModal, setShowEquipModal] = useState(false);
 	const [recentlyBoughtItem, setRecentlyBoughtItem] = useState(null);
@@ -71,6 +72,9 @@ function ShopPage({ theme, setTheme }) {
 				if (!response.ok) return;
 				const data = await response.json();
 				setUserXp(typeof data.xp === "number" ? data.xp : 0);
+				if (data && typeof data.avatar === "string") {
+					setCurrentAvatar(data.avatar);
+				}
 			} catch (e) {
 				console.error("Error fetching user XP for shop:", e);
 			}
@@ -78,6 +82,29 @@ function ShopPage({ theme, setTheme }) {
 
 		fetchUserXp();
 	}, []);
+
+	const handleEquipAvatar = (item) => {
+		const token = localStorage.getItem("token");
+		if (!token) {
+			setError("You need to be logged in to apply avatars.");
+			return;
+		}
+
+		setError(null);
+
+		fetch("http://localhost:5001/api/me", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ avatar: item.asset_url }),
+		})
+			.finally(() => {
+				setCurrentAvatar(item.asset_url);
+				window.location.reload();
+			});
+	};
 
 	const handleBuy = (item) => {
 		const token = localStorage.getItem("token");
@@ -176,12 +203,20 @@ function ShopPage({ theme, setTheme }) {
 
 	const renderActionButton = (item) => {
 		const isOwned = ownedItems.has(item.id);
+		const isUnavailable = item.is_available === false;
 
 		if (item.item_type === "theme") {
+			if (isUnavailable) {
+				return (
+					<span className="shop-owned-badge shop-owned-unavailable">
+						Unavailable
+					</span>
+				);
+			}
 			if (!isOwned) {
 				return (
 					<button
-						className="shop-btn shop-btn-primary"
+						className="shop-btn shop-btn-primary shop-btn-buy"
 						onClick={() => handleBuy(item)}
 					>
 						Buy
@@ -192,8 +227,10 @@ function ShopPage({ theme, setTheme }) {
 			const isEquipped = equippedTheme === item.asset_url;
 			return (
 				<button
-					className={`shop-btn shop-btn-primary ${
-						isEquipped ? "shop-btn-equipped" : ""
+					className={`shop-btn ${
+						isEquipped
+							? "shop-btn-primary shop-btn-equipped"
+							: "shop-btn-apply"
 					}`}
 					onClick={() => handleEquipTheme(item)}
 				>
@@ -202,18 +239,56 @@ function ShopPage({ theme, setTheme }) {
 			);
 		}
 
-		if (isOwned) {
-			return <span className="shop-owned-badge">Owned</span>;
+		if (item.item_type === "avatar") {
+			if (isUnavailable) {
+				return (
+					<span className="shop-owned-badge shop-owned-unavailable">
+						Unavailable
+					</span>
+				);
+			}
+
+			if (!isOwned) {
+				return (
+					<button
+						className="shop-btn shop-btn-primary shop-btn-buy"
+						onClick={() => handleBuy(item)}
+					>
+						Buy
+					</button>
+				);
+			}
+
+			const isEquippedAvatar = currentAvatar === item.asset_url;
+			if (isEquippedAvatar) {
+				// For equipped avatars we already show a small badge,
+				// so no extra button is needed here.
+				return null;
+			}
+
+			return (
+				<button
+					className="shop-btn shop-btn-apply"
+					onClick={() => handleEquipAvatar(item)}
+				>
+					Apply
+				</button>
+			);
 		}
 
-		return (
-			<button
-				className="shop-btn shop-btn-primary"
-				onClick={() => handleBuy(item)}
-			>
-				Buy
-			</button>
-		);
+		// Fallback for any other item types
+		if (!isOwned) {
+			return (
+				<button
+					className="shop-btn shop-btn-primary"
+					onClick={() => handleBuy(item)}
+				>
+					Buy
+				</button>
+			);
+		}
+
+		return <span className="shop-owned-badge">Owned</span>;
 	};
 
 	const themeItemsRaw = items.filter((item) => item.item_type === "theme");
@@ -333,7 +408,20 @@ function ShopPage({ theme, setTheme }) {
 									<h3 className="shop-item-name">{item.name}</h3>
 									<p className="shop-item-description">{item.description}</p>
 									<div className="shop-card-footer">
-										<span className="shop-price">{item.price_xp} XP</span>
+										<div className="shop-card-meta">
+											<span className="shop-price">{item.price_xp} XP</span>
+											{ownedItems.has(item.id) && (
+												<span
+													className={`shop-owned-badge ${
+														equippedTheme === item.asset_url
+															? "shop-owned-badge-active"
+															: ""
+													}`}
+												>
+													{equippedTheme === item.asset_url ? "Active" : "Owned"}
+												</span>
+											)}
+										</div>
 										{renderActionButton(item)}
 									</div>
 								</div>
@@ -369,7 +457,20 @@ function ShopPage({ theme, setTheme }) {
 									<h3 className="shop-item-name">{item.name}</h3>
 									<p className="shop-item-description">{item.description}</p>
 									<div className="shop-card-footer">
-										<span className="shop-price">{item.price_xp} XP</span>
+										<div className="shop-card-meta">
+											<span className="shop-price">{item.price_xp} XP</span>
+											{ownedItems.has(item.id) && (
+												<span
+													className={`shop-owned-badge ${
+														currentAvatar === item.asset_url
+															? "shop-owned-badge-active"
+															: ""
+													}`}
+												>
+													{currentAvatar === item.asset_url ? "Equipped" : "Owned"}
+												</span>
+											)}
+										</div>
 										{renderActionButton(item)}
 									</div>
 								</div>
@@ -378,6 +479,52 @@ function ShopPage({ theme, setTheme }) {
 					</div>
 				</section>
 			</div>
+
+			{previewItem && (
+				<div
+					className="shop-modal-backdrop shop-modal-backdrop-light"
+					onClick={closePreview}
+				>
+					<div
+						className="shop-modal shop-modal-preview"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<h4 className="shop-modal-title">
+							{previewItem.item_type === "theme"
+								? "Theme preview"
+								: "Avatar preview"}
+						</h4>
+						{previewItem.item_type === "theme" ? (
+							<div className="shop-preview-theme-box">
+								<div className="shop-preview-theme-header" />
+								<div className="shop-preview-theme-body" />
+							</div>
+						) : (
+							<div className="shop-preview-avatar-row">
+								<div className="shop-preview-avatar-circle">
+									<img
+										src={previewItem.asset_url}
+										alt={previewItem.name}
+									/>
+								</div>
+								<div className="shop-preview-avatar-text">
+									<div className="shop-preview-line" />
+									<div className="shop-preview-line shop-preview-line-faded" />
+								</div>
+							</div>
+						)}
+						<div className="shop-modal-actions">
+							<button
+								type="button"
+								className="btn btn-cta shop-modal-btn-secondary"
+								onClick={closePreview}
+							>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 
 			{showXpModal && (
 				<div

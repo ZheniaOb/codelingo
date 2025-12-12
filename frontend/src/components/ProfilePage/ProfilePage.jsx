@@ -244,9 +244,9 @@ const ProfilePage = () => {
               <button
                 className="profile-avatar-edit-btn"
                 onClick={() => setIsEditingAvatar(!isEditingAvatar)}
-                title={t('profile_change_avatar') || 'Change avatar'}
+                title={t('profile_change_avatar') || 'Change Avatar'}
               >
-                📷
+					Change Avatar
               </button>
             </div>
 
