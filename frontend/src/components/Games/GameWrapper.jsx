@@ -25,6 +25,7 @@ export function GameWrapper() {
   const [earnedXP, setEarnedXP] = useState(0);
   const [completionStatus, setCompletionStatus] = useState(null);
   const [isSavingResult, setIsSavingResult] = useState(false);
+  const [coinsEarned, setCoinsEarned] = useState(0);
 
   const GameComponent = gameComponents[gameId];
 
@@ -84,6 +85,12 @@ export function GameWrapper() {
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || "Failed to save game result");
+      }
+
+      if (typeof data.coins_added === "number") {
+        setCoinsEarned(data.coins_added);
+      } else {
+        setCoinsEarned(Math.floor(xp / 2));
       }
 
       setCompletionStatus({
@@ -146,6 +153,17 @@ export function GameWrapper() {
                 <span>⭐</span>
                 <span>{earnedXP} XP</span>
               </div>
+              {coinsEarned > 0 && (
+                <div className="game-stat-badge" style={{
+                  display: 'inline-flex',
+                  fontSize: '1.4rem',
+                  padding: '0.6rem 1.4rem',
+                  marginBottom: '2rem'
+                }}>
+                  <span style={{ marginRight: '0.4rem' }}>🪙</span>
+                  <span>{coinsEarned} coins</span>
+                </div>
+              )}
               <p style={{ color: '#6b7280', marginBottom: '1rem', fontSize: '1.1rem' }}>
                 Great job! Keep practicing to improve your skills!
               </p>

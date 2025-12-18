@@ -165,7 +165,7 @@ function Home({ theme, toggleTheme }) {
                 <div className="progress-wrap">
                   <div className="progress-fill" style={{ width: "40%" }}></div>
                 </div>
-                <a className="btn btn-continue" href="#javascript">{t('continue_btn')}</a>
+                <a className="btn btn-continue" href="/courses/javascript">{t('continue_btn')}</a>
               </div>
             </article>
 
@@ -184,7 +184,7 @@ function Home({ theme, toggleTheme }) {
                 <div className="progress-wrap">
                   <div className="progress-fill" style={{ width: "60%" }}></div>
                 </div>
-                <a className="btn btn-continue" href="#htmlcss">{t('continue_btn')}</a>
+                <a className="btn btn-continue" href="/courses/htmlcss">{t('continue_btn')}</a>
               </div>
             </article>
             <article className="language-card" role="listitem">
@@ -202,7 +202,7 @@ function Home({ theme, toggleTheme }) {
                 <div className="progress-wrap">
                   <div className="progress-fill" style={{ width: "10%" }}></div>
                 </div>
-                <a className="btn btn-continue" href="#java">{t('continue_btn')}</a>
+                <a className="btn btn-continue" href="/courses/java">{t('continue_btn')}</a>
               </div>
             </article>
           </div>

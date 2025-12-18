@@ -51,6 +51,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='user')
     xp = db.Column(db.Integer, default=0)
+    coins = db.Column(db.Integer, default=0)
     avatar = db.Column(db.String(255), nullable=True)
     streak = db.Column(db.Integer, default=0)
 
@@ -68,7 +69,8 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     item_type = db.Column(db.String(50), nullable=False)  # e.g. 'avatar', 'theme'
-    price_xp = db.Column(db.Integer, nullable=False, default=0)
+    # Price in coins (column name in DB: price_coins)
+    price_coins = db.Column(db.Integer, nullable=False, default=0)
     asset_url = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
     is_available = db.Column(db.Boolean, nullable=False, default=True)
@@ -258,6 +260,7 @@ def get_user_data():
         "email": current_user.email,
         "role": current_user.role,
         "xp": current_user.xp or 0,
+        "coins": current_user.coins or 0,
         "lessons_count": len(current_user.lessons_completed),
         "level": level,
         "level_title": level_title,
@@ -330,6 +333,7 @@ def update_user_data():
         "email": current_user.email,
         "role": current_user.role,
         "xp": current_user.xp or 0,
+        "coins": current_user.coins or 0,
         "lessons_count": len(current_user.lessons_completed),
         "level": level,
         "level_title": level_title,
@@ -464,6 +468,9 @@ def complete_game(game_id):
     xp_to_add = min(xp_earned, xp_cap)
 
     current_user.xp = (current_user.xp or 0) + xp_to_add
+    # Coin logic: 2 XP -> 1 coin (integer division)
+    coins_to_add = xp_to_add // 2
+    current_user.coins = (current_user.coins or 0) + coins_to_add
 
     result = UserGameResult(
         user_id=current_user.id,
@@ -475,9 +482,11 @@ def complete_game(game_id):
     db.session.commit()
 
     return jsonify({
-        "message": f"You earned {xp_to_add} XP from {game.title}",
+        "message": f"You earned {xp_to_add} XP and {coins_to_add} coins from {game.title}",
         "xp_added": xp_to_add,
+        "coins_added": coins_to_add,
         "xp_total": current_user.xp,
+        "coins_total": current_user.coins,
         "game_id": game.game_id
     }), 200
 
@@ -605,26 +614,31 @@ def complete_lesson(lesson_id):
 
     if existing_progress:
         xp_to_add = repeat_xp
-        message = f"Lesson repeated! You earned {xp_to_add} XP."
         existing_progress.completed_at = datetime.now(timezone.utc)
         if hasattr(existing_progress, 'xp_earned'): existing_progress.xp_earned = xp_to_add
         if hasattr(existing_progress, 'lives_remaining'): existing_progress.lives_remaining = lives_remaining
     else:
         xp_to_add = base_xp
-        message = f"Lesson completed! You earned {xp_to_add} XP."
         new_progress = UserLessonProgress(user_id=current_user.id, lesson_id=lesson_id,
                                           completed_at=datetime.now(timezone.utc))
         if hasattr(new_progress, 'xp_earned'): new_progress.xp_earned = xp_to_add
         if hasattr(new_progress, 'lives_remaining'): new_progress.lives_remaining = lives_remaining
         db.session.add(new_progress)
 
+    # Coin logic: 2 XP -> 1 coin (integer division)
+    coins_to_add = xp_to_add // 2
     current_user.xp = (current_user.xp or 0) + xp_to_add
+    current_user.coins = (current_user.coins or 0) + coins_to_add
     db.session.commit()
 
     return jsonify({
-        "message": message,
+        "message": ("Lesson repeated! You earned {} XP and {} coins.".format(xp_to_add, coins_to_add)
+                    if existing_progress else
+                    "Lesson completed! You earned {} XP and {} coins.".format(xp_to_add, coins_to_add)),
         "xp_earned": xp_to_add,
-        "new_total_xp": current_user.xp
+        "coins_earned": coins_to_add,
+        "new_total_xp": current_user.xp,
+        "new_total_coins": current_user.coins
     }), 200
 
 
@@ -770,7 +784,7 @@ def get_shop_items():
             "id": item.id,
             "name": item.name,
             "item_type": item.item_type,
-            "price_xp": item.price_xp,
+            "price_coins": item.price_coins,
             "asset_url": item.asset_url,
             "description": item.description,
             "owned": item.id in owned_item_ids
@@ -801,13 +815,13 @@ def buy_shop_item():
         return jsonify(
             message="Item already owned",
             item_id=item.id,
-            xp=current_user.xp
+            coins=current_user.coins
         ), 200
 
-    if (current_user.xp or 0) < (item.price_xp or 0):
-        return jsonify(error="Not enough XP to buy this item"), 400
+    if (current_user.coins or 0) < (item.price_coins or 0):
+        return jsonify(error="Not enough coins to buy this item"), 400
 
-    current_user.xp = (current_user.xp or 0) - (item.price_xp or 0)
+    current_user.coins = (current_user.coins or 0) - (item.price_coins or 0)
 
     inventory_entry = UserInventory(
         user_id=current_user.id,
@@ -822,11 +836,11 @@ def buy_shop_item():
             "id": item.id,
             "name": item.name,
             "item_type": item.item_type,
-            "price_xp": item.price_xp,
+            "price_coins": item.price_coins,
             "asset_url": item.asset_url,
             "description": item.description,
         },
-        xp=current_user.xp
+        coins=current_user.coins
     ), 200
 
 

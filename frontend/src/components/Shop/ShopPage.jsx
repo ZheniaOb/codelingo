@@ -8,7 +8,7 @@ function ShopPage({ theme, setTheme }) {
 	const [equippedTheme, setEquippedTheme] = useState(theme);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const [userXp, setUserXp] = useState(null);
+	const [userCoins, setUserCoins] = useState(null);
 	const [currentAvatar, setCurrentAvatar] = useState(null);
 	const [showXpModal, setShowXpModal] = useState(false);
 	const [showEquipModal, setShowEquipModal] = useState(false);
@@ -61,7 +61,7 @@ function ShopPage({ theme, setTheme }) {
 		const token = localStorage.getItem("token");
 		if (!token) return;
 
-		const fetchUserXp = async () => {
+		const fetchUserCurrency = async () => {
 			try {
 				const response = await fetch("http://localhost:5001/api/me", {
 					headers: {
@@ -71,16 +71,16 @@ function ShopPage({ theme, setTheme }) {
 				});
 				if (!response.ok) return;
 				const data = await response.json();
-				setUserXp(typeof data.xp === "number" ? data.xp : 0);
+				setUserCoins(typeof data.coins === "number" ? data.coins : 0);
 				if (data && typeof data.avatar === "string") {
 					setCurrentAvatar(data.avatar);
 				}
 			} catch (e) {
-				console.error("Error fetching user XP for shop:", e);
+				console.error("Error fetching user currency for shop:", e);
 			}
 		};
 
-		fetchUserXp();
+		fetchUserCurrency();
 	}, []);
 
 	const handleEquipAvatar = (item) => {
@@ -127,7 +127,7 @@ function ShopPage({ theme, setTheme }) {
 				const data = await response.json().catch(() => ({}));
 				if (!response.ok) {
 					const message = data.error || "Failed to buy item";
-					if (message.toLowerCase().includes("not enough xp")) {
+					if (message.toLowerCase().includes("not enough coins")) {
 						setShowXpModal(true);
 					}
 					throw new Error(message);
@@ -145,7 +145,7 @@ function ShopPage({ theme, setTheme }) {
 			.catch((err) => {
 				console.error("Error buying item:", err);
 				const msg = err.message || "Failed to buy item";
-				if (!msg.toLowerCase().includes("not enough xp")) {
+				if (!msg.toLowerCase().includes("not enough coins")) {
 					setError(msg);
 				}
 			});
@@ -304,9 +304,9 @@ function ShopPage({ theme, setTheme }) {
 		}
 
 		if (sortBy === "price-asc") {
-			result.sort((a, b) => (a.price_xp || 0) - (b.price_xp || 0));
+			result.sort((a, b) => (a.price_coins || 0) - (b.price_coins || 0));
 		} else if (sortBy === "price-desc") {
-			result.sort((a, b) => (b.price_xp || 0) - (a.price_xp || 0));
+			result.sort((a, b) => (b.price_coins || 0) - (a.price_coins || 0));
 		} else if (sortBy === "name-asc") {
 			result.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 		}
@@ -340,16 +340,16 @@ function ShopPage({ theme, setTheme }) {
 					<div>
 						<h1 className="shop-title">Customization Shop</h1>
 						<p className="shop-subtitle">
-							Spend your XP to unlock new avatars and themes.
+							Spend your coins to unlock new avatars and themes.
 						</p>
 					</div>
 				</header>
 
 				<div className="shop-toolbar">
-					{userXp !== null && (
+					{userCoins !== null && (
 						<div className="shop-xp-pill">
-							<span className="shop-xp-label">Your XP</span>
-							<span className="shop-xp-value">{userXp}</span>
+							<span className="shop-xp-label">Your coins</span>
+							<span className="shop-xp-value">{userCoins}</span>
 						</div>
 					)}
 					<div className="shop-toolbar-controls">
@@ -409,7 +409,7 @@ function ShopPage({ theme, setTheme }) {
 									<p className="shop-item-description">{item.description}</p>
 									<div className="shop-card-footer">
 										<div className="shop-card-meta">
-											<span className="shop-price">{item.price_xp} XP</span>
+											<span className="shop-price">{item.price_coins} coins</span>
 											{ownedItems.has(item.id) && (
 												<span
 													className={`shop-owned-badge ${
@@ -458,7 +458,7 @@ function ShopPage({ theme, setTheme }) {
 									<p className="shop-item-description">{item.description}</p>
 									<div className="shop-card-footer">
 										<div className="shop-card-meta">
-											<span className="shop-price">{item.price_xp} XP</span>
+											<span className="shop-price">{item.price_coins} coins</span>
 											{ownedItems.has(item.id) && (
 												<span
 													className={`shop-owned-badge ${
@@ -535,9 +535,9 @@ function ShopPage({ theme, setTheme }) {
 						className="shop-modal"
 						onClick={(e) => e.stopPropagation()}
 					>
-						<h4 className="shop-modal-title">Not enough XP</h4>
+						<h4 className="shop-modal-title">Not enough coins</h4>
 						<p className="shop-modal-text">
-							You do not have enough XP to buy this item.
+							You do not have enough coins to buy this item.
 						</p>
 						<div className="shop-modal-actions">
 							<button

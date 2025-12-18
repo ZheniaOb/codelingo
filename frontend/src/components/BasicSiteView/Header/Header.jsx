@@ -32,7 +32,8 @@ const getInitialUserState = () => {
       username: usernameFromEmail(email),
       email: email || 'user@example.com',
       role: payload.role || 'user',
-      avatar: storedAvatar || '/img/small_logo.png'
+      avatar: storedAvatar || '/img/small_logo.png',
+      coins: 0
     };
   } catch (error) {
     console.error('Failed to parse token:', error);
@@ -75,7 +76,8 @@ const Header = ({ theme, setTheme }) => {
                 username: userData.email?.split('@')[0] || 'User', 
                 email: userData.email || 'user@example.com',
                 role: userData.role || payload.role || 'user',
-                avatar: userData.avatar || prev?.avatar || storedAvatar
+                avatar: userData.avatar || prev?.avatar || storedAvatar,
+                coins: typeof userData.coins === 'number' ? userData.coins : (prev?.coins ?? 0)
               }));
             } else {
               const storedEmail = localStorage.getItem('email');
@@ -84,7 +86,8 @@ const Header = ({ theme, setTheme }) => {
                 username: storedEmail?.split('@')[0] || 'User', 
                 email: storedEmail || 'user@example.com',
                 role: payload.role || 'user',
-                avatar: storedAvatar 
+                avatar: storedAvatar,
+                coins: 0
               });
             }
           } catch (apiError) {
@@ -94,7 +97,8 @@ const Header = ({ theme, setTheme }) => {
               username: storedEmail?.split('@')[0] || 'User', 
               email: storedEmail || 'user@example.com',
               role: payload.role || 'user',
-              avatar: storedAvatar
+              avatar: storedAvatar,
+              coins: 0
             });
           }
         } catch (err) {
@@ -111,6 +115,7 @@ const Header = ({ theme, setTheme }) => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUser(null);
+    setOpenMenu(null);
     navigate('/');
   };
 
@@ -133,26 +138,75 @@ const Header = ({ theme, setTheme }) => {
           style={theme !== 'light' ? { color: 'var(--color-text-primary)' } : {}}
         >
           <ul className="nav-list">
-            <li className="nav-item">
-              <Link className="nav-link" to="/courses">{t('nav_courses')}</Link>
+            {/* Learn dropdown */}
+            <li className="nav-item nav-dropdown">
+              <button
+                type="button"
+                className="nav-link nav-dropdown-trigger"
+                onClick={() => setOpenMenu(openMenu === 'learn' ? null : 'learn')}
+              >
+                Learn
+                <span className="nav-dropdown-caret">▾</span>
+              </button>
+              {openMenu === 'learn' && (
+                <ul className="nav-dropdown-menu">
+                  <li>
+                    <Link className="nav-dropdown-link" to="/courses" onClick={() => setOpenMenu(null)}>
+                      {t('nav_courses')}
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/minigames">{t('nav_minigames')}</Link>
+
+            {/* Play dropdown */}
+            <li className="nav-item nav-dropdown">
+              <button
+                type="button"
+                className="nav-link nav-dropdown-trigger"
+                onClick={() => setOpenMenu(openMenu === 'play' ? null : 'play')}
+              >
+                Play
+                <span className="nav-dropdown-caret">▾</span>
+              </button>
+              {openMenu === 'play' && (
+                <ul className="nav-dropdown-menu">
+                  <li>
+                    <Link className="nav-dropdown-link" to="/minigames" onClick={() => setOpenMenu(null)}>
+                      {t('nav_minigames')}
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/shop">Shop</Link>
+
+            {/* Community dropdown */}
+            <li className="nav-item nav-dropdown">
+              <button
+                type="button"
+                className="nav-link nav-dropdown-trigger"
+                onClick={() => setOpenMenu(openMenu === 'community' ? null : 'community')}
+              >
+                Community
+                <span className="nav-dropdown-caret">▾</span>
+              </button>
+              {openMenu === 'community' && (
+                <ul className="nav-dropdown-menu">
+                  <li>
+                    <Link className="nav-dropdown-link" to="/leaderboard" onClick={() => setOpenMenu(null)}>
+                      {t('nav_leaderboard')}
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </li>
+
+            {/* Shop as standalone CTA */}
             <li className="nav-item">
-              <Link className="nav-link" to="/progress">{t('nav_progress')}</Link>
+              <Link className="nav-link nav-link-shop" to="/shop">
+                Shop
+              </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/leaderboard">{t('nav_leaderboard')}</Link>
-            </li>
-            {user && user.role === 'admin' && (
-              <li className="nav-item">
-                <Link className="nav-link" to="/admin_panel">{t('nav_admin_panel')}</Link>
-              </li>
-            )}
           </ul>
         </nav>
 
@@ -173,16 +227,43 @@ const Header = ({ theme, setTheme }) => {
           /> 
 
           {user ? (
-            <>
-              <Link to="/profile" className="user-profile-trigger" title={t('profile_my_profile') || 'My Profile'}>
+            <div className="user-menu">
+              <button
+                type="button"
+                className="user-profile-trigger"
+                onClick={() => setOpenMenu(openMenu === 'user' ? null : 'user')}
+                title={t('profile_my_profile') || 'My Profile'}
+              >
                 <img 
                   src={user.avatar || '/img/small_logo.png'}
                   alt="Profile" 
                   className="user-profile-avatar-small"
                 />
-              </Link>
-              <button className="btn btn-ghost" onClick={handleLogout}>{t('nav_logout')}</button>
-            </>
+              </button>
+              {openMenu === 'user' && (
+                <div className="user-menu-dropdown">
+                  <div className="user-menu-balance">
+                    <span className="user-menu-balance-label">Coins</span>
+                    <span className="user-menu-balance-value">{user.coins ?? 0}</span>
+                  </div>
+                  <div className="user-menu-separator" />
+                  <Link to="/profile" className="user-menu-item" onClick={() => setOpenMenu(null)}>
+                    {t('profile_my_profile') || 'Profile'}
+                  </Link>
+                  <Link to="/progress" className="user-menu-item" onClick={() => setOpenMenu(null)}>
+                    {t('nav_progress')}
+                  </Link>
+                  {user.role === 'admin' && (
+                    <Link to="/admin_panel" className="user-menu-item" onClick={() => setOpenMenu(null)}>
+                      {t('nav_admin_panel')}
+                    </Link>
+                  )}
+                  <button type="button" className="user-menu-item user-menu-item-danger" onClick={handleLogout}>
+                    {t('nav_logout')}
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <>
               <Link className="auth-link auth-btn" to="/login">{t('nav_login')}</Link>

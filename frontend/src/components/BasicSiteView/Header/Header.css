@@ -50,6 +50,65 @@
 
 .nav-link:hover{background:rgba(0,0,0,0.03)}
 
+/* Dropdown navigation */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.nav-dropdown-caret {
+  font-size: 0.7rem;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
+  margin-top: 6px;
+  padding: 8px 0;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+  z-index: 50;
+  list-style: none;
+  padding-left: 0;
+}
+
+.nav-dropdown-link {
+  display: block;
+  padding: 8px 16px;
+  color: #0f172a;
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.nav-dropdown-link:hover {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+/* Shop as CTA */
+.nav-link-shop {
+  background: linear-gradient(180deg,var(--green-500), var(--green-400));
+  color:#fff;
+  font-weight:600;
+  box-shadow:0 8px 28px rgba(20,160,110,0.12);
+  transition: background .2s ease-in-out;
+}
+
+.nav-link-shop:hover {
+  background: linear-gradient(180deg, var(--color-accent-green), var(--color-accent-green));
+}
+
 /* Общий стиль для кнопок авторизации */
 .auth-btn {
   display: inline-flex;
@@ -174,4 +233,82 @@
   font-weight: 600; 
   color: #15b07a;   
   margin-right: 15px; 
+}
+
+/* User avatar dropdown */
+.user-menu {
+  position: relative;
+}
+
+.user-profile-trigger {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.user-profile-avatar-small {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+}
+
+.user-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  min-width: 200px;
+  padding: 8px 0;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+  z-index: 60;
+}
+
+.user-menu-balance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 6px;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.user-menu-balance-label {
+  opacity: 0.7;
+}
+
+.user-menu-balance-value {
+  font-weight: 600;
+  color: #0f172a; /* same as main text for softer look */
+}
+
+.user-menu-separator {
+  height: 1px;
+  margin: 4px 0 6px;
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.user-menu-item {
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #0f172a;
+  text-decoration: none;
+  display: block;
+}
+
+.user-menu-item:hover {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+.user-menu-item-danger {
+  color: #b91c1c;
 }

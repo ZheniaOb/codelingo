@@ -45,6 +45,7 @@ const LessonPage = () => {
   const [isGameOver, setIsGameOver] = useState(false); 
 
   const [xpEarned, setXpEarned] = useState(0);
+  const [coinsEarned, setCoinsEarned] = useState(0);
   const [completionMessage, setCompletionMessage] = useState("");
 
   useEffect(() => {
@@ -169,6 +170,11 @@ const LessonPage = () => {
 
         const data = await response.json();
         setXpEarned(data.xp_earned);
+        if (typeof data.coins_earned === "number") {
+          setCoinsEarned(data.coins_earned);
+        } else if (typeof data.xp_earned === "number") {
+          setCoinsEarned(Math.floor(data.xp_earned / 2));
+        }
         setCompletionMessage(data.message);
         setIsCompleted(true);
     } catch (err) {
@@ -234,6 +240,11 @@ const LessonPage = () => {
                     <h1>🎉 {completionMessage || t("lesson_completed")}</h1>
                         <div className="xp-reward">
                           <span className="xp-amount">+{xpEarned} XP</span>
+                          {coinsEarned > 0 && (
+                            <span className="xp-amount" style={{ marginTop: "0.5rem", fontSize: "1.1rem" }}>
+                              +{coinsEarned} coins
+                            </span>
+                          )}
                         </div>
                         <div className="stats-summary">
                           <p>{t("lesson_lives_remaining")} {lives}/3</p>
