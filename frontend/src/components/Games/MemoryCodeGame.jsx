@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./MiniGames.css";
 
 const API_URL = "http://localhost:5001/api";
@@ -13,6 +13,8 @@ export function MemoryCodeGame({ onComplete, onBack, language = 'javascript' }) 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const inputRef = useRef(null);
+
   useEffect(() => {
     loadNewTask();
   }, []);
@@ -25,6 +27,12 @@ export function MemoryCodeGame({ onComplete, onBack, language = 'javascript' }) 
       setPhase("input");
     }
   }, [phase, timer]);
+
+  useEffect(() => {
+    if (phase === "input" && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [phase]);
 
   const loadNewTask = async () => {
     try {
@@ -46,6 +54,18 @@ export function MemoryCodeGame({ onComplete, onBack, language = 'javascript' }) 
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const { selectionStart, selectionEnd } = e.target;
+      const newValue = userInput.substring(0, selectionStart) + "    " + userInput.substring(selectionEnd);
+      setUserInput(newValue);
+      setTimeout(() => {
+        e.target.selectionStart = e.target.selectionEnd = selectionStart + 4;
+      }, 0);
+    }
+  };
+
   const checkAnswer = () => {
     if (!currentTask) return;
     const correctCode = currentTask.task_data.code || "";
@@ -61,9 +81,25 @@ export function MemoryCodeGame({ onComplete, onBack, language = 'javascript' }) 
       setRound(round + 1);
       loadNewTask();
     } else {
-      const finalScore = score + (userInput.trim() === (currentTask?.task_data?.code || "").trim() ? (currentTask?.xp_reward || 50) : 0);
+      const isCorrect = userInput.trim() === (currentTask?.task_data?.code || "").trim();
+      const finalScore = score + (isCorrect ? (currentTask?.xp_reward || 50) : 0);
       onComplete(finalScore);
     }
+  };
+
+  const renderVisualFeedback = () => {
+    const targetCode = currentTask.task_data.code || "";
+    return userInput.split("").map((char, index) => {
+      const isCorrect = char === targetCode[index];
+      return (
+        <span
+          key={index}
+          className={isCorrect ? "char-correct" : "char-wrong"}
+        >
+          {char}
+        </span>
+      );
+    });
   };
 
   if (loading && !currentTask) {
@@ -129,13 +165,22 @@ export function MemoryCodeGame({ onComplete, onBack, language = 'javascript' }) 
           <div className="game-card">
             <h3>Type what you remember!</h3>
             <p className="text-center mb-6">Try to reproduce the code exactly as you saw it</p>
-            <textarea
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              className="game-textarea"
-              placeholder="Type the code here..."
-              autoFocus
-            />
+
+            <div className="game-textarea-wrapper" onClick={() => inputRef.current?.focus()}>
+              <div className="game-textarea-feedback">
+                {renderVisualFeedback()}
+                <span className="cursor-blink">|</span>
+              </div>
+              <textarea
+                ref={inputRef}
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="game-textarea-hidden"
+                placeholder="Type the code here..."
+              />
+            </div>
+
             <button
               onClick={checkAnswer}
               className="game-btn game-btn-primary w-full mt-6"
@@ -205,4 +250,3 @@ export function MemoryCodeGame({ onComplete, onBack, language = 'javascript' }) 
     </div>
   );
 }
-

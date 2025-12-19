@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 import '../../../css/styles.css';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../../LanguageSwitcher';
-import ThemeSwitcher from '../../ThemeSwitcher'; 
+import ThemeSwitcher from '../../ThemeSwitcher';
 
 const getInitialUserState = () => {
   const token = localStorage.getItem('token');
@@ -42,11 +42,13 @@ const getInitialUserState = () => {
   }
 };
 
-const Header = ({ theme, setTheme }) => { 
-  const { t } = useTranslation(); 
+const Header = ({ theme, setTheme }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(() => getInitialUserState());
-  const [openMenu, setOpenMenu] = useState(null); 
+  const [openMenu, setOpenMenu] = useState(null);
+  const [dailyAvailable, setDailyAvailable] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -60,7 +62,7 @@ const Header = ({ theme, setTheme }) => {
             setUser(null);
             return;
           }
-          
+
           try {
             const response = await fetch('http://localhost:5001/api/me', {
               headers: {
@@ -68,12 +70,12 @@ const Header = ({ theme, setTheme }) => {
                 'Content-Type': 'application/json'
               }
             });
-            
+
             if (response.ok) {
               const userData = await response.json();
               const storedAvatar = localStorage.getItem('avatar') || '/img/small_logo.png';
-              setUser(prev => ({ 
-                username: userData.email?.split('@')[0] || 'User', 
+              setUser(prev => ({
+                username: userData.email?.split('@')[0] || 'User',
                 email: userData.email || 'user@example.com',
                 role: userData.role || payload.role || 'user',
                 avatar: userData.avatar || prev?.avatar || storedAvatar,
@@ -82,19 +84,33 @@ const Header = ({ theme, setTheme }) => {
             } else {
               const storedEmail = localStorage.getItem('email');
               const storedAvatar = localStorage.getItem('avatar') || '/img/small_logo.png';
-              setUser({ 
-                username: storedEmail?.split('@')[0] || 'User', 
+              setUser({
+                username: storedEmail?.split('@')[0] || 'User',
                 email: storedEmail || 'user@example.com',
                 role: payload.role || 'user',
                 avatar: storedAvatar,
                 coins: 0
               });
             }
+
+            const dailyRes = await fetch('http://localhost:5001/api/daily-challenge', {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            if (dailyRes.ok) {
+              const dailyData = await dailyRes.json();
+              setDailyAvailable(!dailyData.completed);
+            } else {
+              setDailyAvailable(false);
+            }
+
           } catch (apiError) {
             const storedEmail = localStorage.getItem('email');
             const storedAvatar = localStorage.getItem('avatar') || '/img/small_logo.png';
-            setUser({ 
-              username: storedEmail?.split('@')[0] || 'User', 
+            setUser({
+              username: storedEmail?.split('@')[0] || 'User',
               email: storedEmail || 'user@example.com',
               role: payload.role || 'user',
               avatar: storedAvatar,
@@ -106,16 +122,20 @@ const Header = ({ theme, setTheme }) => {
           localStorage.removeItem('token');
           setUser(null);
         }
+      } else {
+        setUser(null);
+        setDailyAvailable(false);
       }
     };
-    
+
     fetchUserData();
-  }, []);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUser(null);
     setOpenMenu(null);
+    setDailyAvailable(false);
     navigate('/');
   };
 
@@ -123,17 +143,17 @@ const Header = ({ theme, setTheme }) => {
     <header className="site-header">
       <div className="container header-inner">
         <Link to="/" className="brand">
-          <img 
-            src="/img/big_logo.png" 
-            alt="logo" 
-            className="brand-logo" 
+          <img
+            src="/img/big_logo.png"
+            alt="logo"
+            className="brand-logo"
             style={theme === 'dark' ? { filter: 'brightness(0.7) saturate(0.95)' } : {}}
           />
           <span className="brand-title">Codelingo</span>
         </Link>
 
-        <nav 
-          className="main-nav" 
+        <nav
+          className="main-nav"
           aria-label={t('nav_main_aria')}
           style={theme !== 'light' ? { color: 'var(--color-text-primary)' } : {}}
         >
@@ -211,6 +231,51 @@ const Header = ({ theme, setTheme }) => {
         </nav>
 
         <div className="auth-controls">
+
+          {user && (
+            <Link
+              to="/daily-challenge"
+              className="btn-icon-daily"
+              title="Daily Challenge"
+              style={{
+                background: '#ecfdf5',
+                border: '1px solid #10b981',
+                color: '#065f46',
+                fontSize: '1.5rem',
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                marginRight: '10px',
+                textDecoration: 'none'
+              }}
+            >
+              📅
+              {dailyAvailable && (
+                <span style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-5px',
+                  background: '#ef4444',
+                  color: 'white',
+                  fontSize: '10px',
+                  fontWeight: 'bold',
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '2px solid #fff'
+                }}>!</span>
+              )}
+            </Link>
+          )}
+
           <ThemeSwitcher
             className="square-switcher-btn"
             theme={theme}
@@ -224,7 +289,7 @@ const Header = ({ theme, setTheme }) => {
             isOpen={openMenu === 'language'}
             onToggle={() => setOpenMenu(openMenu === 'language' ? null : 'language')}
             onClose={() => setOpenMenu(null)}
-          /> 
+          />
 
           {user ? (
             <div className="user-menu">
@@ -234,9 +299,9 @@ const Header = ({ theme, setTheme }) => {
                 onClick={() => setOpenMenu(openMenu === 'user' ? null : 'user')}
                 title={t('profile_my_profile') || 'My Profile'}
               >
-                <img 
+                <img
                   src={user.avatar || '/img/small_logo.png'}
-                  alt="Profile" 
+                  alt="Profile"
                   className="user-profile-avatar-small"
                 />
               </button>

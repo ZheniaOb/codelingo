@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./MiniGames.css";
 
 const API_URL = "http://localhost:5001/api";
@@ -12,9 +12,17 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
   const [error, setError] = useState(null);
   const [showResult, setShowResult] = useState(false);
 
+  const inputRef = useRef(null);
+
   useEffect(() => {
     loadNewTask();
   }, []);
+
+  useEffect(() => {
+    if (!showResult && !loading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [showResult, loading]);
 
   const loadNewTask = async () => {
     try {
@@ -32,6 +40,18 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
     } catch (err) {
       setError(err.message);
       setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const { selectionStart, selectionEnd } = e.target;
+      const newValue = userInput.substring(0, selectionStart) + "    " + userInput.substring(selectionEnd);
+      setUserInput(newValue);
+      setTimeout(() => {
+        e.target.selectionStart = e.target.selectionEnd = selectionStart + 4;
+      }, 0);
     }
   };
 
@@ -53,6 +73,21 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
       const finalScore = score + (userInput.trim() === (currentTask?.task_data?.refactored_code || "").trim() ? (currentTask?.xp_reward || 50) : 0);
       onComplete(finalScore);
     }
+  };
+
+  const renderVisualFeedback = () => {
+    const targetCode = currentTask.task_data.refactored_code || "";
+    return userInput.split("").map((char, index) => {
+      const isCorrect = char === targetCode[index];
+      return (
+        <span
+          key={index}
+          className={isCorrect ? "char-correct" : "char-wrong"}
+        >
+          {char}
+        </span>
+      );
+    });
   };
 
   if (loading && !currentTask) {
@@ -113,13 +148,20 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
             </div>
             <div className="mb-6">
               <p className="mb-3 font-semibold" style={{ color: '#374151' }}>Your refactored code:</p>
-              <textarea
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                className="game-textarea"
-                placeholder="Write your refactored code here..."
-                autoFocus
-              />
+              <div className="game-textarea-wrapper" onClick={() => inputRef.current?.focus()}>
+                <div className="game-textarea-feedback">
+                  {renderVisualFeedback()}
+                  <span className="cursor-blink">|</span>
+                </div>
+                <textarea
+                  ref={inputRef}
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="game-textarea-hidden"
+                  placeholder="Write your refactored code here..."
+                />
+              </div>
             </div>
             <button
               onClick={checkAnswer}

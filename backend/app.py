@@ -1,8 +1,9 @@
 import os
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 import jwt
 import bcrypt
+import random
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -63,6 +64,12 @@ class User(db.Model):
     def check_password(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
 
+class DailyChallengeStatus(db.Model):
+    __tablename__ = 'daily_challenge_status'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    completed = db.Column(db.Boolean, default=False)
 
 class Item(db.Model):
     __tablename__ = 'items'
@@ -843,6 +850,131 @@ def buy_shop_item():
         coins=current_user.coins
     ), 200
 
+@app.route('/api/daily-challenge', methods=['GET'])
+def get_daily_challenge():
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp:
+        return err_resp, code
+
+    today = date.today()
+
+    status = DailyChallengeStatus.query.filter_by(user_id=current_user.id, date=today).first()
+    if status and status.completed:
+        return jsonify({"completed": True, "tasks": []}), 200
+
+    today_str = today.strftime('%Y-%m-%d')
+    seed_val = f"{current_user.id}-{today_str}"
+    random.seed(seed_val)
+
+    all_exercises = Exercise.query.all()
+    all_game_tasks = GameTask.query.all()
+
+    print(f"DEBUG: Znaleziono {len(all_exercises)} zadań z lekcji i {len(all_game_tasks)} zadań z minigier.")
+
+    combined_pool = []
+
+    for ex in all_exercises:
+        final_options = []
+        is_multiple_choice = False
+        raw_options = ex.options
+
+        if isinstance(raw_options, str):
+            try:
+                parsed = json.loads(raw_options.replace("'", '"'))
+                raw_options = parsed
+            except:
+                raw_options = None
+
+        if isinstance(raw_options, dict):
+            for key in sorted(raw_options.keys()):
+                final_options.append({"key": key, "text": str(raw_options[key])})
+            is_multiple_choice = True
+        elif isinstance(raw_options, list):
+            letters = ['a', 'b', 'c', 'd', 'e', 'f']
+            for i, opt in enumerate(raw_options):
+                key = letters[i] if i < len(letters) else str(i)
+                final_options.append({"key": key, "text": str(opt)})
+            is_multiple_choice = True
+
+        combined_pool.append({
+            "id": f"ex_{ex.id}",
+            "question": ex.question,
+            "options": final_options,
+            "type": "multiple_choice" if is_multiple_choice else "text",
+            "context": None,
+            "answer": ex.answer
+        })
+
+    for gt in all_game_tasks:
+        t_data = gt.task_data
+        if not t_data:
+            continue
+
+        task_type = "code"
+        question = "Solve the task"
+        context = None
+        answer = ""
+
+        t_type_str = str(gt.task_type).lower() if gt.task_type else ""
+
+        if 'refactor' in t_type_str:
+            question = t_data.get('instruction', 'Refactor the code')
+            context = t_data.get('bad_code', '')
+            answer = t_data.get('refactored_code', '')
+        elif 'memory' in t_type_str:
+            question = "Rewrite the code exactly"
+            context = t_data.get('code', '')
+            answer = t_data.get('code', '')
+        else:
+            question = "Solve this task"
+            answer = str(t_data)
+
+        if answer:
+            combined_pool.append({
+                "id": f"gt_{gt.id}",
+                "question": question,
+                "options": [],
+                "type": task_type,
+                "context": context,
+                "answer": answer
+            })
+
+    if not combined_pool:
+        print("DEBUG: Pula zadań jest pusta!")
+        return jsonify(error="No tasks available"), 404
+
+    count = min(len(combined_pool), 5)
+    selected_tasks = random.sample(combined_pool, count)
+
+    return jsonify({"completed": False, "tasks": selected_tasks}), 200
+
+@app.route('/api/daily-challenge/complete-task', methods=['POST'])
+def complete_daily_task():
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp: return err_resp, code
+
+    reward = 50
+    current_user.xp = (current_user.xp or 0) + reward
+    db.session.commit()
+    return jsonify({"message": "Task completed", "xp_earned": reward, "total_xp": current_user.xp}), 200
+
+
+@app.route('/api/daily-challenge/finish', methods=['POST'])
+def finish_daily_challenge():
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp: return err_resp, code
+
+    today = date.today()
+    status = DailyChallengeStatus.query.filter_by(user_id=current_user.id, date=today).first()
+
+    if not status:
+        status = DailyChallengeStatus(user_id=current_user.id, date=today, completed=True)
+        db.session.add(status)
+    else:
+        status.completed = True
+
+    db.session.commit()
+    return jsonify({"message": "Daily challenge finished"}), 200
 
 # --- 5. RUN SERVER ---
 if __name__ == '__main__':
