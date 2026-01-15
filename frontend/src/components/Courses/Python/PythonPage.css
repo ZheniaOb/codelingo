@@ -3,39 +3,38 @@
   --color-bg-secondary: #f7f7f7;
   --color-text-primary: #0d1e26;
   --color-text-secondary: #374151;
-  --color-accent: #22D3EE;
-  --color-accent-soft: #BAE6FD;
+  --color-accent: #3b82f6;
+  --color-accent-soft: #93c5fd;
   --color-border: rgba(33, 37, 41, 0.1);
-  --color-on-accent: #0d1e26;
+  --color-on-accent: #ffffff;
 
-  --py-mint: #6EE7B7;
-  --py-mint-soft: #A7F3D0;
-  --py-teal: #22D3EE;
-  --py-teal-soft: #BAE6FD;
-  --py-bg-top: #ECFEFF;
-  --py-bg-bottom: #F0FDF4;
+  --py-mint: #3b82f6;
+  --py-mint-soft: #60a5fa;
+  --py-teal: #06b6d4;
+  --py-teal-soft: #67e8f9;
+  --py-bg-top: #eff6ff;
+  --py-bg-bottom: #f0f9ff;
 }
 
-.dark-theme {
-  --color-bg-primary: #12161f;
-  --color-bg-secondary: #212835;
-  --color-text-primary: #ededed;
-  --color-text-secondary: #a0a8b5;
-  --color-accent: #10B981;
-  --color-accent-soft: #059669;
-  --color-border: rgba(255, 255, 255, 0.1);
+.python-page.dark-theme {
+  --color-bg-primary: #1a1f2e;
+  --color-bg-secondary: #252b3d;
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #b8bcc8;
+  --color-accent: #34d399;
+  --color-accent-soft: #6ee7b7;
+  --color-border: rgba(255, 255, 255, 0.15);
   --color-on-accent: #ffffff;
 
   --py-mint: #34d399;
-  --py-mint-soft: #059669;
-  --py-teal: #0EA5E9;
-  --py-teal-soft: #38bdf8;
-  --py-bg-top: #1a202c;
-  --py-bg-bottom: #2d3748;
-  
+  --py-mint-soft: #6ee7b7;
+  --py-teal: #5eead4;
+  --py-teal-soft: #99f6e4;
+  --py-bg-top: #0f1419;
+  --py-bg-bottom: #1a1f2e;
 }
 
-.pink-theme {
+.python-page.pink-theme {
   --color-bg-primary: #fefefe;
   --color-bg-secondary: #fce4ec;
   --color-text-primary: #880e4f;
@@ -231,14 +230,14 @@
   font-size:14px;
   font-weight:700;
   letter-spacing:.8px;
-  color:#059669;
+  color:var(--py-mint);
   opacity:1;
 }
 .path-title .theme-name{
   font-size:20px;
   font-weight:800;
   letter-spacing:.6px;
-  color:#0d1e26;
+  color:var(--color-text-primary);
 }
 
 

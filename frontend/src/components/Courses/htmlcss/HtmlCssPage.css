@@ -7,6 +7,20 @@
   --htmlcss-bg-bottom:#EFF4FF;
 }
 
+.dark-theme {
+  --htmlcss-steel: #94a3b8;
+  --htmlcss-steel-soft: #475569;
+  --htmlcss-azure: #3b82f6;
+  --htmlcss-azure-soft: #60a5fa;
+  --htmlcss-bg-top: #0f1419;
+  --htmlcss-bg-bottom: #1a1f2e;
+}
+
+.pink-theme {
+  --htmlcss-bg-top: #fff0f6;
+  --htmlcss-bg-bottom: #fce4ec;
+}
+
 /* Страница HTML/CSS — светлая, как Python/JS */
 .htmlcss-page{
   font-family:'Segoe UI',Tahoma,Verdana,sans-serif;
@@ -64,19 +78,19 @@
   line-height:1.25;
   letter-spacing:.2px;
   font-weight:800;
-  color:#0F172A;
+  color:var(--color-text-primary, #0F172A);
 }
 .htmlcss-path-title .htmlcss-theme-index{
   font-size:14px;
   font-weight:700;
   letter-spacing:.8px;
-  color:#0EA5E9; /* лазурный акцент */
+  color:var(--htmlcss-azure); /* лазурный акцент */
 }
 .htmlcss-path-title .htmlcss-theme-name{
   font-size:20px;
   font-weight:800;
   letter-spacing:.6px;
-  color:#111827;
+  color:var(--color-text-primary, #111827);
 }
 
 /* Колонка с кружками */

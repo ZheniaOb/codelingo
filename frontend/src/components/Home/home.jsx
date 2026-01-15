@@ -60,14 +60,15 @@ function Home({ theme, toggleTheme }) {
   const currentStreak = userData?.streak || 0;
 
   return (
-    <div>
+    <div className={`home-wrapper ${theme}`}>
+      {theme === 'dark' && <div className="matrix-rain-container"></div>}
 
       <main>
         <section className="hero container" id="home">
           <div className="hero-content">
             <h1 className="hero-title">{t('hero_title')}</h1>
             <p className="hero-subtitle">{t('hero_subtitle')}</p>
-            <a className="btn btn-cta" href="#get-started">{t('get_started_btn')}</a >
+            <a className="btn btn-cta" href="/courses">{t('get_started_btn')}</a >
           </div>
 
           <div className="hero-media">

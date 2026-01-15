@@ -12,7 +12,26 @@ const PythonPage = () => {
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentTheme, setCurrentTheme] = useState("light"); 
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  }); 
+
+  useEffect(() => {
+    // Проверяем тему при монтировании и обновлении
+    const checkTheme = () => {
+      const theme = localStorage.getItem('theme');
+      if (theme && theme !== currentTheme) {
+        setCurrentTheme(theme);
+      }
+    };
+    
+    checkTheme();
+    const interval = setInterval(checkTheme, 500);
+    
+    return () => {
+      clearInterval(interval);
+    };
+  }, [currentTheme]);
 
   useEffect(() => {
     fetchCourseData();

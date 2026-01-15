@@ -85,10 +85,9 @@
   grid-template-columns:repeat(3,1fr);
   gap:20px;
   align-items:stretch;
-  background:linear-gradient(90deg, rgba(16,185,129,0.05), rgba(52,211,153,0.03));
+  background:transparent;
   padding:20px;
   border-radius:18px;
-  box-shadow:0 10px 30px rgba(10,30,20,0.03);
 }
 
 @media (max-width: 768px) {
@@ -186,7 +185,7 @@
 }
 
 
-.languages-section{ padding:48px 0 80px; }
+.languages-section{ padding:48px 0 40px; }
 .languages-header{ margin-bottom:28px; text-align:center; }
 .languages-title{ font-size:32px; margin:0 0 8px; color: var(--green-500); font-weight:600; }
 .languages-subtitle{ color:var(--color-text-secondary); margin:0; }
@@ -232,16 +231,6 @@
   }
 }
 
-.card-bg-overlay{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(135deg, rgba(16,185,129,0.06), rgba(52,211,153,0.03));
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .28s ease;
-}
-.language-card:hover .card-bg-overlay{ opacity:1; }
-
 .language-icon{
   width:64px;
   height:64px;
@@ -249,7 +238,7 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  margin-bottom:14px;
+  margin:0 auto 14px;
   box-shadow:0 8px 22px rgba(6,30,18,0.05);
   flex-shrink:0;
 }
@@ -315,7 +304,7 @@
 .btn-continue:hover{ opacity:0.93; transform:translateY(-2px); }
 
 
-.how-section{ padding:56px 0; }
+.how-section{ padding:40px 0; }
 .how-header{ text-align:center; margin-bottom:28px; }
 .how-title{ font-size:32px; margin:0 0 8px; color: var(--green-500); font-weight:600; }
 .how-sub{ color:var(--color-text-secondary); margin:0; }
@@ -335,7 +324,7 @@
   right:5%;
   top:40%;
   height:2px;
-  background:linear-gradient(90deg, rgba(16,185,129,0.08), rgba(52,211,153,0.06), rgba(5,150,105,0.06));
+  background:var(--color-border);
   z-index:0;
   border-radius:2px;
   pointer-events:none;
@@ -402,4 +391,58 @@
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+
+/* Matrix Rain Effect for Dark Theme */
+.home-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+.matrix-rain-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.matrix-rain-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 20%, var(--green-500) 0%, transparent 20%),
+    radial-gradient(circle at 80% 80%, var(--green-400) 0%, transparent 20%),
+    radial-gradient(circle at 40% 40%, var(--green-500) 0%, transparent 20%),
+    radial-gradient(circle at 60% 60%, var(--green-400) 0%, transparent 20%),
+    radial-gradient(circle at 90% 10%, var(--green-500) 0%, transparent 20%),
+    radial-gradient(circle at 30% 70%, var(--green-400) 0%, transparent 20%),
+    radial-gradient(circle at 70% 30%, var(--green-500) 0%, transparent 20%);
+  animation: matrix-rain 20s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes matrix-rain {
+  0% { 
+    background-position: 
+      10% -100%, 80% -100%, 40% -100%, 60% -100%, 
+      90% -100%, 30% -100%, 70% -100%;
+  }
+  100% { 
+    background-position: 
+      10% 200%, 80% 200%, 40% 200%, 60% 200%, 
+      90% 200%, 30% 200%, 70% 200%;
+  }
+}
+
+.home-wrapper main {
+  position: relative;
+  z-index: 1;
 }

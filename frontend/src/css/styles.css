@@ -15,7 +15,7 @@ html,body{height:100%}
 body{
   font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--color-text-primary);
-  background:linear-gradient(180deg,var(--color-bg-secondary) 0%, var(--color-bg-primary) 60%);
+  background:var(--color-bg-primary);
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   line-height:1.45;

@@ -6,13 +6,26 @@
   --js-bg-bottom:#FFF7D0;
 }
 
+.dark-theme {
+  --js-main: #fbbf24;
+  --js-main-soft: #fcd34d;
+  --js-dark: #78716c;
+  --js-bg-top: #0f1419;
+  --js-bg-bottom: #1a1f2e;
+}
+
+.pink-theme {
+  --js-bg-top: #fff0f6;
+  --js-bg-bottom: #fce4ec;
+}
+
 /* Страница JS */
 .js-page{
   font-family:'Segoe UI',Tahoma,Verdana,sans-serif;
   background:
     radial-gradient(circle at 20px 20px, rgba(148,163,184,0.05) 1px, transparent 0),
     radial-gradient(circle at 60px 60px, rgba(148,163,184,0.03) 1px, transparent 0),
-    linear-gradient(180deg,#FFFDF2,#FFFDF2);
+    linear-gradient(180deg, var(--js-bg-top), var(--js-bg-bottom));
   background-size:80px 80px, 120px 120px, 100% 100%;
   min-height:100vh;
   display:flex;
@@ -61,19 +74,19 @@
   line-height:1.25;
   letter-spacing:.2px;
   font-weight:800;
-  color:#111827;
+  color:var(--color-text-primary, #111827);
 }
 .js-page .js-path-title .js-theme-index{
   font-size:14px;
   font-weight:700;
   letter-spacing:.8px;
-  color:#92400E;
+  color:var(--js-main);
 }
 .js-page .js-path-title .js-theme-name{
   font-size:20px;
   font-weight:800;
   letter-spacing:.6px;
-  color:#111827;
+  color:var(--color-text-primary, #111827);
 }
 
 /* Колонка с кружками */

@@ -4,8 +4,23 @@
   --java-navy:#1E293B;
   --java-navy-soft:#E0F2FE;
   --java-accent:#EF4444;      /* яркий красный для экзамена */
-  --java-bg-top:#0F172A;      /* тёмно-синий сверху */
-  --java-bg-bottom:#111827;   /* ещё темнее снизу */
+  --java-bg-top:#f8efff;      /* светлый фон */
+  --java-bg-bottom:#f8efff;
+}
+
+.dark-theme {
+  --java-burgundy: #dc2626;
+  --java-burgundy-soft: #ef4444;
+  --java-navy: #64748b;
+  --java-navy-soft: #94a3b8;
+  --java-accent: #f97316;
+  --java-bg-top: #0f1419;
+  --java-bg-bottom: #1a1f2e;
+}
+
+.pink-theme {
+  --java-bg-top: #fff0f6;
+  --java-bg-bottom: #fce4ec;
 }
 
 /* Страница Java — светлый, как Python */
@@ -14,7 +29,7 @@
   background:
     radial-gradient(circle at 20px 20px, rgba(148,163,184,0.08) 1px, transparent 0),
     radial-gradient(circle at 60px 60px, rgba(148,163,184,0.05) 1px, transparent 0),
-    linear-gradient(180deg,#f8efff,#f8efff); /* светлый голубовато‑серый */
+    linear-gradient(180deg, var(--java-bg-top), var(--java-bg-bottom));
   background-size:80px 80px, 120px 120px, 100% 100%;
   min-height:100vh;
   display:flex;
@@ -65,20 +80,20 @@
   line-height:1.25;
   letter-spacing:.2px;
   font-weight:800;
-  color:#F9FAFB;
+  color:var(--color-text-primary, #F9FAFB);
 }
 .java-path-title .java-theme-index{
   font-size:14px;
   font-weight:700;
   letter-spacing:.8px;
-  color:#F97373; /* бордовый акцент */
+  color:var(--java-accent); /* бордовый акцент */
   opacity:1;
 }
 .java-path-title .java-theme-name{
   font-size:20px;
   font-weight:800;
   letter-spacing:.6px;
-  color:#000000;
+  color:var(--color-text-primary, #000000);
 }
 
 /* Колонка с кружками (клон path-column) */
