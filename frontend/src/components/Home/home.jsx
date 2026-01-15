@@ -19,7 +19,7 @@ const getRobotContainerStyle = (theme) => {
   const baseStyle = { transition: 'filter 0.5s ease, background-color 0.5s ease' };
   const transparentBackground = { backgroundColor: 'transparent' };
 
-  // Здесь может быть дополнительная логика фильтрации, но мы оставим ее чистой
+  // Tutaj może być dodatkowa logika filtrowania, ale zostawiamy ją czystą
   return { ...baseStyle, ...transparentBackground };
 };
 

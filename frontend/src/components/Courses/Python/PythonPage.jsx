@@ -17,7 +17,7 @@ const PythonPage = () => {
   }); 
 
   useEffect(() => {
-    // Проверяем тему при монтировании и обновлении
+    // Sprawdzamy motyw przy montowaniu i aktualizacji
     const checkTheme = () => {
       const theme = localStorage.getItem('theme');
       if (theme && theme !== currentTheme) {

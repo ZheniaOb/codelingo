@@ -260,7 +260,7 @@ def get_user_data():
     level_title = level_titles.get(level, f"Level {level}")
     next_level_title = level_titles.get(level + 1, f"Level {level + 1}")
 
-    # Возвращаем расширенные данные профиля
+    # Zwracamy rozszerzone dane profilu
     return jsonify({
         "id": current_user.id,
         "username": current_user.username,

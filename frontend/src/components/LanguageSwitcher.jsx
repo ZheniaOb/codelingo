@@ -5,8 +5,8 @@ import '../css/LanguageSwitcher.css';
 const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
   { code: 'pl', name: 'Polski', flag: '🇵🇱' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'uk', name: 'Українська', flag: '🇺🇦' },
+  { code: 'ru', name: 'Rosyjski', flag: '🇷🇺' },
+  { code: 'uk', name: 'Ukraiński', flag: '🇺🇦' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
   { code: 'zh', name: '中文', flag: '🇨🇳' },
