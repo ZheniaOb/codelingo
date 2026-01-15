@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
-from google import genai
+import google.generativeai as genai
 
 # --- 1. CONFIGURATION ---
 print("Starting backend...")
@@ -26,8 +26,9 @@ db = SQLAlchemy(app)
 print("Connecting to database...")
 
 try:
-    client = genai.Client(api_key="AIzaSyDqoQJOl0KEknJT5bJcYjgIGhn9HTp7NBo")
-    AI_MODEL = "gemini-2.5-flash-lite"
+    genai.configure(api_key="AIzaSyDqoQJOl0KEknJT5bJcYjgIGhn9HTp7NBo")
+    AI_MODEL = "gemini-2.0-flash-exp"
+    client = True  # Flag indicating AI is configured
 except Exception as e:
     print(f"AI Config Error: {e}")
     client = None
@@ -1019,7 +1020,8 @@ def get_ai_hint():
     )
 
     try:
-        response = client.models.generate_content(model=AI_MODEL, contents=prompt)
+        model = genai.GenerativeModel(AI_MODEL)
+        response = model.generate_content(prompt)
         return jsonify(hint=response.text.replace("*", "").strip())
     except Exception as e:
         return jsonify(error=str(e)), 500
@@ -1057,7 +1059,8 @@ def get_ai_feedback():
         )
 
     try:
-        response = client.models.generate_content(model=AI_MODEL, contents=prompt)
+        model = genai.GenerativeModel(AI_MODEL)
+        response = model.generate_content(prompt)
         return jsonify(feedback=response.text.replace("*", "").strip())
     except Exception as e:
         return jsonify(error=str(e)), 500
