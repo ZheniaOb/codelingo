@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from 'react-i18next';
 import "./MiniGames.css";
 
 const API_URL = "http://localhost:5001/api";
 
 export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }) {
+  const { i18n } = useTranslation();
   const [currentTask, setCurrentTask] = useState(null);
   const [userInput, setUserInput] = useState("");
   const [score, setScore] = useState(0);
@@ -11,6 +13,11 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showResult, setShowResult] = useState(false);
+
+  const [hint, setHint] = useState(null);
+  const [isHintLoading, setIsHintLoading] = useState(false);
+  const [aiFeedback, setAiFeedback] = useState(null);
+  const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
 
   const inputRef = useRef(null);
 
@@ -28,6 +35,8 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
     try {
       setLoading(true);
       setError(null);
+      setHint(null);
+      setAiFeedback(null);
       const response = await fetch(`${API_URL}/games/refactor-rush/tasks/random?language=${language}`);
       if (!response.ok) {
         throw new Error("Failed to load task");
@@ -40,6 +49,49 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
     } catch (err) {
       setError(err.message);
       setLoading(false);
+    }
+  };
+
+  const getHint = async () => {
+    if (!currentTask || isHintLoading) return;
+    setIsHintLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/ai/hint`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: currentTask.task_data.bad_code,
+          language: i18n.language,
+          game_type: 'refactor'
+        })
+      });
+      const data = await response.json();
+      setHint(data.hint);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsHintLoading(false);
+    }
+  };
+
+  const getFeedback = async (userCode, correctCode) => {
+    setIsFeedbackLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/ai/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_code: userCode,
+          correct_code: correctCode,
+          language: i18n.language
+        })
+      });
+      const data = await response.json();
+      setAiFeedback(data.feedback);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsFeedbackLoading(false);
     }
   };
 
@@ -61,6 +113,8 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
     const isCorrect = userInput.trim() === correctCode.trim();
     if (isCorrect) {
       setScore(score + (currentTask.xp_reward || 50));
+    } else {
+      getFeedback(userInput, correctCode);
     }
     setShowResult(true);
   };
@@ -70,7 +124,8 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
       setRound(round + 1);
       loadNewTask();
     } else {
-      const finalScore = score + (userInput.trim() === (currentTask?.task_data?.refactored_code || "").trim() ? (currentTask?.xp_reward || 50) : 0);
+      const isCorrect = userInput.trim() === (currentTask?.task_data?.refactored_code || "").trim();
+      const finalScore = score + (isCorrect ? (currentTask?.xp_reward || 50) : 0);
       onComplete(finalScore);
     }
   };
@@ -163,9 +218,27 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
                 />
               </div>
             </div>
+
+            <div className="hint-section">
+                {!hint && (
+                    <button
+                        onClick={getHint}
+                        className="hint-btn"
+                        disabled={isHintLoading}
+                    >
+                        {isHintLoading ? "Analyzing..." : "🤖 Hint"}
+                    </button>
+                )}
+                {hint && (
+                    <div className="ai-message-box hint-box">
+                        <strong>🤖 AI Explanation:</strong> {hint}
+                    </div>
+                )}
+            </div>
+
             <button
               onClick={checkAnswer}
-              className="game-btn game-btn-primary w-full"
+              className="game-btn game-btn-primary w-full mt-6"
             >
               ✓ Check Answer
             </button>
@@ -184,10 +257,18 @@ export function RefactorRushGame({ onComplete, onBack, language = 'javascript' }
               <div className="result-error">
                 <div className="result-error-icon">❌</div>
                 <h3 style={{ color: '#ef4444', marginBottom: '1rem' }}>Not quite right!</h3>
-                <p style={{ color: '#6b7280', marginBottom: '2rem' }}>Keep practicing! Check the solution below.</p>
+                <div className="ai-message-box error-box">
+                    {isFeedbackLoading ? (
+                        <span>🤖 Analyzing your mistake...</span>
+                    ) : (
+                        <span>
+                            <strong>🤖 AI Advice:</strong> {aiFeedback || "Check the solution below."}
+                        </span>
+                    )}
+                </div>
               </div>
             )}
-            <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="grid md:grid-cols-2 gap-4 mb-6 mt-4">
               <div>
                 <p className="mb-3 font-semibold" style={{ color: '#374151' }}>Expected:</p>
                 <div className="code-block">

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import "./MiniGames.css";
 
 const API_URL = "http://localhost:5001/api";
 
 export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }) {
+  const { i18n } = useTranslation();
   const [currentTask, setCurrentTask] = useState(null);
   const [selectedVariable, setSelectedVariable] = useState("");
   const [score, setScore] = useState(0);
@@ -11,6 +13,11 @@ export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showResult, setShowResult] = useState(false);
+
+  const [hint, setHint] = useState(null);
+  const [isHintLoading, setIsHintLoading] = useState(false);
+  const [aiFeedback, setAiFeedback] = useState(null);
+  const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
 
   useEffect(() => {
     loadNewTask();
@@ -20,6 +27,8 @@ export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }
     try {
       setLoading(true);
       setError(null);
+      setHint(null);
+      setAiFeedback(null);
       const response = await fetch(`${API_URL}/games/variable-hunt/tasks/random?language=${language}`);
       if (!response.ok) {
         throw new Error("Failed to load task");
@@ -35,12 +44,58 @@ export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }
     }
   };
 
+  const getHint = async () => {
+    if (!currentTask || isHintLoading) return;
+    setIsHintLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/ai/hint`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: currentTask.task_data.code,
+          language: i18n.language,
+          game_type: 'variable_hunt'
+        })
+      });
+      const data = await response.json();
+      setHint(data.hint);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsHintLoading(false);
+    }
+  };
+
+  const getFeedback = async (userChoice, correctChoice) => {
+    setIsFeedbackLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/ai/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_code: `Selected variable: ${userChoice}`,
+          correct_code: `Correct incorrect variable: ${correctChoice}`,
+          language: i18n.language,
+          game_type: 'variable_hunt'
+        })
+      });
+      const data = await response.json();
+      setAiFeedback(data.feedback);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsFeedbackLoading(false);
+    }
+  };
+
   const checkAnswer = () => {
     if (!currentTask || !selectedVariable) return;
     const correctVariable = currentTask.task_data.correct_variable || "";
     const isCorrect = selectedVariable === correctVariable;
     if (isCorrect) {
       setScore(score + (currentTask.xp_reward || 50));
+    } else {
+      getFeedback(selectedVariable, correctVariable);
     }
     setShowResult(true);
   };
@@ -125,10 +180,28 @@ export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }
                 ))}
               </div>
             </div>
+
+            <div className="hint-section">
+                {!hint && (
+                    <button
+                        onClick={getHint}
+                        className="hint-btn"
+                        disabled={isHintLoading}
+                    >
+                        {isHintLoading ? "Analyzing..." : "🤖 Hint"}
+                    </button>
+                )}
+                {hint && (
+                    <div className="ai-message-box hint-box">
+                        <strong>🤖 AI Analysis:</strong> {hint}
+                    </div>
+                )}
+            </div>
+
             <button
               onClick={checkAnswer}
               disabled={!selectedVariable}
-              className="game-btn game-btn-primary w-full"
+              className="game-btn game-btn-primary w-full mt-6"
             >
               ✓ Check Answer
             </button>
@@ -147,12 +220,20 @@ export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }
               <div className="result-error">
                 <div className="result-error-icon">❌</div>
                 <h3 style={{ color: '#ef4444', marginBottom: '1rem' }}>Not quite!</h3>
-                <p style={{ color: '#6b7280', marginBottom: '2rem' }}>Keep looking! The answer is below.</p>
+                <div className="ai-message-box error-box">
+                    {isFeedbackLoading ? (
+                        <span>🤖 Analyzing error...</span>
+                    ) : (
+                        <span>
+                            <strong>🤖 AI Advice:</strong> {aiFeedback || "The answer is below."}
+                        </span>
+                    )}
+                </div>
               </div>
             )}
-            <div className="mb-6">
+            <div className="mb-6 mt-4">
               <p className="mb-3 font-semibold text-center" style={{ color: '#374151' }}>Correct answer:</p>
-              <div style={{ 
+              <div style={{
                 background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
                 border: '2px solid #10b981',
                 borderRadius: '12px',

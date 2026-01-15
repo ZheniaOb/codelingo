@@ -7,11 +7,11 @@
     <list default="true" id="6782b9e4-5f35-4e99-9903-b2131f0b29b6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/BasicSiteView/Header/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/BasicSiteView/Header/Header.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Games/BugInfectionGame.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Games/BugInfectionGame.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Games/MemoryCodeGame.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Games/MemoryCodeGame.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Games/MiniGames.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Games/MiniGames.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Games/RefactorRushGame.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Games/RefactorRushGame.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Games/VariableHuntGame.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Games/VariableHuntGame.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,27 +77,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JavaScript Debug.index.html.executor": "Run",
-    "Node.js.home.jsx.executor": "Run",
-    "Python.Backend  .executor": "Run",
-    "Python.app.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/User/PycharmProjects/codelingo/frontend/src/components",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "File.Encoding",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PyCharm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.home.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Backend  .executor&quot;: &quot;Run&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/PycharmProjects/codelingo/frontend/src/components&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PyCharm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\User\PycharmProjects\codelingo\frontend\src\components" />
@@ -139,6 +139,9 @@
       <workItem from="1763054985234" duration="7575000" />
       <workItem from="1763066586332" duration="4603000" />
       <workItem from="1763072331242" duration="856000" />
+      <workItem from="1766138418874" duration="2253000" />
+      <workItem from="1768248641325" duration="32000" />
+      <workItem from="1768505934936" duration="7245000" />
     </task>
     <servers />
   </component>

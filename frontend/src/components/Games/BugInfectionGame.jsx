@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import "../../css/styles.css";
+import { useTranslation } from 'react-i18next';
+import "./MiniGames.css";
 
 const API_URL = "http://localhost:5001/api";
 
 export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }) {
+  const { i18n } = useTranslation();
   const [currentTask, setCurrentTask] = useState(null);
   const [selectedBugs, setSelectedBugs] = useState([]);
   const [score, setScore] = useState(0);
@@ -11,6 +13,11 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showResult, setShowResult] = useState(false);
+
+  const [hint, setHint] = useState(null);
+  const [isHintLoading, setIsHintLoading] = useState(false);
+  const [aiFeedback, setAiFeedback] = useState(null);
+  const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
 
   useEffect(() => {
     loadNewTask();
@@ -20,6 +27,8 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
     try {
       setLoading(true);
       setError(null);
+      setHint(null);
+      setAiFeedback(null);
       const response = await fetch(`${API_URL}/games/bug-infection/tasks/random?language=${language}`);
       if (!response.ok) {
         throw new Error("Failed to load task");
@@ -35,6 +44,54 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
     }
   };
 
+  const getHint = async () => {
+    if (!currentTask || isHintLoading) return;
+    setIsHintLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/ai/hint`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: currentTask.task_data.code,
+          language: i18n.language,
+          game_type: 'bug_infection'
+        })
+      });
+      const data = await response.json();
+      setHint(data.hint);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsHintLoading(false);
+    }
+  };
+
+  const getFeedback = async (userBugsIndices, correctBugsIndices, allBugsList) => {
+    setIsFeedbackLoading(true);
+    // Konwersja indeksów na tekst dla lepszego kontekstu AI
+    const userSelectedText = userBugsIndices.map(i => allBugsList[i]).join(", ");
+    const correctText = correctBugsIndices.map(i => allBugsList[i]).join(", ");
+
+    try {
+      const response = await fetch(`${API_URL}/ai/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_code: `User selected bugs: [${userSelectedText}]`,
+          correct_code: `Actual bugs: [${correctText}]`,
+          language: i18n.language,
+          game_type: 'bug_infection'
+        })
+      });
+      const data = await response.json();
+      setAiFeedback(data.feedback);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsFeedbackLoading(false);
+    }
+  };
+
   const toggleBug = (bugIndex) => {
     if (showResult) return;
     setSelectedBugs((prev) =>
@@ -47,15 +104,18 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
   const checkAnswer = () => {
     if (!currentTask) return;
     const correctBugs = currentTask.task_data.correct_bugs || [];
+    const bugsList = currentTask.task_data.bugs || [];
     const selectedSet = new Set(selectedBugs);
     const correctSet = new Set(correctBugs);
-    
-    const isCorrect = 
+
+    const isCorrect =
       selectedSet.size === correctSet.size &&
       [...selectedSet].every((bug) => correctSet.has(bug));
-    
+
     if (isCorrect) {
       setScore(score + (currentTask.xp_reward || 50));
+    } else {
+        getFeedback(selectedBugs, correctBugs, bugsList);
     }
     setShowResult(true);
   };
@@ -68,7 +128,7 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
       const correctBugs = currentTask?.task_data?.correct_bugs || [];
       const selectedSet = new Set(selectedBugs);
       const correctSet = new Set(correctBugs);
-      const isCorrect = 
+      const isCorrect =
         selectedSet.size === correctSet.size &&
         [...selectedSet].every((bug) => correctSet.has(bug));
       const finalScore = score + (isCorrect ? (currentTask?.xp_reward || 50) : 0);
@@ -107,7 +167,7 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
   const correctBugs = currentTask.task_data.correct_bugs || [];
   const selectedSet = new Set(selectedBugs);
   const correctSet = new Set(correctBugs);
-  const isCorrect = 
+  const isCorrect =
     selectedSet.size === correctSet.size &&
     [...selectedSet].every((bug) => correctSet.has(bug));
 
@@ -158,10 +218,28 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
                 ))}
               </div>
             </div>
+
+            <div className="hint-section">
+                {!hint && (
+                    <button
+                        onClick={getHint}
+                        className="hint-btn"
+                        disabled={isHintLoading}
+                    >
+                        {isHintLoading ? "Analyzing..." : "🤖 Hint"}
+                    </button>
+                )}
+                {hint && (
+                    <div className="ai-message-box hint-box">
+                        <strong>🤖 AI Analysis:</strong> {hint}
+                    </div>
+                )}
+            </div>
+
             <button
               onClick={checkAnswer}
               disabled={selectedBugs.length === 0}
-              className="game-btn game-btn-primary w-full"
+              className="game-btn game-btn-primary w-full mt-6"
             >
               ✓ Check Answer ({selectedBugs.length} selected)
             </button>
@@ -180,15 +258,23 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
               <div className="result-error">
                 <div className="result-error-icon">❌</div>
                 <h3 style={{ color: '#ef4444', marginBottom: '1rem' }}>Not quite!</h3>
-                <p style={{ color: '#6b7280', marginBottom: '2rem' }}>Keep practicing! The correct bugs are shown below.</p>
+                <div className="ai-message-box error-box">
+                    {isFeedbackLoading ? (
+                        <span>🤖 Analyzing your failure...</span>
+                    ) : (
+                        <span>
+                            <strong>🤖 AI Advice:</strong> {aiFeedback || "Check the correct bugs below."}
+                        </span>
+                    )}
+                </div>
               </div>
             )}
-            <div className="mb-6">
+            <div className="mb-6 mt-4">
               <p className="mb-3 font-semibold" style={{ color: '#374151' }}>Correct bugs:</p>
               <div className="space-y-3">
                 {correctBugs.map((bugIndex, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     style={{
                       background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
                       border: '2px solid #10b981',

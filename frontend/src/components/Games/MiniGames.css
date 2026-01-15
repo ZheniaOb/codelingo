@@ -788,3 +788,55 @@
 	z-index: 2;
 }
 
+.hint-section {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.hint-btn {
+    background: transparent;
+    border: 2px dashed var(--green-500);
+    color: var(--green-500);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.hint-btn:hover:not(:disabled) {
+    background: rgba(16, 185, 129, 0.1);
+    transform: translateY(-2px);
+}
+
+.ai-message-box {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    animation: fadeInDown 0.4s ease;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.hint-box {
+    background: linear-gradient(135deg, rgba(255, 243, 205, 0.6), rgba(255, 230, 156, 0.4));
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
+
+.error-box {
+    background: linear-gradient(135deg, rgba(248, 215, 218, 0.6), rgba(245, 198, 203, 0.4));
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    text-align: center;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+

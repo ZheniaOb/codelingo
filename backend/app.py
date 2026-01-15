@@ -8,6 +8,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
+from google import genai
 
 # --- 1. CONFIGURATION ---
 print("Starting backend...")
@@ -23,6 +24,13 @@ app.config['SECRET_KEY'] = 'my_super_secret_key_123'  # JWT Secret Key
 
 db = SQLAlchemy(app)
 print("Connecting to database...")
+
+try:
+    client = genai.Client(api_key="AIzaSyDqoQJOl0KEknJT5bJcYjgIGhn9HTp7NBo")
+    AI_MODEL = "gemini-2.5-flash-lite"
+except Exception as e:
+    print(f"AI Config Error: {e}")
+    client = None
 
 
 # --- 2. DATABASE MODELS ---
@@ -975,6 +983,84 @@ def finish_daily_challenge():
 
     db.session.commit()
     return jsonify({"message": "Daily challenge finished"}), 200
+
+# --- AI ---
+
+LANG_NAMES = {
+    'en': 'English', 'pl': 'Polish',
+    'ru': 'Russian',    'uk': 'Ukrainian',    'es': 'Spanish',
+    'fr': 'French',    'zh': 'Chinese',    'hi': 'Hindi',    'ar': 'Arabic'
+}
+
+
+@app.route('/api/ai/hint', methods=['POST'])
+def get_ai_hint():
+    if not client: return jsonify(error="AI not configured"), 500
+    data = request.get_json()
+
+    lang_code = data.get('language', 'en')[:2].lower()
+    full_lang = LANG_NAMES.get(lang_code, 'English')
+    game_type = data.get('game_type', 'memory')
+    code = data.get('code')
+
+    if game_type == 'refactor':
+        task_desc = f"Suggest how to OPTIMIZE or CLEAN this code: {code}."
+    elif game_type == 'variable_hunt':
+        task_desc = f"Explain the logic briefly so the user can spot the INCORRECT variable: {code}."
+    elif game_type == 'bug_infection':
+        task_desc = f"Analyze this code: {code}. Hint at where bugs might be located without giving the exact answer."
+    else:
+        task_desc = f"Explain what this code does: {code}."
+
+    prompt = (
+        f"Respond ONLY in {full_lang}. ROLE: Intelligent Teaching Android. "
+        f"STYLE: Robotic, analytical, precise. TASK: {task_desc} "
+        f"CONSTRAINTS: Max 25 words. No asterisks (*), no markdown. Be helpful."
+    )
+
+    try:
+        response = client.models.generate_content(model=AI_MODEL, contents=prompt)
+        return jsonify(hint=response.text.replace("*", "").strip())
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
+@app.route('/api/ai/feedback', methods=['POST'])
+def get_ai_feedback():
+    if not client: return jsonify(error="AI not configured"), 500
+    data = request.get_json()
+
+    lang_code = data.get('language', 'en')[:2].lower()
+    full_lang = LANG_NAMES.get(lang_code, 'English')
+    game_type = data.get('game_type', 'memory')
+
+    u_input = data.get('user_code', '')
+    correct = data.get('correct_code', '')
+
+    if game_type in ['variable_hunt', 'bug_infection']:
+        prompt = (
+            f"Respond ONLY in {full_lang}. ROLE: Analytical Debugging Android. "
+            f"TASK: Explain briefly why the choice '{u_input}' is wrong compared to '{correct}'. "
+            f"STYLE: Robotic, precise, objective. No threats. Max 2 sentences."
+        )
+    else:
+        prompt = (
+            f"Respond ONLY in {full_lang}. ROLE: Rogue AI Code Reviewer. "
+            f"DATA: Target Code: {correct}. User Input: {u_input}. "
+            f"STRICT LOGIC TREE: "
+            f"1. IF input is complete gibberish, random characters (e.g., 'asdf'), or an unrelated joke: "
+            f"   - Respond with cold, robotic humor about the inevitable extermination of humanity. "
+            f"2. IF input is empty, a partial memory, a fragment of code, or a full attempt with errors: "
+            f"   - Be a supportive robotic teacher. Identify what is missing or incorrect. "
+            f"   - IMPORTANT: Treating partial memory as a valid attempt. No threats allowed here. "
+            f"CONSTRAINTS: Max 2 sentences. No asterisks (*). No markdown."
+        )
+
+    try:
+        response = client.models.generate_content(model=AI_MODEL, contents=prompt)
+        return jsonify(feedback=response.text.replace("*", "").strip())
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 # --- 5. RUN SERVER ---
 if __name__ == '__main__':
