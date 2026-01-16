@@ -59,10 +59,9 @@ const PythonPage = () => {
   };
 
   const handleNodeClick = (node) => {
-    const isQuiz = node.status === "quiz" || node.type === "quiz";
-    if (node.status === "locked" || node.status === "exam" || isQuiz) return;
-    if (!node.lessonId) return;
-    navigate(`/courses/python/lesson/${node.lessonId}`);
+    if (node.status === "locked") return; 
+    const id = node.lessonId || node.id;
+    navigate(`/courses/python/lesson/${id}`);
   };
 
   if (loading) {
@@ -109,7 +108,7 @@ const PythonPage = () => {
                       type="button"
                       className={["path-node", node.type, node.status].join(" ")}
                       onClick={() => handleNodeClick(node)}
-                      disabled={node.status === "locked" || node.status === "exam" || node.status === "quiz" || node.type === "quiz"}
+                      disabled={node.status === "locked"}
                     >
                       <img
                         className="icon-img"

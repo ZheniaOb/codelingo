@@ -127,12 +127,7 @@ const JavaScriptPage = () => {
                       type="button"
                       className={["js-path-node", node.type, node.status].join(" ")}
                       onClick={() => handleNodeClick(node)}
-                      disabled={
-                        node.status === "locked" ||
-                        node.status === "exam" ||
-                        node.status === "quiz" ||
-                        node.type === "quiz"
-                      }
+                      disabled={node.status === "locked"}
                     >
                       <img
                         className="js-icon-img"

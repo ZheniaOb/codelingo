@@ -700,7 +700,7 @@ def get_course_structure(language_name):
                     "lesson_type": lesson.lesson_type,
                     "status": "exam",
                     "type": "exam",
-                    "lessonId": None
+                    "lessonId": lesson.id  
                 })
             else:
                 module_lessons.append({
@@ -741,21 +741,12 @@ def get_course_structure(language_name):
         
         # Add lessons
         for lesson in lessons:
-            # When lessons already include exam entries, keep their type/status as provided
             module_lessons.append({
-                "id": lesson["id"],
-                "type": lesson.get("type", "lesson"),
-                "status": lesson["status"],
-                "lessonId": lesson.get("lessonId", lesson["id"]) if lesson.get("type", "lesson") != "quiz" else None
-            })
-        
-        # Add exam node after lessons only if module has lessons and no explicit exam lesson
-        if lessons and not module_data.get("has_exam_lesson"):
-            module_lessons.append({
-                "id": f"quiz_{module_data['id']}",
-                "type": "quiz",
-                "status": "quiz"
-            })
+             "id": lesson["id"],
+             "type": lesson.get("type", "lesson"),
+             "status": lesson["status"],
+             "lessonId": lesson.get("lessonId", lesson["id"]) 
+                })
         
         result_modules.append({
             "id": module_data["id"],
@@ -984,6 +975,35 @@ def finish_daily_challenge():
 
     db.session.commit()
     return jsonify({"message": "Daily challenge finished"}), 200
+
+
+
+
+
+@app.route('/api/exam/<int:exam_id>', methods=['GET'])
+def get_exam_data(exam_id):
+    current_user, err_resp, code = get_current_user_from_request()
+    if err_resp: return err_resp, code
+    exercises = Exercise.query.filter_by(lesson_id=exam_id).all()
+    
+    if not exercises:
+        return jsonify(error="No questions found for this exam"), 404
+
+    return jsonify({
+        "id": exam_id,
+        "questions": [{
+            "id": ex.id,
+            "question": ex.question,
+            "options": ex.options,
+            "answer": ex.answer,
+            "type": ex.exercise_type
+        } for ex in exercises]
+    }), 200
+
+
+
+
+
 
 # --- AI ---
 

@@ -184,54 +184,6 @@ const LessonPage = () => {
 
   if (loading) return <div className={`lesson-page ${currentTheme}`}><div className="loader">{t("lesson_loading")}</div></div>;
   
-  if (showLecture) {
-    return (
-      <div className={`lesson-page ${currentTheme}`}>
-        <header className="lesson-header">
-          <button className="lesson-close-btn" onClick={() => navigate(-1)}>✕</button>
-        </header>
-        <main className="lesson-main">
-           <div className="lesson-content">
-            <h1 className="lesson-title">{lessonTitle}</h1>
-
-              <div className="lesson-text">
-                <ReactMarkdown
-                  components={{
-                    code({node, inline, className, children, ...props}) {
-                      const match = /language-(\w+)/.exec(className || "");
-                      return !inline && match ? (
-                        <SyntaxHighlighter style={oneDark} language={match[1]} PreTag="div" {...props}>
-                          {String(children).replace(/\n$/, "")}
-                        </SyntaxHighlighter>
-                      ) : (
-                        <code className={className} {...props}>
-                          {children}
-                        </code>
-                      );
-                    }
-                  }}
-                >
-                  {lessonContent}
-                </ReactMarkdown>
-              </div>
-
-                {allExercises && allExercises.length > 0 ? (
-                <button className="lesson-start-btn" onClick={startTest}>
-                  {t("lesson_start_test")}
-                </button>
-            ) : (
-              <div className="lesson-no-exercises">
-                {t("lesson_no_exercises")}
-              </div>
-               )}            </div>
-        </main>
-      </div>
-    );
-  }
-
-  if (!allExercises || allExercises.length === 0) {                  return <div className={`lesson-page ${currentTheme}`}><main className="lesson-main">{t("lesson_content_not_found")}</main></div>;
-  }
-
   if (isCompleted) {
     return (
         <div className={`lesson-page ${currentTheme}`}>
@@ -285,6 +237,59 @@ const LessonPage = () => {
     </div>
   );
 }
+
+  if (showLecture) {
+    return (
+      <div className={`lesson-page ${currentTheme}`}>
+        <header className="lesson-header">
+          <button className="lesson-close-btn" onClick={() => navigate(-1)}>✕</button>
+        </header>
+        <main className="lesson-main">
+           <div className="lesson-content">
+            <h1 className="lesson-title">{lessonTitle}</h1>
+
+              <div className="lesson-text">
+                <ReactMarkdown
+                  components={{
+                    code({node, inline, className, children, ...props}) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      return !inline && match ? (
+                        <SyntaxHighlighter style={oneDark} language={match[1]} PreTag="div" {...props}>
+                          {String(children).replace(/\n$/, "")}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      );
+                    }
+                  }}
+                >
+                  {lessonContent}
+                </ReactMarkdown>
+              </div>
+
+                {allExercises && allExercises.length > 0 ? (
+                <button className="lesson-start-btn" onClick={startTest}>
+                  {t("lesson_start_test")}
+                </button>
+              ) : (
+                <button 
+                  className="lesson-continue-btn" 
+                  style={{ marginTop: '20px' }}
+                  onClick={() => finishLesson(3)} 
+                >
+                  {t("lesson_finish") || "Complete Exam & Get XP"}
+                </button>
+              )}           
+               </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (!allExercises || allExercises.length === 0) {                  return <div className={`lesson-page ${currentTheme}`}><main className="lesson-main">{t("lesson_content_not_found")}</main></div>;
+  }
 
   if (!currentExercise) return null;
 
