@@ -68,8 +68,9 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
 
   const getFeedback = async (userBugsIndices, correctBugsIndices, allBugsList) => {
     setIsFeedbackLoading(true);
-    // Konwersja indeksów na tekst dla lepszego kontekstu AI
-    const userSelectedText = userBugsIndices.map(i => allBugsList[i]).join(", ");
+    const userSelectedText = userBugsIndices.length > 0 
+      ? userBugsIndices.map(i => allBugsList[i]).join(", ") 
+      : "No bugs selected";
     const correctText = correctBugsIndices.map(i => allBugsList[i]).join(", ");
 
     try {
@@ -113,7 +114,7 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
       [...selectedSet].every((bug) => correctSet.has(bug));
 
     if (isCorrect) {
-      setScore(score + (currentTask.xp_reward || 50));
+      setScore(score + 50);
     } else {
         getFeedback(selectedBugs, correctBugs, bugsList);
     }
@@ -124,15 +125,8 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
     if (round < 3) {
       setRound(round + 1);
       loadNewTask();
-    } else {
-      const correctBugs = currentTask?.task_data?.correct_bugs || [];
-      const selectedSet = new Set(selectedBugs);
-      const correctSet = new Set(correctBugs);
-      const isCorrect =
-        selectedSet.size === correctSet.size &&
-        [...selectedSet].every((bug) => correctSet.has(bug));
-      const finalScore = score + (isCorrect ? (currentTask?.xp_reward || 50) : 0);
-      onComplete(finalScore);
+    } else { 
+      onComplete(score);
     }
   };
 
@@ -165,11 +159,9 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
 
   const bugs = currentTask.task_data.bugs || [];
   const correctBugs = currentTask.task_data.correct_bugs || [];
-  const selectedSet = new Set(selectedBugs);
-  const correctSet = new Set(correctBugs);
   const isCorrect =
-    selectedSet.size === correctSet.size &&
-    [...selectedSet].every((bug) => correctSet.has(bug));
+    new Set(selectedBugs).size === new Set(correctBugs).size &&
+    [...new Set(selectedBugs)].every((bug) => new Set(correctBugs).has(bug));
 
   return (
     <div className="game-container">
@@ -195,7 +187,7 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
               {currentTask.task_data.instruction || "Select all the bugs in the code below"}
             </p>
             <div className="mb-6">
-              <div className="code-block">
+              <div className="code-block" style={{ userSelect: 'none' }}> 
                 <pre>{currentTask.task_data.code}</pre>
               </div>
             </div>
@@ -209,6 +201,7 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
                     key={index}
                     onClick={() => toggleBug(index)}
                     className={`bug-item ${selectedBugs.includes(index) ? 'bug-item-selected' : ''}`}
+                    style={{ cursor: 'pointer' }} 
                   >
                     <div className="bug-checkbox">
                       {selectedBugs.includes(index) ? '✓' : ''}
@@ -238,7 +231,6 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
 
             <button
               onClick={checkAnswer}
-              disabled={selectedBugs.length === 0}
               className="game-btn game-btn-primary w-full mt-6"
             >
               ✓ Check Answer ({selectedBugs.length} selected)
@@ -250,7 +242,7 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
               <div className="result-success">
                 <div className="result-success-icon">✅</div>
                 <h3 style={{ color: '#10b981', marginBottom: '1rem' }}>
-                  Perfect! +{currentTask.xp_reward || 50} XP
+                  Perfect! +50 XP
                 </h3>
                 <p style={{ color: '#6b7280', marginBottom: '2rem' }}>Excellent bug hunting! You found them all!</p>
               </div>
@@ -300,16 +292,13 @@ export function BugInfectionGame({ onComplete, onBack, language = 'javascript' }
                 </button>
               ) : (
                 <button
-                  onClick={() => {
-                    const finalScore = score + (isCorrect ? (currentTask.xp_reward || 50) : 0);
-                    onComplete(finalScore);
-                  }}
+                  onClick={() => onComplete(score)}
                   className="game-btn game-btn-primary flex-1"
                 >
                   🎉 Complete Game
                 </button>
               )}
-              <button onClick={onBack} className="game-btn game-btn-secondary">
+              <button onClick={() => onComplete(score)} className="game-btn game-btn-secondary">
                 Exit
               </button>
             </div>
