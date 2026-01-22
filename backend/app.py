@@ -87,6 +87,9 @@ class User(db.Model):
     lessons_completed = db.relationship('UserLessonProgress', backref='user', lazy=True, cascade="all, delete-orphan")
 
     def set_password(self, password):
+        # Validate password length before hashing (bcrypt has a 72-byte limit)
+        if len(password.encode('utf-8')) > 72:
+            raise ValueError("Password exceeds maximum length of 72 characters")
         self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
     def check_password(self, password):
@@ -232,6 +235,17 @@ print("All course models defined.")
 
 # --- 3. AUTHENTICATION ENDPOINTS ---
 
+def normalize_email(email):
+    """
+    Normalize email address: convert to lowercase and handle + signs.
+    This prevents conflicts with emails like user+tag@example.com and User+Tag@Example.COM
+    """
+    if not email:
+        return None
+    # Convert to lowercase
+    normalized = email.lower().strip()
+    return normalized
+
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -242,20 +256,38 @@ def register():
     if not username or not email or not password:
         return jsonify(error="Username, email, and password are required"), 400
 
-    if User.query.filter_by(email=email).first():
+    # Validate password length (bcrypt has a 72-byte limit)
+    if len(password.encode('utf-8')) > 72:
+        return jsonify(error="Password is too long. Maximum length is 72 characters."), 400
+
+    # Normalize email
+    normalized_email = normalize_email(email)
+    if not normalized_email:
+        return jsonify(error="Invalid email address"), 400
+
+    if User.query.filter_by(email=normalized_email).first():
         return jsonify(error="This email is already registered"), 409
 
     if User.query.filter_by(username=username).first():
         return jsonify(error="This username is already taken"), 409
 
-    new_user = User(email=email, username=username)
-    new_user.set_password(password)
+    new_user = User(email=normalized_email, username=username)
+    
+    try:
+        new_user.set_password(password)
+    except ValueError as e:
+        return jsonify(error=str(e)), 400
 
     secret_code = data.get('secret_code')
     new_user.role = 'admin' if secret_code == 'MY_ADMIN_SECRET' else 'user'
 
-    db.session.add(new_user)
-    db.session.commit()
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(error="Registration failed. Please try again."), 500
+    
     return jsonify(message="User successfully registered", role=new_user.role), 201
 
 
@@ -264,7 +296,13 @@ def login():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
-    user = User.query.filter_by(email=email).first()
+    
+    # Normalize email for lookup
+    normalized_email = normalize_email(email)
+    if not normalized_email:
+        return jsonify(error="Invalid email address"), 400
+    
+    user = User.query.filter_by(email=normalized_email).first()
 
     if not user or not user.check_password(password):
         return jsonify(error="Invalid email or password"), 401
@@ -351,14 +389,19 @@ def update_user_data():
     if not new_email:
         return jsonify(error="Email cannot be empty"), 400
 
+    # Normalize email
+    normalized_email = normalize_email(new_email)
+    if not normalized_email:
+        return jsonify(error="Invalid email address"), 400
+
     # Ensure username/email are unique if changed
-    if new_email != current_user.email and User.query.filter_by(email=new_email).first():
+    if normalized_email != current_user.email and User.query.filter_by(email=normalized_email).first():
         return jsonify(error="This email is already registered"), 409
     if new_username != current_user.username and User.query.filter_by(username=new_username).first():
         return jsonify(error="This username is already taken"), 409
 
     current_user.username = new_username
-    current_user.email = new_email
+    current_user.email = normalized_email
     current_user.avatar = new_avatar
     db.session.commit()
 

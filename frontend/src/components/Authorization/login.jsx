@@ -97,9 +97,17 @@ const Login = () => {
                   placeholder="••••••••"
                   className="input-field"
                   required
+                  maxLength={72}
                   value={formData.password}
                   onChange={handleChange}
                 />
+              </div>
+              <div style={{
+                color: '#6b7280',
+                fontSize: '0.75rem',
+                marginTop: '0.25rem'
+              }}>
+                Note: Leading and trailing spaces are treated as part of the password.
               </div>
             </div>
 

@@ -12,14 +12,32 @@ const SignUp = () => {
   });
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value = e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
     setMessage("");
+    
+    // Validate password length
+    if (e.target.name === 'password') {
+      if (value.length > 72) {
+        setPasswordError("Password is too long. Maximum length is 72 characters.");
+      } else {
+        setPasswordError("");
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate password length before submission
+    if (formData.password.length > 72) {
+      setIsError(true);
+      setMessage("Password is too long. Maximum length is 72 characters.");
+      return;
+    }
 
     const secretCode = formData.name.toLowerCase() === 'admin' ? 'MY_ADMIN_SECRET' : undefined;
 
@@ -101,7 +119,33 @@ const SignUp = () => {
               <label htmlFor="password" className="form-label">Password</label>
               <div className="input-wrapper">
                 <svg className="input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                <input type="password" id="password" name="password" placeholder="••••••••" className="input-field" required value={formData.password} onChange={handleChange} />
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  placeholder="••••••••" 
+                  className="input-field" 
+                  required 
+                  maxLength={72}
+                  value={formData.password} 
+                  onChange={handleChange} 
+                />
+              </div>
+              {passwordError && (
+                <div style={{
+                  color: '#b91c1c',
+                  fontSize: '0.875rem',
+                  marginTop: '0.5rem'
+                }}>
+                  {passwordError}
+                </div>
+              )}
+              <div style={{
+                color: '#6b7280',
+                fontSize: '0.75rem',
+                marginTop: '0.25rem'
+              }}>
+                Maximum 72 characters. Leading and trailing spaces are part of the password.
               </div>
             </div>
 
