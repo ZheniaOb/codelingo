@@ -25,6 +25,24 @@ app.config['SECRET_KEY'] = 'my_super_secret_key_123'  # JWT Secret Key
 db = SQLAlchemy(app)
 print("Connecting to database...")
 
+# Auto-migration: Add last_activity_date column if it doesn't exist
+def check_and_add_last_activity_date():
+    try:
+        from sqlalchemy import inspect, text
+        inspector = inspect(db.engine)
+        columns = [col['name'] for col in inspector.get_columns('users')]
+        
+        if 'last_activity_date' not in columns:
+            print("Adding 'last_activity_date' column to users table...")
+            with db.engine.connect() as conn:
+                conn.execute(text("ALTER TABLE users ADD COLUMN last_activity_date DATE DEFAULT NULL"))
+                conn.commit()
+            print("✓ Column 'last_activity_date' added successfully")
+        else:
+            print("✓ Column 'last_activity_date' already exists")
+    except Exception as e:
+        print(f"Migration check skipped or failed: {e}")
+
 try:
     genai.configure(api_key="AIzaSyDqoQJOl0KEknJT5bJcYjgIGhn9HTp7NBo")
     AI_MODEL = "gemini-2.0-flash-exp"
@@ -64,6 +82,7 @@ class User(db.Model):
     coins = db.Column(db.Integer, default=0)
     avatar = db.Column(db.String(255), nullable=True)
     streak = db.Column(db.Integer, default=0)
+    last_activity_date = db.Column(db.Date, nullable=True)
 
     lessons_completed = db.relationship('UserLessonProgress', backref='user', lazy=True, cascade="all, delete-orphan")
 
@@ -99,6 +118,32 @@ class UserInventory(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'), nullable=False)
     purchase_date = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     is_equipped = db.Column(db.Boolean, default=False)
+
+
+def update_user_streak(user):
+    """
+    Updates user's streak based on their last activity date.
+    - If last activity was yesterday: increment streak
+    - If last activity was today: keep streak unchanged
+    - If last activity was before yesterday or never: reset streak to 1
+    """
+    today = date.today()
+    
+    if user.last_activity_date is None:
+        # First activity ever
+        user.streak = 1
+        user.last_activity_date = today
+    elif user.last_activity_date == today:
+        # Already active today, don't change streak
+        pass
+    elif user.last_activity_date == today - timedelta(days=1):
+        # Was active yesterday, increment streak
+        user.streak = (user.streak or 0) + 1
+        user.last_activity_date = today
+    else:
+        # Gap in activity, reset streak
+        user.streak = 1
+        user.last_activity_date = today
 
 
 class Language(db.Model):
@@ -277,6 +322,7 @@ def get_user_data():
         "role": current_user.role,
         "xp": current_user.xp or 0,
         "coins": current_user.coins or 0,
+        "streak": current_user.streak or 0,
         "lessons_count": len(current_user.lessons_completed),
         "level": level,
         "level_title": level_title,
@@ -350,6 +396,7 @@ def update_user_data():
         "role": current_user.role,
         "xp": current_user.xp or 0,
         "coins": current_user.coins or 0,
+        "streak": current_user.streak or 0,
         "lessons_count": len(current_user.lessons_completed),
         "level": level,
         "level_title": level_title,
@@ -487,6 +534,9 @@ def complete_game(game_id):
     # Coin logic: 2 XP -> 1 coin (integer division)
     coins_to_add = xp_to_add // 2
     current_user.coins = (current_user.coins or 0) + coins_to_add
+    
+    # Update streak
+    update_user_streak(current_user)
 
     result = UserGameResult(
         user_id=current_user.id,
@@ -645,6 +695,10 @@ def complete_lesson(lesson_id):
     coins_to_add = xp_to_add // 2
     current_user.xp = (current_user.xp or 0) + xp_to_add
     current_user.coins = (current_user.coins or 0) + coins_to_add
+    
+    # Update streak
+    update_user_streak(current_user)
+    
     db.session.commit()
 
     return jsonify({
@@ -972,6 +1026,9 @@ def finish_daily_challenge():
         db.session.add(status)
     else:
         status.completed = True
+    
+    # Update streak
+    update_user_streak(current_user)
 
     db.session.commit()
     return jsonify({"message": "Daily challenge finished"}), 200
@@ -1089,6 +1146,8 @@ def get_ai_feedback():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        # Run migration to add last_activity_date column
+        check_and_add_last_activity_date()
     # Import admin endpoints
     try:
         from admin import *

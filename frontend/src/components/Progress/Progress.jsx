@@ -85,7 +85,7 @@ const Progress = () => {
   const nextLevelTitle = userData?.next_level_title || "Next Level";
   const xpToNextLevel = userData?.xp_to_next_level || 100;
   const progressPercent = userData?.progress_percentage || 0;
-  const currentStreak = userData?.streak || 7;
+  const currentStreak = userData?.streak || 0;
 
   return (
     <HeaderFooter>

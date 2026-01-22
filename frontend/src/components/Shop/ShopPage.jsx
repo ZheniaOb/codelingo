@@ -12,16 +12,19 @@ function ShopPage({ theme, setTheme }) {
 	const [currentAvatar, setCurrentAvatar] = useState(null);
 	const [showXpModal, setShowXpModal] = useState(false);
 	const [showEquipModal, setShowEquipModal] = useState(false);
+	const [showEarnCoinsModal, setShowEarnCoinsModal] = useState(false);
 	const [recentlyBoughtItem, setRecentlyBoughtItem] = useState(null);
 	const [justPurchasedId, setJustPurchasedId] = useState(null);
 	const [sortBy, setSortBy] = useState("default");
 	const [filterBy, setFilterBy] = useState("all");
 	const [previewItem, setPreviewItem] = useState(null);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchItems = async () => {
 			const token = localStorage.getItem("token");
+			setIsLoggedIn(!!token);
 
 			try {
 				const response = await fetch(
@@ -214,12 +217,16 @@ function ShopPage({ theme, setTheme }) {
 				);
 			}
 			if (!isOwned) {
+				const canAfford = isLoggedIn && userCoins !== null && userCoins >= (item.price_coins || 0);
+				const isDisabled = isLoggedIn && !canAfford;
 				return (
 					<button
-						className="shop-btn shop-btn-primary shop-btn-buy"
-						onClick={() => handleBuy(item)}
+						className={`shop-btn shop-btn-primary shop-btn-buy ${isDisabled ? 'shop-btn-disabled' : ''}`}
+						onClick={() => isLoggedIn ? handleBuy(item) : navigate('/login')}
+						disabled={isDisabled}
+						title={isDisabled ? `Not enough coins. You need ${item.price_coins || 0} coins.` : ''}
 					>
-						Buy
+						{isLoggedIn ? 'Buy' : 'Log in to buy'}
 					</button>
 				);
 			}
@@ -249,12 +256,16 @@ function ShopPage({ theme, setTheme }) {
 			}
 
 			if (!isOwned) {
+				const canAfford = isLoggedIn && userCoins !== null && userCoins >= (item.price_coins || 0);
+				const isDisabled = isLoggedIn && !canAfford;
 				return (
 					<button
-						className="shop-btn shop-btn-primary shop-btn-buy"
-						onClick={() => handleBuy(item)}
+						className={`shop-btn shop-btn-primary shop-btn-buy ${isDisabled ? 'shop-btn-disabled' : ''}`}
+						onClick={() => isLoggedIn ? handleBuy(item) : navigate('/login')}
+						disabled={isDisabled}
+						title={isDisabled ? `Not enough coins. You need ${item.price_coins || 0} coins.` : ''}
 					>
-						Buy
+						{isLoggedIn ? 'Buy' : 'Log in to buy'}
 					</button>
 				);
 			}
@@ -278,12 +289,16 @@ function ShopPage({ theme, setTheme }) {
 
 		// Fallback for any other item types
 		if (!isOwned) {
+			const canAfford = isLoggedIn && userCoins !== null && userCoins >= (item.price_coins || 0);
+			const isDisabled = isLoggedIn && !canAfford;
 			return (
 				<button
-					className="shop-btn shop-btn-primary"
-					onClick={() => handleBuy(item)}
+					className={`shop-btn shop-btn-primary ${isDisabled ? 'shop-btn-disabled' : ''}`}
+					onClick={() => isLoggedIn ? handleBuy(item) : navigate('/login')}
+					disabled={isDisabled}
+					title={isDisabled ? `Not enough coins. You need ${item.price_coins || 0} coins.` : ''}
 				>
-					Buy
+					{isLoggedIn ? 'Buy' : 'Log in to buy'}
 				</button>
 			);
 		}
@@ -346,11 +361,16 @@ function ShopPage({ theme, setTheme }) {
 				</header>
 
 				<div className="shop-toolbar">
-					{userCoins !== null && (
+					{isLoggedIn && userCoins !== null && (
 						<div className="shop-xp-pill">
 							<span className="shop-xp-label">Your coins</span>
-							<span className="shop-xp-value">{userCoins}</span>
-						</div>
+							<span className="shop-xp-value">{userCoins}</span>						<button 
+							className="shop-info-btn"
+							onClick={() => setShowEarnCoinsModal(true)}
+							title="How to earn coins"
+						>
+							💡
+						</button>						</div>
 					)}
 					<div className="shop-toolbar-controls">
 						<div className="shop-toolbar-group">
@@ -402,7 +422,16 @@ function ShopPage({ theme, setTheme }) {
 									onClick={() => openPreview(item)}
 								>
 									<span className="shop-tag">Theme</span>
-									<div className="shop-theme-preview shop-theme-preview-pink" />
+								<div 
+									className="shop-theme-preview"
+									style={{
+										background: item.asset_url === 'pink' 
+											? 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)'
+											: item.asset_url === 'dark'
+											? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
+											: 'linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%)'
+									}}
+								/>
 								</div>
 								<div className="shop-card-body">
 									<h3 className="shop-item-name">{item.name}</h3>
@@ -496,8 +525,34 @@ function ShopPage({ theme, setTheme }) {
 						</h4>
 						{previewItem.item_type === "theme" ? (
 							<div className="shop-preview-theme-box">
-								<div className="shop-preview-theme-header" />
-								<div className="shop-preview-theme-body" />
+							<div 
+								className="shop-preview-theme-mockup"
+								style={{
+									background: previewItem.asset_url === 'pink' 
+										? 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)'
+										: previewItem.asset_url === 'dark'
+										? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
+										: 'linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%)'
+								}}
+							>
+								<div className="shop-preview-header">
+									<div className="shop-preview-logo">CodeLingo</div>
+									<div className="shop-preview-nav">
+										<span className="shop-preview-nav-item">Home</span>
+										<span className="shop-preview-nav-item">Courses</span>
+										<span className="shop-preview-nav-item">Shop</span>
+									</div>
+								</div>
+								<div className="shop-preview-body">
+									<div className="shop-preview-card">
+										<div className="shop-preview-card-header"></div>
+										<div className="shop-preview-card-content">
+											<div className="shop-preview-line"></div>
+											<div className="shop-preview-line shop-preview-line-short"></div>
+										</div>
+									</div>
+								</div>
+							</div>
 							</div>
 						) : (
 							<div className="shop-preview-avatar-row">
@@ -526,6 +581,55 @@ function ShopPage({ theme, setTheme }) {
 				</div>
 			)}
 
+			{showEarnCoinsModal && (
+				<div
+					className="shop-modal-backdrop"
+					onClick={() => setShowEarnCoinsModal(false)}
+				>
+					<div
+						className="shop-modal"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<h4 className="shop-modal-title">💰 How to Earn Coins</h4>
+						<p className="shop-modal-text">
+							Coins are the in-game currency you can use to unlock awesome themes 
+							and avatars in the shop!
+						</p>
+						<div className="shop-modal-text" style={{ marginTop: '1rem', padding: '1.25rem', backgroundColor: '#f0f9ff', borderRadius: '12px', borderLeft: '4px solid #3b82f6' }}>
+							<strong style={{ fontSize: '1.05rem', color: '#1e40af' }}>💡 Ways to earn coins:</strong>
+							<ul style={{ marginTop: '0.75rem', marginBottom: 0, paddingLeft: '1.5rem', lineHeight: '1.8' }}>
+								<li><strong>Complete lessons:</strong> Earn 100-200 XP per lesson → 50-100 coins</li>
+								<li><strong>Play mini-games:</strong> Win up to 50 coins per game</li>
+								<li><strong>Daily challenges:</strong> Complete daily tasks for 25 coins</li>
+								<li><strong>Keep your streak:</strong> Consistent daily activity rewards bonus XP</li>
+							</ul>
+							<div style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: '#dbeafe', borderRadius: '8px', textAlign: 'center' }}>
+								<strong style={{ fontSize: '1.1rem', color: '#1e40af' }}>✨ 2 XP = 1 Coin ✨</strong>
+							</div>
+						</div>
+						<div className="shop-modal-actions">
+							<button
+								type="button"
+								className="shop-btn shop-btn-primary"
+								onClick={() => {
+									setShowEarnCoinsModal(false);
+									navigate('/courses');
+								}}
+							>
+								📚 Start Learning
+							</button>
+							<button
+								type="button"
+								className="shop-btn shop-btn-secondary"
+								onClick={() => setShowEarnCoinsModal(false)}
+							>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
+
 			{showXpModal && (
 				<div
 					className="shop-modal-backdrop"
@@ -535,14 +639,33 @@ function ShopPage({ theme, setTheme }) {
 						className="shop-modal"
 						onClick={(e) => e.stopPropagation()}
 					>
-						<h4 className="shop-modal-title">Not enough coins</h4>
+						<h4 className="shop-modal-title">💰 Not enough coins</h4>
 						<p className="shop-modal-text">
 							You do not have enough coins to buy this item.
 						</p>
+						<div className="shop-modal-text" style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#f0f9ff', borderRadius: '8px', borderLeft: '4px solid #3b82f6' }}>
+							<strong>💡 How to earn coins:</strong>
+							<ul style={{ marginTop: '0.5rem', marginBottom: 0, paddingLeft: '1.5rem' }}>
+								<li>Complete lessons (100-200 XP → 50-100 coins)</li>
+								<li>Play mini-games (up to 50 coins per game)</li>
+								<li>Finish daily challenges (25 coins)</li>
+								<li><strong>2 XP = 1 coin</strong></li>
+							</ul>
+						</div>
 						<div className="shop-modal-actions">
 							<button
 								type="button"
-								className="btn btn-cta"
+								className="shop-btn shop-btn-primary"
+								onClick={() => {
+									setShowXpModal(false);
+									navigate('/courses');
+								}}
+							>
+								Go to Courses
+							</button>
+							<button
+								type="button"
+								className="shop-btn shop-btn-secondary"
 								onClick={() => setShowXpModal(false)}
 							>
 								Close

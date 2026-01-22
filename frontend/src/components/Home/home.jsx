@@ -93,7 +93,7 @@ function Home({ theme, toggleTheme }) {
                   <span className="icon-ring"></span>
                 </div>
               </div>
-                <h3 id="streak-title" className="stat-title">7 {t('days_unit')}</h3>
+                <h3 id="streak-title" className="stat-title">{currentStreak} {t('days_unit')}</h3>
                 <p className="stat-subtitle">{t('stat_streak_label')} 🔥</p>
             </article>
 
