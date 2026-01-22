@@ -89,24 +89,23 @@ export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }
   };
 
   const checkAnswer = () => {
-    if (!currentTask || !selectedVariable) return;
-    const correctVariable = currentTask.task_data.correct_variable || "";
-    const isCorrect = selectedVariable === correctVariable;
-    if (isCorrect) {
-      setScore(score + (currentTask.xp_reward || 50));
-    } else {
-      getFeedback(selectedVariable, correctVariable);
-    }
-    setShowResult(true);
-  };
+      if (!currentTask || !selectedVariable) return;
+      const correctVariable = currentTask.task_data.correct_variable || "";
+      const isCorrect = selectedVariable.trim() === correctVariable.trim();
+      if (isCorrect) {
+        setScore(score + 50);
+      } else {
+        getFeedback(selectedVariable, correctVariable);
+      }
+      setShowResult(true);
+    };
 
   const nextRound = () => {
     if (round < 3) {
       setRound(round + 1);
       loadNewTask();
     } else {
-      const finalScore = score + (selectedVariable === (currentTask?.task_data?.correct_variable || "") ? (currentTask?.xp_reward || 50) : 0);
-      onComplete(finalScore);
+      onComplete(score);
     }
   };
 
@@ -212,7 +211,7 @@ export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }
               <div className="result-success">
                 <div className="result-success-icon">✅</div>
                 <h3 style={{ color: '#10b981', marginBottom: '1rem' }}>
-                  Perfect! +{currentTask.xp_reward || 50} XP
+                  Perfect! + 50 XP
                 </h3>
                 <p style={{ color: '#6b7280', marginBottom: '2rem' }}>Excellent detective work! You found the bug!</p>
               </div>
@@ -265,7 +264,10 @@ export function VariableHuntGame({ onComplete, onBack, language = 'javascript' }
                   🎉 Complete Game
                 </button>
               )}
-              <button onClick={onBack} className="game-btn game-btn-secondary">
+              <button 
+                onClick={() => onComplete(score)} 
+                className="game-btn game-btn-secondary"
+              >
                 Exit
               </button>
             </div>

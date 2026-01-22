@@ -188,6 +188,11 @@
 	font-size: 1rem;
 }
 
+.code-block {
+  user-select: none; 
+  -webkit-user-select: none;
+}
+
 @keyframes fadeInDown {
 	from {
 		opacity: 0;
